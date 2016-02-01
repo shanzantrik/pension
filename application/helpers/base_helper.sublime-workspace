@@ -1,0 +1,282 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"name",
+				"nameofspouse"
+			],
+			[
+				"ex",
+				"explode"
+			],
+			[
+				"month",
+				"monthsDiff"
+			],
+			[
+				"h",
+				"height	Attr"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"class",
+				"class_of_pension"
+			],
+			[
+				"str_re",
+				"str_replace"
+			],
+			[
+				"pension",
+				"pensioner"
+			],
+			[
+				"s",
+				"style	Attr"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "base_helper.php",
+			"settings":
+			{
+				"buffer_size": 40716,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/pension_ui/application/views/administrator/pension/report/worksheet/superannuation_after/superannuation_pension.php",
+			"settings":
+			{
+				"buffer_size": 9379,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/xampp/htdocs/pension_ui/application/helpers/base_helper.php",
+		"/C/xampp/htdocs/pension_ui/application/config/database.php",
+		"/C/xampp/htdocs/pension_ui/application/views/administrator/pension/revision/family_authority_report_outside.php",
+		"/C/xampp/htdocs/pension_ui/application/views/administrator/pension/revision/family_authority_report_inside.php",
+		"/C/xampp/htdocs/pension_ui/application/views/administrator/pension/report/family/normal_family_pension_06.php",
+		"/C/xampp/htdocs/pension_ui/application/views/administrator/pension/report/worksheet/superannuation_after/superannuation_pension.php",
+		"/C/xampp/htdocs/pension_ui/application/views/administrator/pension/report/disburser.php"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			">\n",
+			"getPay",
+			"getAverageEmolument",
+			"2071  ",
+			"2071",
+			"$pensioner->class_of_pension",
+			"$class_of_pension=$pensioner->class_of_pension;\nif($class_of_pension==\"Voluntary Retirement Pension\"){\n\n	$class_of_pension=\"Retiring Pension\";\n	}\n",
+			"ppoprint2",
+			"ppoprint1",
+			"ppoprint2"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "base_helper.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 40716,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/xampp/htdocs/pension_ui/application/views/administrator/pension/report/worksheet/superannuation_after/superannuation_pension.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9379,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "base_helper.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

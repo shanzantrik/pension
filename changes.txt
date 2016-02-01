@@ -1,0 +1,51 @@
+change employee table - add dep field after fhname
+
+`dep` int(11) NOT NULL COMMENT 'department name',
+
+Add Pension Department from Department Master Entry
+
+UPDATE employees SET dep='1002';
+
+Remove employees_budget table
+
+CREATE TABLE IF NOT EXISTS `employees_budget` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `dep` int(11) NOT NULL COMMENT 'For which Department',
+  `from` int(11) NOT NULL COMMENT 'Budget From',
+  `to` int(11) NOT NULL COMMENT 'Budget To',
+  `description` varchar(255) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
+
+--
+-- Dumping data for table `employees_budget`
+--
+
+INSERT INTO `employees_budget` (`id`, `dep`, `from`, `to`, `description`, `amount`, `create`) VALUES
+(1, 1002, 2013, 2014, 'Provision of arrear DA 10 % ( July''13 to Feb''14)', '1036800.00', '2013-07-10 23:17:06'),
+(2, 1002, 2013, 2014, 'One(1) Peon Post is Vaccant likely to Fill up shortly', '60000.00', '2013-07-10 23:18:34'),
+(3, 1002, 2013, 2014, 'Leve encashment in r/o Smti B. Kalita,asstt. retired on 30.11.2013', '385000.00', '2013-07-10 23:19:10'),
+(4, 1002, 2013, 2014, 'Leve encashment in r/o Shri D.C. Kar,Asstt. retiring on 28.02.2014', '400000.00', '2013-07-10 23:19:38'),
+(5, 1002, 2013, 2014, 'Arr. MACP for the Staffs', '250000.00', '2013-07-10 23:20:06'),
+(6, 1002, 2013, 2014, 'Festival Advance', '50000.00', '2013-07-10 23:20:47'),
+(7, 1002, 2013, 2014, 'Honorarium', '200000.00', '2013-07-10 23:21:06'),
+(8, 1002, 2013, 2014, 'Provision for 10 days Leave encashment  Rs. 1,00,000 under HTLTC / Arunachal Darshan', '100000.00', '2013-07-10 23:23:45'),
+(9, 1002, 2013, 2014, 'Employees contribution to CPS', '40000.00', '2013-07-10 23:24:24'),
+(10, 1002, 2013, 2014, 'Provision for HRA', '180000.00', '2013-07-10 23:24:47'),
+(11, 1002, 2013, 2014, 'Provision for LTC', '100000.00', '2013-07-10 23:25:06'),
+(14, 1000, 2014, 2015, 'Festival Advance', '60000.00', '2014-11-12 17:12:37'),
+(15, 1000, 2014, 2015, 'Arr. MACP for the Staffs', '250000.00', '2014-11-13 14:25:13'),
+(16, 1000, 2014, 2015, 'Honorarium', '200000.00', '2014-11-13 15:02:37'),
+(17, 1002, 2014, 2015, 'Honorarium', '200000.00', '2014-11-13 15:03:11'),
+(18, 1000, 2014, 2015, 'Provision for employees', '130000.00', '2014-11-17 11:39:54');
+
+
+
+
+
+
+
+designation master id not populate in pension_receipt_file_master from file entry in receipt.
+

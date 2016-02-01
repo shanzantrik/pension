@@ -1,0 +1,47 @@
+PPO no. is generated in issue branch.
+
+In Inside and Outside portion of report To field in form 4 is dynamic from receipt branch.
+
+appoint as should be dropdown option are Adhoc, Officating, WC, Contract, Temporary, Permanent
+
+Pay Scale - auto populated based on the pay details
+
+Pre-Revised and Revised both form not needed. Only Revised form is enough.
+
+NPA value check.
+
+
+check transaction of model_receipt->add_receipt
+
+
+after database structure changes -
+==================================
+
+In Receipt - 
+administrator/receipt
+administrator/receipt/search_report
+
+District - id shown
+
+
+
+
+
+
+
+
+
+
+<div class="form-group" id="disability_catagory" style="display:none">
+    <label class="col-sm-3 control-label">Category</label>
+    <div class="col-sm-6">
+        <select name="disability_catagory"><option>Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select>
+    </div>
+</div>
+
+<div class="form-group" id="disability_percent" style="display:none">
+    <label class="col-sm-3 control-label">Percentage</label>
+    <div class="col-sm-6">
+        <select name="disability_percent"><option>Select</option><option value="100">100</option><option value="90">90</option><option value="80">80</option></select>
+    </div>
+</div>

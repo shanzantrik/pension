@@ -1,0 +1,163 @@
+pension DA---from director/joint director/FAO
+received not working
+
+GPO NO:
+CPO NO:
+
+Service BOOK ENTRY:
+TOtal service 
+Name of accountant general:width increase;
+
+in receipt Salutation not neccessary
+like Enamul haque
+
+GIS-for objection
+
+checklist --savings_less_from,savings_less_to,savings_add_to,savings_add_from "timestamp to date"
+
+
+
+1987-decmber missing
+1992 gis chart-year 1990 febraury
+1995 gis chart 1982,1983 december mising,1986 july missing
+1998 gis chart 1983 aug missing,1986-july,1991 jan,may missing,1992-april,1994-october,1996-january
+1999 gis chart 1997-decmber missing,1998-decmbr mising,1999 decembr missing
+2001 gis chart -1994- january missing
+2002 missing
+2004 gis chart 1996 feb and march same
+
+
+amount in words pending
+
+
+controller/gis--15
+ $dp['file_no']= $this->model_Gis->getfile_no_from_checklist_for_check();
+model_gis
+function getfile_no_from_checklist_for_check()
+	 {
+	    $q=$this->db->query("SELECT file_no from checklist");
+	    $array = array();
+	    foreach($q->result() as $key=>$row) :
+	    	array_push($array, $row->file_no);
+	    endforeach;
+	  	return $array;
+	 }
+gis/view---99
+<?php 
+$my_values = array();
+$my_array=array();
+?>
+<?php $old=$file_no;
+
+/*foreach ($file_no as $value){
+  array_push($old,$value);
+}*/
+?>
+--------117
+ <?php if(in_array($key->file_no, $old)) { ?>
+                        <a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/Gis/attach_checklist/'.base64_encode($key->file_no))?>/Receipt" class="btn btn-warning"  data-id=""><i class="icon-book"></i>Attached</a>
+                    <?php } else { ?>
+                        <a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/Gis/attach_checklist/'.base64_encode($key->file_no))?>/Receipt" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Attach Checklist</a>
+                    <?php }?>
+
+
+model_gis_superintendent
+function getAll_file_DA()
+	 {
+	    //$q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,checklist c,token_reciept d where b.file_No=d.file_No and a.file_no=b.file_No and b.file_No=c.file_no and a.status='Forwarded to GIS_Superintendent By GIS DA' and c.claim_status='complete' ");
+	    $q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,checklist c,token_reciept d where b.file_No=d.file_No and a.file_no=b.file_No and b.file_No=c.file_no and a.status='Forwarded to GIS_Superintendent By GIS DA'");
+    	$result = $q->result();
+ 		return $result;
+	 }
+gis_superintendent/view--143
+<?php if($key->claim_status=="incomplete")
+                {
+                ?>
+<a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/view_checklist/'.base64_encode($key->file_no))?>/Receipt" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>View Checklist</a><a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/objection_report/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-danger btn-rad" data-id=""><i class="icon-book"></i>Objection</a>
+                <?php
+                }else{//complete
+                ?>
+<a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/view_checklist/'.base64_encode($key->file_no))?>/Receipt" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Checklist</a><a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/attach_authority/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Authority</a>
+               <?php 
+                }
+                ?>
+
+Fao/model_fao
+function getAll_file_gissuperintendent()
+	 {
+	   // $q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,token_reciept c where a.file_no=b.file_No and c.file_No=b.file_No and a.status='gis_Forwarded to FAO'");
+	    $q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,checklist c,token_reciept d where b.file_No=d.file_No and a.file_no=b.file_No and b.file_No=c.file_no and a.status='gis_Forwarded to FAO'");
+    	$result = $q->result();
+ 		return $result;
+	 }
+fao/view----143
+ <?php if($key->claim_status=="incomplete")
+                {
+                ?>
+<a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/view_checklist/'.base64_encode($key->file_no))?>/Receipt" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>View Checklist</a><a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/objection_report/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-danger btn-rad" data-id=""><i class="icon-book"></i>Objection</a>
+                <?php
+                }else{//complete
+                ?>
+<a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/view_checklist/'.base64_encode($key->file_no))?>/Receipt" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Checklist</a><a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/attach_authority/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Authority</a>
+               <?php 
+                }
+                ?>
+model_jointdirector
+function getAll_file_superintendent_for_approval()
+	 {
+	    //$q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,token_reciept c where c.file_No=b.file_No and a.file_no=b.file_No and a.status='gis_Forwarded to joint Director'");
+	    $q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,checklist c,token_reciept d where b.file_No=d.file_No and a.file_no=b.file_No and b.file_No=c.file_no and a.status='gis_Forwarded to joint Director'");
+
+    	$result = $q->result();
+ 		return $result;
+	 }
+view/joint_director--114
+<?php if($key->claim_status=="incomplete")
+                {
+                ?>
+<a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/view_checklist/'.base64_encode($key->file_no))?>/Receipt" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>View Checklist</a><a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/objection_report/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-danger btn-rad" data-id=""><i class="icon-book"></i>Objection</a>
+                <?php
+                }else{//complete
+                ?>
+<a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/view_checklist/'.base64_encode($key->file_no))?>/Receipt" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Checklist</a><a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/attach_authority/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Authority</a>
+               <?php 
+                }
+                ?>
+
+model_director
+function filefrom_gis_superintendent()
+	 {
+	    //$q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,checklist c,token_reciept d where b.file_No=d.file_No and  a.file_no=b.file_No and b.file_No=c.file_no and a.status='gis_Forwarded to Director' and c.claim_status='complete' ");
+	    $q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,checklist c,token_reciept d where b.file_No=d.file_No and  a.file_no=b.file_No and b.file_No=c.file_no and a.status='gis_Forwarded to Director'");
+    	$result = $q->result();
+ 		return $result;
+	 }
+view/director---191
+<?php if($key->claim_status=="incomplete")
+                {
+                ?>
+<a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/view_checklist/'.base64_encode($key->file_no))?>/Receipt" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>View Checklist</a><a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/gis_superintendent/objection_report/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-danger btn-rad" data-id=""><i class="icon-book"></i>Objection</a>
+                <?php
+                }else{//complete
+                ?>
+<a title="Attach Checklist for this claimant from receipt branch" href="<?php echo site_url('/administrator/Director/view_checklist/'.base64_encode($key->file_no))?>/Receipt" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Checklist</a><a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/Director/attach_authority/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Authority</a>
+               <?php 
+                }
+                ?>
+
+
+
+Experience-1 yr 9 months
+Current Fixed Sal-18000
+Expected Fixed Sal-26000
+Notice Period-1 month
+Edu qual-MCA
+Current Organisation-Zantrik technologies pvt ltd
+Current Location-Guwahati
+Willing to travel to work location at Electronic CIty? (Y/N) : Y
+* Php-8 out of 10
+* Mysql-8 out of 10
+* Javascript-8 out of 10
+* Ajax-6 out of 10
+* Json-6 out of 10
+* Code Igniter-7 out of 10

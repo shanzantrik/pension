@@ -1,0 +1,87 @@
+1-1-1996 to 31-12-2006 5th pay Commision.
+1-1-2006 to 31-12-2015 6th pay Commision.
+
+sallary=basic_pay+grade_pay+NPA(only for doctor).
+
+Average Emolument:ae
+getAverageEmolument()
+Family pension:no ae
+if date of retirement 15-08-2009 and date of last increament 01-05-2009 and before increament sallary-10000 and after increament-12000
+then ae=((sallary_b4_increamnet*6)+(sallary_aftr_increament*4))/10
+if last 10 months no increament then ae=(sallary at the time of retirement*10)/10
+
+
+Amount of pension:
+getAmountofPension()
+on or after 2006 50% of last pay or 50% of ae (whichever is more)
+before 2006 
+$amountofPension = ceil(($averageEmolument*1/2)*($this->year_of_service()/66));
+
+minimum amount_of_pension 3500 in 6th pay commision(on or after 1-1-2006)and minimum amount_of_pension 1275 in 5th pay(1-1-1996 to 31-12-2005)
+
+year_of_service:
+if net qualifying service is 32 years 5 month 7 days.
+
+then year of service is 32*2=64
+if month is between 3<month<=8
+then year of service=64+1=65
+elseif month is between 9<=month<=11
+then year of service=64+2=66
+
+year of service cannot be more then 66
+
+DeathcumretirementGratuity(DCRG):
+
+(LastPay*DA(Dearness Allowance)*yearofservice)/4;
+
+Gratuity  will be maximum 10,00,000.
+
+EnhanceRate:
+getEnhanceRate();
+50% of last pay;
+if pensioner dies after service or alive then Enhance rate is for  following date of retirement to 7 years after that ordinaryRate upto his/her death or remarriage.
+if pensioner dies during service then following date of death to 10 years after that ordinaryRate upto his/her(wife/husband/child) death or remarriage.
+
+in between if his age reached to 65/67(if he retires at 58 then enhance rate 65 and if retires 60 then 67) then enhancerate stopped ordinary rate starts.
+
+
+NB: if the Government Servant dies during service then the enhanced rate is for 10 years 
+and if the government servant dies after service than the enhanced rate is for 7 years.
+In case of qualifying service less than 7 years enhanced rate is not admissible, only ordinary rate.
+
+
+ORdinaryRate:
+getOrdinaryRate();
+getOrdinaryRate:30% of lastpay
+
+check_age_at_next_birth:
+if pensioner age at the time of retirement 54 and pay_commision is 6 then corresponding value (54+1=55) get from table master_comm_value_tb. value will be 8.627
+
+Commutationof Pension:
+getCommutationofPension()
+pensioner will be paid commutation amount if he applied for it otherwise nill.
+Commutation_amount=(amountofpension*40/100)*12*check_age_at_next_birth();
+return ceil((($amountofPension*40/100)*12)*check_age_at_next_birth($this->pay_commission,$age_at_retirement+1));
+
+Reduced Pension:
+getReducePension();
+amountofpension-40% of amountofpension.
+
+Commuted value:-40% of pension.
+
+N.B-in case of family pension no ae,commutation,reduced pension.
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+

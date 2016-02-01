@@ -1,0 +1,11 @@
+getEnhanceRate
+getOrdinaryRate
+getAmountofPension
+getDCRG
+getAverageEmolument
+
+
+
+
+
+check this function - getDCRG

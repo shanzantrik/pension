@@ -1,0 +1,47 @@
+$last_pay, $averageEmolument, $basicSalary, $pensionCategory, $pensionFor, $pensionScheme, $com_pension_rate, $year_of_service, $net_qualifying_service
+
+dependent pension
+=================
+getAmountofPension($last_pay)
+
+extraordinary_pension
+=====================
+getAmountofPension($last_pay, $basicSalary, $pensionCategory, $pensionFor, $pensionScheme)
+
+liberalised pension
+===================
+getAmountofPension($last_pay)
+
+parents pension
+===============
+getAmountofPension($last_pay)
+
+absorption pension
+==================
+after  - getAmountofPension($lastPay, $averageEmolument)
+before - getAmountofPension($lastPay, $averageEmolument)
+
+compulsory
+===========
+after  - getAmountofPension($lastPay,$averageEmolument,$com_pension_rate)
+before - getAmountofPension($lastPay,$averageEmolument,$com_pension_rate)
+
+disability pension
+==================
+after  - getAmountofPension($lastPay, $averageEmolument)
+before - getAmountofPension($averageEmolument, $year_of_service)
+
+invalid pension
+===============
+after  - getAmountofPension($lastPay, $averageEmolument, $year_of_service, $net_qualifying_service)
+before - getAmountofPension($lastPay, $averageEmolument, $year_of_service, $net_qualifying_service)
+
+superannuation
+===============
+after  - getAmountofPension($lastPay, $averageEmolument)
+before - getAmountofPension($averageEmolument, $year_of_service)
+
+voluntary
+=========
+after  - getAmountofPension($lastPay, $averageEmolument)
+before - getAmountofPension($averageEmolument, $year_of_service)

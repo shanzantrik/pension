@@ -1,0 +1,4 @@
+DELETE FROM `master_sub_module` WHERE `module_code`=33;
+DELETE FROM `privilege_sub_module` WHERE `main_module_code`=33;
+DELETE FROM `privilege_module` WHERE `module_code`=33;
+DELETE FROM `master_module` WHERE `module_code`=33;

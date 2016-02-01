@@ -1,0 +1,92 @@
+dearness_allowance_master
+
+director_ds
+
+status field in pensioner_files_details remove it and check the codes.
+
+case_no is not unique in case of revision from pay commission to pay commission because if pay commision changed new entry of pensioner details in the pensioner table with same case no but with different serial no.
+
+
+In reauthorization table instead of file_no it should be serial_no(foreign_key) from pensioner_personal_details.
+
+done						Not done
+=====						========
+chat
+checklist
+concern_da
+content_manager
+employees					concern_superintendant
+employees_budget
+file_status
+file_tracking_details
+issue
+master_accountant_general
+master_branch
+master_comm_value_tb		master_sub_module
+master_dearness_allowance
+master_department
+master_designation
+master_districts
+master_document
+master_fitment_table
+master_icons
+master_member_type
+master_module
+master_objection
+master_pay_comm
+master_pay_comm_param
+master_pay_scale
+master_treasury
+notice
+pensioner_family_details
+pensioner_files_details
+pensioner_pay_details
+pensioner_personal_details
+pensioner_service_details
+pensioner_treasury_details
+pension_receipt_file_master
+pension_receipt_register_master
+pen_members
+privilege_module
+privilege_sub_module
+reauthorization
+registration
+section
+settings
+theme
+token_reciept
+weather_config
+woids
+
+
+
+TRUNCATE QUERY
+==============
+SET FOREIGN_KEY_CHECKS=0;
+TRUNCATE TABLE `chat`;
+TRUNCATE TABLE `checklist`;
+TRUNCATE TABLE `concern_da`;
+TRUNCATE TABLE `concern_superintendent`;
+TRUNCATE TABLE `file_status`;
+TRUNCATE TABLE `file_tracking_details`;
+TRUNCATE TABLE `issue`;
+TRUNCATE TABLE `notice`;
+TRUNCATE TABLE `pensioner_family_details`;
+TRUNCATE TABLE `pensioner_files_details`;
+TRUNCATE TABLE `pensioner_ips_details`;
+TRUNCATE TABLE `pensioner_pay_details`;
+TRUNCATE TABLE `pensioner_personal_details`;
+TRUNCATE TABLE `pensioner_revision`;
+TRUNCATE TABLE `pensioner_service_details`;
+TRUNCATE TABLE `pensioner_treasury_details`;
+TRUNCATE TABLE `pension_receipt_file_master`;
+TRUNCATE TABLE `pension_receipt_register_master`;
+TRUNCATE TABLE `reauthorization`;
+TRUNCATE TABLE `registration`;
+TRUNCATE TABLE `token_reciept`;
+TRUNCATE TABLE `weather_config`;
+
+be careful
+===========
+TRUNCATE TABLE `privilege_module`;
+TRUNCATE TABLE `privilege_sub_module`;

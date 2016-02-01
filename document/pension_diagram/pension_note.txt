@@ -1,0 +1,297 @@
+application/viewchanges-all pension VIEW and report section form1 and form4
+<?php echo getEnhanceRate($lastPay, $val['net_qualifying_service'], $val['dor'], $val['dod'],$val['class_of_pension']); ?>
+base_helper:
+ if ($class_of_pension=='Normal_Family_Pension'||$class_of_pension=='Extraordinary_Pension'||$class_of_pension=='Liberalised_Pension'||$class_of_pension=='Dependent_Pension'||$class_of_pension=='Parents_Pension'){
+				return round($total*50/100)." <b>from ".$from->format('Y-m-d')." upto ".$upto->format('Y-m-d')."</b>";
+				}else{	
+			return round($total*50/100);
+}
+----------------------------------
+$earn_leave=$pay_info[5]['earn_leave'];
+$half_leave=$pay_info[6]['half_pay'];
+//in palce of leave account
+  <tr>
+		<td colspan="4" align="center"><b>Leave Account(No of Days)</b></td>
+	</tr>
+	<tr>
+		<td><b>Earn leave</b></td>
+		<td><?php echo $earn_leave;?></td>
+		<td><b>Half pay leave</b></td>
+		<td><?php echo $half_leave;?></td>
+	</tr>
+
+$da_post=$pay_info[3]['da_post'];
+$da_incr=$pay_info[4]['da_incr'];
+in palce of <?php echo $da?>put
+<?php echo $da_post;?>
+---------------------------------
+view/Working sheet-all
+$earn_leave=$pay_info[5]['earn_leave'];
+$half_leave=$pay_info[6]['half_pay'];
+
+<tr>
+		<td ><div align="right">10.</div></td>
+		<td><b>Leave Account(No of Days):</b></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td><div align="right"></div></td>
+		<td><b>(a)Earn leave</b></td>
+		<td>:</td>
+		<td><?php echo $earn_leave;?></td>
+		
+	</tr>
+	<tr>
+		<td ><div align="right"><b></b></div></td>
+		<td><b>(b)Half pay leave</b></td>
+		<td>:</td>
+		<td><?php echo $half_leave ;?></td>
+</tr>
+
+in palce of <?php echo $da?>put
+<?php echo $da_post."(%)";?>
+
+<tr>
+		<td ><div align="right">17.</div></td>
+		<td><b>Family Pension:</b></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td><div align="right"></div></td>
+		<td><b>(a)Enhanced Rate</b></td>
+		<td>:</td>
+		<td><?php echo getEnhanceRate($lastPay, $val['net_qualifying_service'], $val['dor'], $val['dod']); ?></td>
+		
+	</tr>
+	<tr>
+		<td ><div align="right"><b></b></div></td>
+		<td><b>(b)Ordinary Rate</b></td>
+		<td>:</td>
+		<td><?php echo getOrdinaryRate($lastPay);?></td>
+	</tr>
+    <tr>
+		<td><div align="right">18.</div></td>
+		<td><b>Commuted Value</b></td>
+		<td>:</td>
+		<td><?php echo getCommuted_value(getAmountofPension($ae, $lastPay));?></td>
+		
+	</tr>
+----
+worksheet/voluntary/super_after
+$da_post=$pay_info[3]['da_post'];
+$da_incr=$pay_info[4]['da_incr'];
+$lastPay = getPay($lp,$da_post);
+-------
+worksheet/super_bfore/absorption
+$pay_info = unserialize($val['pay_info']); 
+			$lp = array();
+	foreach ($pay_info[0] as $key => $value) {
+		$lp[$key] = $value;
+	}
+	$ip = array();
+	foreach ($pay_info[1] as $key => $value) {
+		$ip[$key] = $value;
+	}
+	$da_post=$pay_info[3]['da_post'];
+	$da_incr=$pay_info[4]['da_incr'];
+	$lastPay = getPay($lp,$da_post);
+	
+	$latestDaAmount = get_pecentage_of_da($lastPay,getLatestDaPercent());
+	$da = getDA($lastPay, $val['dor']);
+	$year_of_service = year_of_service($val['net_qualifying_service']);
+	//$ae = getAverageEmolument($lp, $ip, $val['dor'], $pay_info[2]['last_increament_date']);
+	//$ae = getAverageEmolument($lp, $ip, $val['dor'], $pay_info[2]['last_increament_date'],$val['pay_commission']);
+	$ae = getAverageEmolument($lp,$da_post,$ip,$da_incr,$val['dor'], $pay_info[2]['last_increament_date'],$val['pay_commission']);
+        $earn=get_Earn_money($pay_info[5]['earn_leave'],$lastPay);
+	$half_pay=get_half_money($pay_info[6]['half_pay'],$lastPay);
+
+change serial no 17 to 18 18 to 19
+-------------------------
+compulsory
+<?php echo getCommuted_value(getAmountofPension($ae,$lastPay,$com_pension_rate));?>
+invalid
+<?php echo getCommuted_value(getAmountofPension($lastPay, $ae, $year_of_service, $val['net_qualifying_service']));?>
+
+disbursor:
+ <?php //echo $val['dob'];
+			$dob = new DateTime($val['dob']);
+			$dob1=date_format($dob,"Y-m-d");
+			//print_r($dob1);
+			$dob->modify('+80 year');
+			$year80=date_format($dob,"Y-m-d");
+			//print_r($year80);
+			$dob->modify('+5 year');
+			$year85=date_format($dob,"Y-m-d");
+			//print_r($year85);
+			$dob->modify('+5 year');
+			$year90=date_format($dob,"Y-m-d");
+			//print_r($year90);
+			$dob->modify('+5 year');
+			$year95=date_format($dob,"Y-m-d");
+			//print_r($year95);
+			$dob->modify('+5 year');
+			$year100=date_format($dob,"Y-m-d");
+			//print_r($year100);
+			?>
+			<tr>
+				<td colspan="4">
+1.W.e.f <?php echo $val['effect_of_pension'];?> to <?php echo $year80; ?>(80 yrs.) 20% increase on  Rs. <?php echo $amountOfPension;?>= <?php echo  round((20*$amountOfPension)/100)+$amountOfPension;?>  <br />
+2.W.e.f <?php $year80plus = new DateTime($year80);
+$year80plus->modify('+1 day');
+$year80plus1=date_format($year80plus,"Y-m-d");
+echo $year80plus1;
+?> to <?php echo $year85; ?>(85 yrs.) 30% increase on  Rs. <?php echo $amountOfPension;?>= <?php echo round((30*$amountOfPension)/100)+$amountOfPension;?><br />
+3.W.e.f  <?php $year85plus = new DateTime($year85);
+$year85plus->modify('+1 day');
+$year85plus1=date_format($year85plus,"Y-m-d");
+echo $year85plus1;
+?> to <?php echo $year90; ?>(90 yrs.) 40% increase on  Rs. <?php echo $amountOfPension;?>= <?php echo round((40*$amountOfPension)/100)+$amountOfPension;?><br />
+4.W.e.f <?php $year90plus = new DateTime($year90);
+$year90plus->modify('+1 day');
+$year90plus1=date_format($year90plus,"Y-m-d");
+echo $year90plus1;
+?> to <?php echo $year95;?>(95 yrs.) 50% increase on  Rs. <?php echo $amountOfPension;?>= <?php echo round((50*$amountOfPension)/100)+$amountOfPension;?><br />
+5.W.e.f <?php $year95plus = new DateTime($year95);
+$year95plus->modify('+1 day');
+$year95plus1=date_format($year95plus,"Y-m-d");
+echo $year95plus1;?> to (100 yrs.) onwards 100% increase on  Rs. <?php echo $amountOfPension;?>= <?php echo round((100*$amountOfPension)/100)+$amountOfPension;?><br />
+</td>	
+</tr>
+
+-------------------
+pension Da/from ips
+Forwarded to Superintendent of Pension
+view/notification/da_index
+<a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/Ips/print_ips/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Print</a>
+<a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/Ips/print_ips_all/'.base64_encode($key->dept_forw_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Print All</a>
+--------------------
+ips cycle
+model_notification/getNotifiction
+$sql="SELECT * from file_status a,pension_receipt_file_master b,token_reciept c,pensioner_personal_details d where d.case_no=b.file_No and c.file_No=b.file_No and a.status='Forwarded to Superintendent of Pension' and a.file_no=b.file_no";
+model_notification/save_fwd_to_pen_superintendent
+'file_status'=>'Forwarded to Superintendent of Pension',
+model_notification/save_forwrd_dynamic
+'file_status'=>'Forwarded to Superintendent of Pension',
+view/administrator/home_view/line_no-149
+$sql="SELECT count(id) as cnt from file_status where  status='Forwarded to Superintendent of Pension'";
+view/administrator/home_view/line_no-172
+$sql="SELECT * from file_status a,pension_receipt_file_master b where a.status='Forwarded to Superintendent of Pension' and a.file_no=b.file_No  LIMIT 0,5";
+----
+<!-- ###################################  DEALING ASSISTANT OF PENSION   ################################### -->
+administrator/home_view/405
+$res=mysql_query("SELECT count(id) as cnt from file_status where  status='Forwarded to Concern Dealing Assistant' and member_code=$member_code");
+administrator/home_view/429
+$sql="SELECT * from file_status a,pension_receipt_file_master b where  a.status='Forwarded to Concern Dealing Assistant' and a.file_no=b.file_No and a.member_code=$member_code LIMIT 0,5";
+administrator/home_view/460
+$res=mysql_query("SELECT count(id) as cnt from file_status where  status='pension_Forwarded to Pension DA' and member_code=$member_code");
+administrator/home_view/483
+$sql="SELECT * from file_status a,pension_receipt_file_master b where  a.status='pension_Forwarded to Pension DA' and a.file_no=b.file_No and a.member_code=$member_code LIMIT 0,5";
+
+administrator/home_view/505
+<div class="tab-pane" id='fsp'>
+from sql delete member code.
+
+view all 
+other then fms
+<a href="<?php echo site_url('administrator/da_notification/from_superintendent') ?>" class="btn" style="float:right">view all</a>
+--------
+<div class="tab-pane" id='ddd'>
+                               <?php
+                                $bc=$this->session->userdata('branch_code'); 
+                                $member_code=$this->session->userdata('member_code');
+                                //$res=mysql_query("SELECT count(id) as cnt from file_status where  status='Forwarded to Dealing Assistant of Pension from Superintendent' and member_code=$member_code");
+		$res=mysql_query("SELECT count(id) as cnt from file_status where  status='Forwarded to Pension DA by IPS DA'");
+								
+                                $row=mysql_fetch_array($res);
+                                $cnt=$row['cnt'];
+                                    ?>
+                                    <?php if ($cnt>0): ?>
+                                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable">
+                                        <thead>
+                                            <tr>
+                                                <td><b>Auto Gen File No</b></td>
+                                                <td><b>File No</b></td>
+                                                <td><b>Dept Forwarding No</b></td>
+                                                <td><b>Employee Code</b></td>
+                                                <td><b>Pensionee Name</b></td>
+                                                <td><b>Designation</b></td>
+                                                <td><b>Superintendent</b></td>
+                                                <td><b>Allocated Date</b></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php 
+                                                //$sql="SELECT * from file_status a,pension_receipt_file_master b where  a.status='Forwarded to Dealing Assistant of Pension from Superintendent' and a.file_no=b.file_No and a.member_code=$member_code LIMIT 0,5";
+	$sql="SELECT * from file_status a,pension_receipt_file_master b where  a.status='Forwarded to Pension DA by IPS DA' and a.file_no=b.file_No LIMIT 0,5";
+												
+                                                $result=mysql_query($sql);
+                                                while ($row=mysql_fetch_array($result)) {
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $row['auto_file_no'] ?></td>
+                                                <td><?php echo $row['file_no'] ?></td>
+                                                <td><?php echo $row['dept_forw_no'] ?></td>
+                                                <td><?php echo $row['emp_code'] ?></td>
+                                                <td><?php echo $row['salutation'].'. '.$row['pensionee_name'] ?></td>
+                                                <td><?php echo $row['designation'] ?></td>
+                                                <td><?php $x=$this->model_notification->get_last_member($row['file_no']); print_r($x[1]) ?></td>
+                                                <td><?php echo $row['allocated_date'] ?></td>
+                                            </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                        <?php 
+
+                                         ?>
+                                    </table>
+                                <a href="<?php echo site_url('administrator/da_notification/from_superintendent') ?>" class="btn" style="float:right">view all</a>
+                                <?php else: ?>
+                                    <div class="alert alert-success">No New File Notifications From Superiendantant</div>
+                                <?php endif ?>
+                           </div>
+
+
+
+
+C:\xampp\htdocs\pension_ui\application\views\administrator\gis
+edit_checklist
+view_checklist
+viewform
+C:\xampp\htdocs\pension_ui\application\views\administrator\pension\report\gis
+checklist-report
+
+
+
+
+
+INSERT INTO `pension_ui`.`master_gis_chart` (`for_year`, `year_of_entry`, `jan`, `feb`, `mar`, `apr`, `may`, `jun`, `jul`, `aug`, `sep`, `oct`, `nov`, `dec`) VALUES ('1986', '1983', '302', '317', '321', '331', '341', '350', '361', '371', '381', '391', '402', '412')
+
+
+
+ERROR 1146: 1146: Table 'pension_ui.master_gis_chart' doesn't exist
+
+SQL Statement:
+
+INSERT INTO `pension_ui`.`master_gis_chart` (`for_year`, `year_of_entry`, `jan`, `feb`, `mar`, `apr`, `may`, `jun`, `jul`, `aug`, `sep`, `oct`, `nov`, `dec`) VALUES ('1986', '1984', '193', '207', '210', '219', '228', '236', '245', '255', '264', '273', '282', '292')
+
+
+
+ERROR 1146: 1146: Table 'pension_ui.master_gis_chart' doesn't exist
+
+SQL Statement:
+
+INSERT INTO `pension_ui`.`master_gis_chart` (`for_year`, `year_of_entry`, `jan`, `feb`, `mar`, `apr`, `may`, `jun`, `jul`, `aug`, `sep`, `oct`, `nov`, `dec`) VALUES ('1986', '1985', '95', '102', '110', '118', '126', '134', '142', '150', '159', '167', '175', '184')
+
+
+
+ERROR 1146: 1146: Table 'pension_ui.master_gis_chart' doesn't exist
+
+SQL Statement:
+
+INSERT INTO `pension_ui`.`master_gis_chart` (`for_year`, `year_of_entry`, `jan`, `feb`, `mar`, `apr`, `may`, `jun`, `jul`, `aug`, `sep`, `oct`, `nov`, `dec`) VALUES ('1986', '1986', '7', '14', '21', '28', '35', '42', '50', '57', '64', '72', '79', '87')
+
+
+
+
+
