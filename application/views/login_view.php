@@ -70,7 +70,7 @@ window.setInterval(function () {
                             </p>
                         </fieldset>
                   </form>
-                  <h5 style="text-align:center">&copy; Copyright 2014, All Rights Reserved DAP, Arunachal Pradesh, Powered by: <a href="http://www.zantriktechnologies.in">Zantrik Technologies</a> | Version Z-1.0</h5>
+                  <h5 style="text-align:center">&copy; Copyright 2014, All Rights Reserved DAP, Arunachal Pradesh, Powered by: <a href="http://www.zantriktechnologies.in">Zantrik Technologies</a></h5>
                 </div>
             </div>
         </div>

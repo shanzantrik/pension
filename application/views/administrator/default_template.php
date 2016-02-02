@@ -124,7 +124,7 @@ window.setInterval(function () {
 	<div class="navbar">
 		<div class="navbar-inner">
 			<div class="container-fluid">
-				<a class="brand" href="<?php echo base_url() ?>index.php/administrator/home"> <img alt="" src="<?php echo base_url();?>includes/images/pension-project-logo.png" /></a> <b>Version Z-1.0</b>
+				<a class="brand" href="<?php echo base_url() ?>index.php/administrator/home"> <img alt="" src="<?php echo base_url();?>includes/images/pension-project-logo.png" /></a>
 				
 				<!-- theme selector starts -->
 				<div class="btn-group pull-right theme-container" >
