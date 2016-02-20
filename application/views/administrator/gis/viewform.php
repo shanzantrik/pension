@@ -70,7 +70,7 @@
                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">his/her relationship with
 The employee (in case of Death of Govt. Servant)
 </label></td>
-                        <td><select name="claiment_relation"><option value="">Select</option><option>Wife</option><option>Son</option><option>Daughter</option><option>Father</option><option>Mother</option></select></td>                                                    
+                        <td><select name="claiment_relation"><option value="">Select</option><option>Wife</option><option>Husband</option><option>Son</option><option>Daughter</option><option>Father</option><option>Mother</option></select></td>                                                    
                     </tr>
                     <tr>
                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">Village/Town</label></td>

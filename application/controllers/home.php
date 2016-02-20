@@ -20,21 +20,20 @@ class Home extends CI_Controller {
 		}
 	}
 
-	function login_link(){
+	function login(){
 		$this->load->view('login_view');
 	}
 
-	function login() {
+	function doLogin() {
 		$username = $this->input->post('username');
 		$pass  = $this->input->post('password');
 		$md5_pass = md5($pass);	
 			if($this->model_home->login($username,$md5_pass)) {
-				//$this->session->set_flashdata('message', '<div class="alert alert-success">Login Successfully.</div>');
 				$this->member_type_redirection();
 			} else {
 				$this->session->set_flashdata("message", "<div class='alert alert-danger'>Member code or password doesn't match.</div>");
 				$err=base64_encode('error');
-				redirect(site_url('home/login_link').'?msg='.$err);
+				redirect(site_url('home/login').'?msg='.$err);
 			}
 
 	}
@@ -45,8 +44,6 @@ class Home extends CI_Controller {
 	}
 
 	function logout() {
-		//logout 
-
 		$datas=array('logged_in'=>'no');
 	  	$this->db->where('member_code',$this->session->userdata('member_code'));
 	  	$this->db->update('pen_members',$datas);

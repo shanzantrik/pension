@@ -110,6 +110,7 @@
                 <option value="Muslim">Muslim</option>
                 <option value="Sikh">Sikh</option>
                 <option value="Christian">Christian</option>
+                <option value="Budhism">Budhism</option>
                 <option value="Others">Others</option>
             </select><?php echo form_error('religion', '<div class="error">', '</div>'); ?>
         </div>

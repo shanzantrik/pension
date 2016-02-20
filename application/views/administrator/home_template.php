@@ -145,7 +145,7 @@ window.setInterval(function () {
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="<?php echo site_url('home/login_link') ?>"><i class="icon-user"></i>Login</a></li>
+						<li><a href="<?php echo site_url('home/login') ?>"><i class="icon-user"></i>Login</a></li>
 						<!-- <li class="divider"></li>
 						<li><a href="<?php echo site_url('home/logout'); ?>"><i class="icon-off"></i>Logout</a></li> -->
 					</ul>
@@ -153,14 +153,6 @@ window.setInterval(function () {
 				<!-- user dropdown ends -->
 				
 				<div class="top-nav nav-collapse">
-					<!-- <ul class="nav">
-						<li><a href="#">Visit Site</a></li>
-						<li>
-							<form class="navbar-search pull-left">
-								<input placeholder="Search" class="search-query span2" name="query" type="text">
-							</form>
-						</li>
-					</ul> -->
 				</div><!--/.nav-collapse -->
 			</div>
 		</div>
@@ -236,12 +228,6 @@ window.setInterval(function () {
 		
 	</div><!--/.fluid-container-->
 
-	<!-- external javascript
-	================================================== -->
-	<!-- Placed at the end of the document so the pages load faster -->
-
-	<!-- jQuery -->
-	
 	<!-- jQuery UI -->
 	<script src="<?php echo base_url();?>includes/js/bootstrap-multiselect.js" type="text/javascript"></script>
 	<script src="<?php echo base_url();?>includes/js/jquery-ui-1.8.21.custom.min.js"></script>
@@ -278,16 +264,5 @@ window.setInterval(function () {
 	<script src='<?php echo base_url()?>includes/js/fullcalendar.min.js'></script>
 	<!-- data table plugin -->
 	<script src='<?php echo base_url()?>includes/js/jquery.dataTables.min.js'></script>
-	
-
-	<!-- chart libraries start -->
-
-	<!-- chart libraries end -->
-
-	<!-- select or dropdown enhancer -->
-<!-- 
-	<script src="<?php echo base_url()?>includes/js/charisma.js"></script>
-	 -->
-		
 </body>
 </html>

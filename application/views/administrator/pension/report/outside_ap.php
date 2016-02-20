@@ -784,6 +784,7 @@ if(!in_array($pensioner->designation, $apex_designation)) : ?>
 				 	<tr>
 						<td style="vertical-align: top;" colspan="2"><b>
 							To<br/>
+							The Treasury Officer<br/>
 							<?php echo $pensioner->treasuryOfficer(); ?>
 						</td>
 						<td colspan="2" align="right">
@@ -971,6 +972,7 @@ if(!in_array($pensioner->designation, $apex_designation)) : ?>
 				 	<tr>
 						<td style="vertical-align: top;" colspan="2"><b>
 							To<br/>
+							The Treasury Officer<br/>
 							<?php echo $pensioner->treasuryOfficer(); ?>
 						</td>
 						<td colspan="2" align="right">

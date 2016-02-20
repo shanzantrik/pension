@@ -49,10 +49,10 @@ window.setInterval(function () {
                     if($this->session->flashdata('message')){
                         echo $this->session->flashdata('message');
                     }else{
-                        echo "<div class='alert alert-success'>Login with Your Member Code & Password</div>";
+                        echo "<div class='alert alert-success'>Login with your member code & password</div>";
                     }
                  ?>
-                <form method="POST" class="form-horizontal" action="<?php echo site_url('home/login'); ?>"> 
+                <form method="POST" class="form-horizontal" action="<?php echo site_url('home/doLogin'); ?>"> 
                         <fieldset>
                             <div class="input-prepend" title="Username" data-rel="tooltip">
                                 <span class="add-on"><i class="icon-user"></i></span><input autofocus autocomplete="off" class="input-large span10" placeholder="Member Code" id="username" type="text" name="username" />
