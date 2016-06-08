@@ -50,7 +50,7 @@ class Home extends CI_Controller {
 		$login_data = array('member_code'=>'', 'member_name'=>'', 'branch_code'=>'', 'member_type'=>'', 'logged_in'=>'FALSE','member_type_code'=>'','theme'=>'');
 		$this->session->unset_userdata($login_data);
 		$this->session->set_flashdata("message", "<div class='alert alert-success'>Logout Successfully.</div>");
-		redirect(site_url('home'));
+		redirect(site_url('home/login'));
 	}
 	function view($page_title){
 		$page_title=str_replace('_', ' ', $page_title);

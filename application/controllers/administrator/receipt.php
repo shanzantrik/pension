@@ -255,8 +255,8 @@ while($row=mysql_fetch_array($result))
 						} else {
   							$serial_no = $this->db->query('SELECT serial_no FROM pensioner_personal_details WHERE case_no="'.$_POST['file_no'].'"')->row();
 							$data=array('files'=>$uploadPath, 'serial_no'=>$serial_no->serial_no, 'case_no'=>$_POST['file_no'],'doc_code'=>$fileDesc,'ftype'=>$typical,'status'=>$chk);
-							print($data);
-							exit();
+							//print($data);
+							//exit();
   							$this->db->insert('pensioner_files_details',$data);
                         }
                     }

@@ -84,9 +84,9 @@
 
 <h3>VIEW ISSUED FILE</h3><hr style="margin: 5px 0;"/>
 <ul class="nav nav-tabs" id="myTab">
-    <li onclick="$('#pension').hide();$('#abc').hide();$('#receipt').show();"><a href="<?php echo site_url('/administrator/ips/view_pensioner/_10049')?>#receipt" data-toggle="tab" ><b>From Receipt</b></a></li>
+    <!--<li onclick="$('#pension').hide();$('#abc').hide();$('#receipt').show();"><a href="<?php echo site_url('/administrator/ips/view_pensioner/_10049')?>#receipt" data-toggle="tab" ><b>From Receipt</b></a></li>
     <li style="color:" onclick="$('#receipt').hide();$('#pension').hide();$('#abc').show()"><a href="<?php echo site_url('/administrator/ips/view_pensioner/_1004')?>#pension" data-toggle="tab"><b>From Pension</b></a></li>
-    <li style="color:" onclick="$('#receipt').hide();$('#abc').hide();$('#pension').show()"><a href="<?php echo site_url('/administrator/ips/view_pensioner/_1001')?>#pension" data-toggle="tab"><b>From Director/Joint Director/FAO</b></a></li>
+    <li style="color:" onclick="$('#receipt').hide();$('#abc').hide();$('#pension').show()"><a href="<?php echo site_url('/administrator/ips/view_pensioner/_1001')?>#pension" data-toggle="tab"><b>From Director/Joint Director/FAO</b></a></li>-->
 </ul>
 <div class="tab-content" style="overflow:visible;">
   <!-- From Receipt -->

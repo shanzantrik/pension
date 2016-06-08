@@ -25,9 +25,9 @@
 
 	//$serial_no=$val['serial_no'];
     $family_info=unserialize($val['family_info']);
-	print_r($name);
-    print_r($dob);
-	print_r($serial_no);
+	//print_r($name);
+    //print_r($dob);
+	//print_r($serial_no);
 	?>
   
 	
@@ -77,7 +77,7 @@
 
   
   <div class="form-group">
-    <label for="exampleInputPassword1">Date of Birth <?php echo $main_key++;?></label>
+    <label for="exampleInputPassword1">Date of Birth </label>
     <input type="text" class="form-control" name="child_dob" value="<?php echo $dob?>" id="exampleInputPassword1">
   </div>
 

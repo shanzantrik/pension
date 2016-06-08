@@ -30,7 +30,7 @@
                                 <td><a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/Ips/edit_ips/'.base64_encode($list->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Edit</a>
                                 
                                    <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/Ips/print_ips_all/'.base64_encode($list->dept_forw_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Print All</a>
-                                   <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/Ips/print_ips_all/'.base64_encode($list->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Print</a>
+                                   <!--<a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/Ips/print_ips_all/'.base64_encode($list->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Print</a>-->
 
                                  </td>
                             <?php } else { ?>
