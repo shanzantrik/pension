@@ -35,7 +35,7 @@
         });
     }
 
-	function ajax2(x,y){
+    function ajax2(x,y){
         $.ajax({
             url:"<?php echo site_url('administrator/da_notification/da_confirm_from_ips').'?file=' ?>"+x,
             dataType:'json',
@@ -50,7 +50,7 @@
             }
         });
     }
-	function validate(){
+    function validate(){
         if($(document).find('input[type=radio]:checked').length==0){
             alert('You Must Select');
             return false;
@@ -59,7 +59,7 @@
         }
     }
 
-	function ajax3(x,y){
+    function ajax3(x,y){
         $.ajax({
             url:"<?php echo site_url('administrator/director/pen_confirm_from_jd_fao_superintendent').'?file=' ?>"+x,
             dataType:'json',
@@ -122,6 +122,7 @@
                 <td><b>Receipt Date</b></td>
                 <td><b>Allocated Date</b></td>
                 <td><b>Received</b>[<small style="color:red; font-size: 10px;">Mark as Received</small>]</td>
+                <td>IPS Remarks</td>
                 <td><b>Action</b></td>
             </tr>
         </thead>
@@ -143,11 +144,36 @@
                         <?php $i=$i+1; ?>
                     </td>
                     <td>
+                        <?php if($rec->ips_pass==2){ ?>
+
+                        <a title="Add Observation" href="<?php echo site_url('/administrator/da_notification/load_remarks/'.base64_encode($rec->file_no))?>/Pension" class="open-dialog-edit btn btn-default btn-rad" data-id="">Add</a>
+                        <?Php } else { ?>
+
+                        <a title="Add Observation" href="<?php echo site_url('/administrator/da_notification/load_editremarks/'.base64_encode($rec->file_no))?>/Pension" class="open-dialog-edit btn btn-default btn-rad" data-id="">Edit</a>
+
+                        <?php
+
+                        if($rec->ips_pass==1){
+
+                            echo "<nobr>IPS Passed</nobr>";
+
+                        }else{
+                            echo "<nobr>IPS Not Pass</nobr>";
+                        }
+
+
+                         } ?>
+
+                    </td>
+                    <td>
 <?php if(in_array($rec->file_no, $file_no)) { ?>
     <a title="Attach service detail for Pensioner" href="#<?php //echo site_url('/administrator/service_book/add/'.base64_encode($rec->file_no))?>" class="btn btn-warning" data-id="">Attached</a>
-<?php } else { ?>
+<?php } else {  ?>
+    
+
     <a title="Attach service detail for Pensioner" href="<?php echo site_url('/administrator/service_book/add/'.base64_encode($rec->file_no))?>" class="btn btn-success" data-id="">Pending</a>
-<?php }?>
+<?php } ?>
+           
                     </td>
            
         </tr>
@@ -208,7 +234,7 @@
             <th width="20%">File No</th>
             <th width="20%">Name|Designation</th>                   
             <th width="10%">Received</th>
-            <th width="10%"></th>
+            <th width="10%">IPS remark</th>
         </tr>
     </thead>
     <tbody>
@@ -225,6 +251,11 @@
                     <?php $i=$i+1;?>
                 </td>
                 <td>
+                <a title="Add Observation" href="<?php echo site_url('/administrator/pension/load_editremarks/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-default btn-rad" data-id=""><i class="icon-book"></i>Edit Remarks</a>
+                       
+                <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/pension/print_ips_observation/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>IPS Obs. Print</a>
+
+                <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/fao/print_pension_observation/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Pension Obs. Print</a>
                 </td>
                 </tr>
             <?php endforeach ?>
@@ -242,7 +273,8 @@
             </div>
             <div class="modal-body">
                 <input type="radio" id="to" name="to" value="gis">Gis
-                <input type="radio" id="to" name="to" value="issue">To ISsue
+                <input type="radio" id="to" name="to" value="issue">To Issue
+                <input type="radio" id="to" name="to" value="superintendent">Pension Superintendent
             </div>
             <div class="modal-footer">
                <a class="btn btn-success" data-dismiss="modal">No</a>
@@ -266,6 +298,8 @@
             <th width="40%">Designation</th>
             <th width="20%">Received</th>                   
             <th width="10%">Report</th>
+            <th width="10%">IPS remark</th>
+            <th width="10%">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -281,9 +315,25 @@
                     <?php $i=$i+1; ?>
                 </td>
                 <td>
-               <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/Ips/print_ips/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Print</a>
-<a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/Ips/print_ips_all/'.base64_encode($key->dept_forw_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Print All</a>
-</td></tr>
+                      <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/DA_Notification/add/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Add</a>
+                      <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/Ips/print_ips/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Print</a>
+                        <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/Ips/print_ips_all/'.base64_encode($key->dept_forw_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Print All</a>
+                </td>
+                <td>
+                         <a title="Add Observation" href="<?php echo site_url('/administrator/pension/load_editremarks/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-default btn-rad" data-id=""><i class="icon-book"></i>Edit Remarks</a>
+                       
+                       <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/pension/print_ips_observation/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>IPS Obs. Print</a>
+                       <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/pension/print_pension_observation/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Pension Obs. Print</a>
+</td>
+<td>
+    
+<?php if(in_array($key->file_no, $file_no)) { ?>
+    <a title="Attach service detail for Pensioner" href="#<?php //echo site_url('/administrator/service_book/add/'.base64_encode($rec->file_no))?>" class="btn btn-warning" data-id="">Attached</a>
+<?php } else { ?>
+    <a title="Attach service detail for Pensioner" href="<?php echo site_url('/administrator/service_book/add/'.base64_encode($key->file_no))?>" class="btn btn-success" data-id="">Pending</a>
+<?php }?>
+</td>
+</tr>
             <?php endforeach ?>
     </tbody>
 </table>
@@ -295,7 +345,11 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Are you Sure want to Forward these Files </h4>
-                <input type="hidden" name="to" value="superintendent_ips">
+                <input type="radio" id="to" name="to" value="superintendent_ips">Pension Superintendent
+                <!-- <div class="modal-body">
+                <input type="radio" id="to" name="to" value="gis">Gis -->
+                <input type="radio" id="to" name="to" value="issue">Issue
+            </div>
             </div>
             <div class="modal-body">
                 <p class="text-warning">Click Yes, if you are sure to forward these files, otherwise Click No</p>

@@ -11,9 +11,15 @@
 	$payable 	= $ac.' '.$pensioner->bank_name.' '.$account_no;
 ?>
 
-<div id="print" style="width: 1000px; margin: 0px auto;">
+<!-- <div id="print" style="width: 1000px; margin: 0px auto;">
 	<div style="width:1000px; min-height:600px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 2em">
 	    <div style="text-align:center; padding-top:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
+	        <u><strong>Working Sheet</strong></u>
+	    </div> -->
+	    <div id="print" style="width: 1000px; margin: 0px auto;">
+	<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+	
+		<div style="text-align:center; padding-top:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
 	        <u><strong>Working Sheet</strong></u>
 	    </div>
 	    <div style="padding-top:20px">
@@ -87,6 +93,12 @@
 				<td valign="top"><?php echo $pensioner->non_qualifying_service(); ?></td>
 			</tr>
 			<tr>
+				<td valign="top"><div align="right"><span class="style2"><span class="style3"></span></span></div></td>
+				<td valign="top"><span class="style3"><b>(iii) Add Weightage</b></span></td>
+			  <td valign="top"><span class="style3">:</span></td>
+			  <td valign="top"><span class="style3"><?php echo $pensioner->Weightage(); ?></span></td>
+		  </tr>
+			<tr>
 				<td valign="top"><div align="right"></div></td>
 				<td valign="top"><b>Net qualifying Service</b></td>
 				<td valign="top">:</td>
@@ -156,7 +168,9 @@
 				<td valign="top"><div align="right">15.</div></td>
 				<td valign="top"><b>Amount of Pension</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getAmountofPension(); ?></td>
+				<td valign="top"><?php if($pensioner->class_of_pension=='Extraordinary_Pension' && $pensioner->pay_commission==6 && $pensioner->getAmountofPension() < 7000){echo 7000;} else {
+					echo $pensioner->getAmountofPension();
+				} ?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">16.</div></td>
@@ -180,19 +194,21 @@
 				<td valign="top"><div align="right"></div></td>
 				<td valign="top"><b>(a) Enhanced Rate</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getEnhanceRate(); ?></td>
+				<td valign="top"><?php if($pensioner->class_of_pension=='Extraordinary_Pension' && $pensioner->pay_commission==6 && $pensioner->getAmountofPension() < 7000){echo 'N/A';} else {
+					echo $pensioner->getEnhanceRate();
+				} ?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right"><b></b></div></td>
 				<td valign="top"><b>(b) Ordinary Rate</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getOrdinaryRate(); ?></td>
+				<td valign="top"><?php if($pensioner->class_of_pension=='Extraordinary_Pension' && $pensioner->pay_commission==6 && $pensioner->getAmountofPension() < 7000){echo 'N/A';} else {echo $pensioner->getOrdinaryRate();} ?></td>
 			</tr>
 		    <tr>
 				<td valign="top"><div align="right">19.</div></td>
 				<td valign="top"><b>Commuted Value</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getCommutedValue();?></td>
+				<td valign="top"><?php if($pensioner->class_of_pension=='Extraordinary_Pension' && $pensioner->pay_commission==6 && $pensioner->getAmountofPension() < 7000){echo 'N/A';} else {echo $pensioner->getCommutedValue();}?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">20.</div></td>
@@ -236,10 +252,7 @@
 				<td valign="top">:</td>
 				<td valign="top"><?php echo $pensioner->provisional_pension; ?></td>
 			</tr>
-		    <tr>
-		        <td valign="top">&nbsp;</td>
-		        <td valign="top" colspan="4"><b>RECOVERIES:</b></td>
-		    </tr>
+		   
 		    <tr>
 				<td valign="top"><div align="right">27.</div></td>
 				<td valign="top"><b>Earned Leave Encashment</b></td>
@@ -250,13 +263,13 @@
 				<td valign="top"><div align="right">28.</div></td>
 				<td valign="top"><b>Half Leave Encashment</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getHalfMoney(); ?></td>
+				<td valign="top"><?php if($pensioner->class_of_pension=='Extraordinary_Pension' && $pensioner->pay_commission==6 && $pensioner->getAmountofPension() < 7000){echo 'N/A';} else {echo $pensioner->getHalfMoney();} ?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">29.</div></td>
 				<td valign="top"><b>Total Leave Encashment</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getTotalLeaveEncashment(); ?></td>
+				<td valign="top"><?php if($pensioner->class_of_pension=='Extraordinary_Pension' && $pensioner->pay_commission==6 && $pensioner->getAmountofPension() < 7000){echo 'N/A';} else { echo $pensioner->getTotalLeaveEncashment();} ?></td>
 			</tr>
 		</table>
 	</div>

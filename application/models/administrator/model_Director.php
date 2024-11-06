@@ -6,6 +6,42 @@ class model_Director extends CI_Model
 	{
 		parent::__construct();
 	}
+
+	function get_record($file_no)
+	 {
+		$this->db->select('*');
+		$this->db->where('case_no', $file_no);
+		$query = $this->db->get('observation');
+		if($query) 
+		{
+		 //return 'exist';
+		 return $query->result_array();
+		} 
+		else 
+		{
+			//return 'not_exist';
+			return false;
+		}
+		
+    }
+
+    function edit_ips_observation() {
+		$case_no 		= $this->security->xss_clean($this->input->post('case_no'));
+		$observation_by	= $this->security->xss_clean($this->input->post('observation_by'));
+		$remarks 		= $this->security->xss_clean($this->input->post('remarks'));
+		$ips_pass	    = $this->security->xss_clean($this->input->post('ips_pass'));
+		$observation_date= $this->security->xss_clean($this->input->post('observation_date'));
+
+		$observation = array('observation_by'=>$observation_by, 'remarks'=>$remarks, 'ips_pass'=>$ips_pass, 'observation_date'=>$observation_date);
+
+		$this->db->trans_begin();
+		//$this->db->insert('observation', $observation);
+		$this->db->where('case_no', $case_no);
+		$this->db->update('observation', $observation);
+		$this->db->trans_complete();
+
+			
+	}
 		
 	function filefrom_gis_superintendent()
 	{
@@ -37,7 +73,7 @@ class model_Director extends CI_Model
 
 	function getfile_from_ips()
 	{
-		$q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,pensioner_ips_details c,token_reciept d where a.file_no=b.file_No and a.file_no=d.file_No and b.file_No=c.file_no and a.status='ips_Forwarded to Director'");
+		$q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,pensioner_ips_details c,token_reciept d, observation e where a.file_no=b.file_No and a.file_no=d.file_No and b.file_No=c.file_no and a.status='ips_Forwarded to Director' and b.file_no=e.case_no");
     	$result = $q->result();
  		return $result;
 	}
@@ -51,7 +87,8 @@ class model_Director extends CI_Model
 
 	function getpensionfile_from_jd_fao()
 	{
-		$q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,token_reciept c,pensioner_personal_details d where d.case_no=b.file_No and a.file_no=b.file_No and c.file_No=b.file_No and a.status='pension_Forwarded to Director'");
+		// $q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,token_reciept c,pensioner_personal_details d where d.case_no=b.file_No and a.file_no=b.file_No and c.file_No=b.file_No and a.status='pension_Forwarded to Director'");
+		$q=$this->db->query("SELECT * from file_status a,pension_receipt_file_master b,token_reciept c where a.file_no=b.file_No and c.file_No=b.file_No and a.status='pension_Forwarded to Director'");
     	$result = $q->result();
  		return $result;
 	}

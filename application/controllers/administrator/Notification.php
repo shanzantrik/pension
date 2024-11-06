@@ -31,6 +31,48 @@ class notification extends CI_Controller
 		
 	}
 
+	function load_editremarks($file_No='')
+    {
+            $file_No=base64_decode($file_No);
+                    
+            $data['title']   = "Check IPS Observations";
+            $dv['receipt']   = $this->model_notification->get_record($file_No);
+
+            $data['content'] = $this->load->view('administrator/pension_superintendent/edit_remarks',$dv, true);
+            $this->load->view('administrator/default_template', $data);
+        
+            
+     }
+
+     function edit_remarks_controller()
+    {
+        
+        if($_POST) {
+            $ret=$this->model_notification->edit_ips_observation();
+            $this->session->set_flashdata('message', '<div class="alert alert-success">IPS observation updated successfully.</div>');
+            redirect('administrator/notification/index');
+            $this->load->view('administrator/default_template', $data);
+            
+            } else {
+            //$dv['receipt']=$this->model_ips->get_receipt($file_No);
+            redirect('administrator/notification/load_editremarks');
+            $this->load->view('administrator/default_template', $data);
+        }
+    }
+
+    function print_ips_observation($file_no)
+    {
+        $file_No=base64_decode($file_no);
+        
+        $q=$this->db->query("select a.remarks,b.dept_forw_no,b.receipt_date,b.pensionee_name,b.designation,c.address_department from observation a, pension_receipt_file_master b, pension_receipt_register_master c where a.case_no=b.file_no and c.dept_forw_no=b.dept_forw_no and a.case_no='$file_No'");
+        $result = $q->result();
+        $res['resu'] = $result;
+      
+        $data['title'] = "IPS detail Report";
+        $data['content'] = $this->load->view('administrator/pension/report/ips/ips_observations', $res, true);
+        $this->load->view('administrator/default_template', $data);
+    }
+
 	//FILES RECEIVED FROM IPS
 	function index2()
 	{

@@ -50,12 +50,12 @@ class Model_auth extends CI_Model {
 			//where a.module_code=b.sub_module_code and a.member_type_code=$member_type_code and b.sub_module_name='$sub_module'";
 				$q=$this->db->query($sql);
 				
-				if($q->num_rows()>0){
+				/*if($q->num_rows()>0){
 
 				}
 				else{
 					redirect(site_url('404/error'));
-				}
+				}*/
 
 		}
 		else

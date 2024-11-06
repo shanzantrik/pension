@@ -39,13 +39,15 @@
 				<tr>
 					<td style="vertical-align: top;" colspan="3">
 						<?php echo nbs(25); ?>
-						<?php echo "<b>".str_replace(", ", ",<br />".nbs(26), $treasury[$result->ost])."</b>"; ?>
+						<?php echo "<b>".str_replace(", ", ",<br />".nbs(26), $ag[$result->ost]['name'])."</b>"; ?>
 					</td>
 				</tr>
-				<tr>
+				<tr style="display: none;">
 					<td style="vertical-align: middle;" colspan="3">Sub: <?php echo nbs(17); ?>Forwarding of P.P.O. both halves of <?php echo $result->salutation." ".$result->name.", Retd. ".$result->designation; ?></td></tr>
-			 	<tr>
 				<tr>
+				<td style="vertical-align: middle;" colspan="3">Sub: <?php echo nbs(17); ?><u>Transfer of PPO</u></td></tr>
+			 	<tr>
+				<tr style="display: none;">
 					<td style="vertical-align: middle;" colspan="2">Ref: <?php echo nbs(17); ?><?php echo $result->case_no; ?> Dated <?php echo $result->case_dated; ?></td>
 				</tr>
 				<tr style="height: 12px;">
@@ -55,88 +57,128 @@
 					<td style="vertical-align: top;" colspan="3">Sir,</td>
 				</tr>
 			 	<tr>
-					<td style="vertical-align: top; line-height: 1.7em; text-align: justify" colspan="3"><?php echo nbs(19); ?>Enclosed find herewith the P.P.O. both halves No. <b><?php echo $result->ppo; ?></b> of <b><?php echo $result->salutation." ".$result->name.", (Retd.) ".$result->designation; ?></b> received from <b><?php echo $ag[$result->orf]['name']; ?></b> for drawal of pensionery benefits from your end vide its special seal authority No. <b><?php echo $result->case_no; ?></b> dated <b><?php echo $result->case_dated; ?></b> and C.P.O No <b><?php echo $result->cpo; ?></b> Dated <b><?php echo $result->cpo_dated; ?></b>. The details are given below.</td>
+			 		<td style="vertical-align: top; line-height: 1.7em; text-align: justify" colspan="3">
+					<p>
+			 			<?php echo nbs(19); ?>I am to forward herewith the PPO No. Pen / AP <b><?php echo $result->ppo; ?></b> both halves with the enclosures in respect of <b><?php echo $result->salutation." ".$result->name.", (Retd.) ".$result->designation; ?></b> to draw his / her monthly pension / family pension from the Sub-Treasury Officer <b><?php echo $result->draw_from; ?></b>
+					</p>
+					<p>
+					<?php echo nbs(19); ?>The pensioner has been paid up to <?php echo $result->paid_upto; ?> at the following rate by the Sub-Treasury Officer <b><?php echo $treasury[$result->orf]; ?></b>
+
+			 		
+					</p>
+					</td>
+					<!-- <td style="vertical-align: top; line-height: 1.7em; text-align: justify" colspan="3"><?php echo nbs(19); ?>Enclosed find herewith the P.P.O. both halves No. <b><?php echo $result->ppo; ?></b> of <b><?php echo $result->salutation." ".$result->name.", (Retd.) ".$result->designation; ?></b> received from <b><?php echo $ag[$result->orf]['name']; ?></b> for drawal of pensionery benefits from your end vide its special seal authority No. <b><?php echo $result->case_no; ?></b> dated <b><?php echo $result->case_dated; ?></b> and C.P.O No <b><?php echo $result->cpo; ?></b> Dated <b><?php echo $result->cpo_dated; ?></b>. The details are given below.</td> -->
 				</tr>
 			 	<tr>
 					<td style="vertical-align: top; padding-left: 50px;" colspan="3">
 						<table width="100%" style="margin: 20px 0;">
-							<tr style="height: 20px;">
+							<!-- <tr style="height: 20px;display: none;">
 								<td width="3%">1.</td>
 								<td width="37%">Commencement of Pension</td>
 								<td width="3%">-</td>
 								<td width="57%"><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;"><?php echo $result->comm_of_pension; ?></div></td>
-							</tr>
+							</tr> -->
 							<tr style="height: 20px;">
-								<td>2.</td>
+								<td>1.</td>
 								<td>Basic pension</td>
 								<td>-</td>
 								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->basic_pension); ?>/- pm</div></td>
 							</tr>
 							<tr style="height: 20px;">
-								<td>3.</td>
-								<td>Enhance rate of family pension</td>
-								<td>-</td>
-								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->enhance_rate); ?>/- pm</div></td>
-							</tr>
-							<tr style="height: 20px;">
-								<td>4.</td>
-								<td>Normal Rate of family pension</td>
-								<td>-</td>
-								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->ordinary_rate); ?>/- pm</div></td>
-							</tr>
-							<tr style="height: 20px;">
-								<td>5.</td>
-								<td>Amount Of Gratuity</td>
-								<td>-</td>
-								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->amount_of_gratuity); ?>/-</div></td>
-							</tr>
-							<tr style="height: 20px;">
-								<td>6.</td>
-								<td>Commuted value of pension</td>
-								<td>-</td>
-								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->commuted_value_of_pension); ?>/-</div></td>
-							</tr>
-							<tr style="height: 20px;">
-								<td>7.</td>
-								<td>Amount of pension commuted</td>
-								<td>-</td>
-								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->amount_of_pension_commuted); ?>/-</div></td>
-							</tr>
-							<tr style="height: 20px;">
-								<td>8.</td>
+								<td>2.</td>
 								<td>Reduced pension</td>
 								<td>-</td>
 								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->reduced_pension); ?>/- pm</div></td>
 							</tr>
 							<tr style="height: 20px;">
+								<td>3.</td>
+								<td>Dearness Relief</td>
+								<td>-</td>
+								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->dearness_relief); ?>/- pm</div></td>
+							</tr>
+							<tr style="height: 20px;">
+								<td>4.</td>
+								<td>Medical Allowance</td>
+								<td>-</td>
+								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->medical_allowance); ?>/- pm</div></td>
+							</tr>
+							<tr style="height: 20px;">
+								<td style="vertical-align: top;">5.</td>
+								<td style="vertical-align: top;">Family Pension:-</td>
+								<td colspan="100%"></td>
+							</tr>
+							<tr style="height: 20px;">
+								<td style="vertical-align: top;"></td>
+								<td colspan="100%">
+									<table width="86%" cellpadding="3" id="report" border="0">
+										<tr style="height: 20px;">
+											<td><?php echo nbs(10); //print_r($result); die();?>a)Enhance rate</td>
+										
+											<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->reduced_pension); ?>/- pm</div></td>
+										</tr>
+										<tr style="height: 20px;">
+											<td><?php echo nbs(10); ?>b)Normal Rate</td>
+										
+											<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->ordinary_rate); ?>/- pm</div></td>
+										</tr>
+									</table>
+									</td>
+								
+							</tr>
+							<!-- <tr style="height: 20px;">
+								<td>4.</td>
+								<td>Normal Rate of family pension</td>
+								<td>-</td>
+								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->ordinary_rate); ?>/- pm</div></td>
+							</tr> -->
+							<!-- <tr style="height: 20px;">
+								<td>5.</td>
+								<td>Amount Of Gratuity</td>
+								<td>-</td>
+								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->amount_of_gratuity); ?>/-</div></td>
+							</tr> -->
+							<!-- <tr style="height: 20px;">
+								<td>6.</td>
+								<td>Commuted value of pension</td>
+								<td>-</td>
+								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->commuted_value_of_pension); ?>/-</div></td>
+							</tr> -->
+							<!-- <tr style="height: 20px;">
+								<td>7.</td>
+								<td>Amount of pension commuted</td>
+								<td>-</td>
+								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->amount_of_pension_commuted); ?>/-</div></td>
+							</tr> -->
+							
+							<!-- <tr style="height: 20px;">
 								<td>9.</td>
 								<td colspan="3">Pension may be reduced from the date of payment of commuted value.</td>
-							</tr>
+							</tr> -->
 						</table>
 					</td>
 				</tr>
 		        <tr>
-					<td style="vertical-align: top; text-align: justify;" colspan="3"><?php echo nbs(33); ?>The pension may be paid as per the P.P.O. after observing the required formalities</td>
+					<td style="vertical-align: top; text-align: justify;" colspan="3"><?php echo nbs(43); ?>You are requested to take further necessary action from your end at early date.</td>
 				</tr>
 				<tr style="height: 12px;">
 					<td style="vertical-align: top;" colspan="3"></td>
 				</tr>
-				<tr>
+				<!-- <tr style="display: none;">
 					<?php $dd = ($result->amount_of_gratuity != '' && $result->amount_of_gratuity != 0) ? '/GPO' : ''; ?>
 					<td style="vertical-align: top; text-align: justify;" colspan="3"><?php echo nbs(30); ?>The P.P.O/C.P.O<?php echo $dd; ?> are enclosed herewith for payment of pensionery benefits and the expenditure is debitable to Head of Account "8793" Inter State Suspense Account, Adjustment to <?php echo $ag[$result->orf]['state']; ?> State (Pension).</td>
-				</tr>
+				</tr> -->
 				<tr style="height: 25px;">
 					<td style="vertical-align: top;" colspan="3"></td>
 				</tr>
 				<tr>
 					<td style="vertical-align: top;" colspan="2"></td>
-					<td style="vertical-align: top; text-align:center">Yours faithfully,</td>
+					<td style="vertical-align: top; text-align:center">Yours sincerely,</td>
 				</tr>
 				<tr style="height: 15px;">
 					<td style="vertical-align: top;" colspan="3"></td>
 				</tr>
 				<tr>
-					<td style="vertical-align: top;" colspan="3">Enclo:- As stated</td>
+					<td style="vertical-align: top;" colspan="3"><!-- Enclo:- As stated --></td>
 				</tr>
 				<tr style="height: 25px;">
 					<td style="vertical-align: top;" colspan="3"></td>
@@ -158,24 +200,29 @@
 					<td style="vertical-align: top;" colspan="3">
 						<table width="100%">
 							<tr>
-								<td width="10%" align="center" style="vertical-align: top;">1.</td>
+								<td align="center" style="vertical-align: top;">1.</td>
+								<td style="vertical-align: top;">The Sub-Treasury Officer<br><?php echo $treasury[$result->orf]; ?></td>
+							</tr>
+							<tr>
+								<td width="10%" align="center" style="vertical-align: top;">2.</td>
 								<td width="90%" style="vertical-align: top;">
 									<?php echo $result->salutation." ".$result->name.", Retd. ".$result->designation; ?>,<br />
 									<?php echo str_replace(",", ",<br />", $result->address); ?>
 								</td>
 							</tr>
-							<tr>
-								<td align="center" style="vertical-align: top;">2.</td>
-								<td style="vertical-align: top;"><?php echo $ag[$result->orf]['name']; ?> for information.</td>
-							</tr>
+							
 							<tr>
 								<td align="center" style="vertical-align: top;">3.</td>
+								<td style="vertical-align: top;">The Superintendent pension Section-I/II, for information.</td>
+							</tr>
+							<tr>
+								<td align="center" style="vertical-align: top;">4.</td>
 								<td style="vertical-align: top;">Office Copy.</td>
 							</tr>
 						</table>
 					</td>
 				</tr>
-				<tr>
+				<tr style="display: none;">
 					<td style="vertical-align: top;" colspan="2"></td>
 					<td style="vertical-align: top;text-align:center;font-size: 14px;" width="50%">Director/Joint Director<br />Govt. of Arunchal Pradesh,<br />Naharlagun</td>
 				</tr>

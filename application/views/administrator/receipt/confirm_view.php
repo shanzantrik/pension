@@ -14,7 +14,7 @@ foreach ($records as $key) {
   <tbody role="alert" aria-live="polite" aria-relevant="all">
     <tr>
       <td><label style="font-weight:bold" class="col-sm-3 control-label">Dept Forwarding No.</label></td>
-      <td><?php echo $dfno; ?></td>
+      <td><?php echo $dfno; ?><a href="#" class="btn btn-sm btn-success pull-right btnEditDeptForwardNo" id="btnEditDeptForwardNo_<?php echo $dfno; ?>"><i class="icon-white icon-edit"></i></a></td>
       <td><label style="font-weight:bold" class="col-sm-3 control-label">Department</label></td>
       <td><?php echo $dept; ?></td>                                        
     </tr>
@@ -366,8 +366,8 @@ foreach ($file as $rec) { ?>
       <table style="color:#000" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example" width="100%">
   <tbody role="alert" aria-live="polite" aria-relevant="all">
     <tr>
-      <td><label style="font-weight:bold" class="col-sm-3 control-label">Dept Forwarding No.</label></td>
-      <td><?php echo $dfno; ?></td>
+      <td><label style="font-weight:bold" class="col-sm-3 control-label">Subject</label></td>
+        <td><?php echo $subject; ?></td>
       <td><label style="font-weight:bold" class="col-sm-3 control-label">Department</label></td>
       <td><?php echo $dept; ?></td>                                        
     </tr>
@@ -380,8 +380,8 @@ foreach ($file as $rec) { ?>
     <tr>
       <td><label style="font-weight:bold" class="col-sm-3 control-label">Address of the Department</label></td>
       <td><?php echo $address; ?></td>
-      <td><label style="font-weight:bold" class="col-sm-3 control-label">Subject</label></td>
-        <td><?php echo $subject; ?></td>
+      <td><label style="font-weight:bold" class="col-sm-3 control-label">Dept Forwarding No.</label></td>
+        <td><?php echo $dfno; ?></td>
     </tr>
   </tbody>
 </table>
@@ -405,8 +405,8 @@ foreach ($file as $rec) { ?>
                 <th>Token No.</th>
                 <th>Employee Code</th>
                 <!-- <th>File No</th> -->
-                <th>Designation</th>
                 <th>Employee Name</th>
+                <th>Designation</th>
               </tr>
             </thead>
             <tbody>
@@ -422,8 +422,8 @@ foreach ($file as $rec) { ?>
                         </td>
                         <td><?php echo $rec->emp_code ?></td>
                         <!-- <td><?php echo $rec->file_No ?></td> -->
-                        <td><?php echo $rec->designation ?></td>
                         <td><?php echo $rec->salutation.'. ';echo $rec->pensionee_name; ?></td>
+                        <td><?php echo $rec->designation ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -521,3 +521,63 @@ foreach ($file as $rec) { ?>
 </table>
 </div>
 </div>
+
+  <!-- New Case modal start -->
+  <div class="modal fade" id="myModalEditDeptForwNo" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title"><i class="fa fa-pencil"></i> Edit Dept. Forwarding No</h4>
+        </div>
+        <div class="modal-body">
+            <form autocomplete="off">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="col-md-3 control-label"><b>Dept. Forwarding No</b></label>
+                    <div class="col-md-9">
+                      <input type="text" class="form-control input-sm" id="txtEditDeptForwNo" placeholder="0">
+                    </div>
+                  </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn btn-primary pull-right btnUpdateDeptForwNo"><i class="fa fa-save"></i> Update </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal end -->
+
+<script type="text/javascript">
+  $(document).on("click",".btnEditDeptForwardNo",function(){
+    var key=$(this).attr("id").split("_");
+    $("#myModalEditDeptForwNo").modal("show");
+    $("#txtEditDeptForwNo").val(key[1]);
+    $(".btnUpdateDeptForwNo").attr("id","btnUpdateDeptForwNo_"+key[1]);
+  });
+
+  $(document).on("click",".btnUpdateDeptForwNo",function(){
+    var key=$(this).attr("id").split("_");
+    var formData=new FormData();
+    formData.append("deptfornow",$("#txtEditDeptForwNo").val());
+    formData.append("key",key[1]);
+
+      $.ajax({
+        url: '<?php echo base_url("index.php/administrator/receipt/updateDeptForwNo"); ?>',
+          type: 'POST',
+          dataType: 'json',
+          data:formData,
+          processData: false,
+          contentType: false,
+          success: function(data) {
+              alert("Record updated successfully!");
+          },
+          complete:function(res){
+            window.location='<?php echo base_url("index.php/administrator/receipt/search_report"); ?>';
+          }
+      });
+  });
+</script>

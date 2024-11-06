@@ -8,6 +8,7 @@ class pension extends CI_Controller
 		$this->load->model('auth/model_auth');
 		$this->load->helper('base');
 		$this->load->model(array('administrator/model_pension', 'administrator/model_notification'));
+		
 	}
 
 	function index()
@@ -35,13 +36,82 @@ class pension extends CI_Controller
         $dv['records']=$this->model_notification->getDANotifiction();
 		$dv['records1']=$this->model_notification->getfile_Director();
 		$dv['records2']=$this->model_notification->getfile_ips();
-		$data['title']="All Files";
-		$data['content'] =$this->load->view('administrator/notification/da_index',$dv, true);
-		$this->load->view('administrator/default_template',$data);
+		$dv['title']="All Files";
+		$dv['content'] =$this->load->view('administrator/notification/da_index',$dv, true);
+		$this->load->view('administrator/default_template',$dv);
 		}
 		
 	    
 	}
+
+	function load_editremarks($file_No='')
+    {
+            $file_No=base64_decode($file_No);
+                    
+            $data['title']   = "Check IPS Observations";
+            $dv['receipt']   =$this->model_pension->get_record($file_No);
+
+            $data['content'] = $this->load->view('administrator/notification/edit_remarks',$dv, true);
+            $this->load->view('administrator/default_template', $data);
+        
+            
+     }
+
+    //  function load_pension_editremarks($file_No='')
+    // {
+    //         $file_No=base64_decode($file_No);
+                    
+    //         $data['title']   = "Check IPS Observations";
+    //         $dv['receipt']   =$this->model_pension->get_pension_record($file_No);
+
+    //         $data['content'] = $this->load->view('administrator/notification/edit_remarks',$dv, true);
+    //         $this->load->view('administrator/default_template', $data);
+        
+            
+    //  }
+
+     function edit_remarks_controller()
+    {
+        
+        if($_POST) {
+            $ret=$this->model_pension->edit_ips_observation();
+            $this->session->set_flashdata('message', '<div class="alert alert-success">IPS observation updated successfully.</div>');
+            redirect('administrator/pension/view_file');
+            $this->load->view('administrator/default_template', $data);
+            
+            } else {
+           
+            redirect('administrator/pension/load_editremarks');
+            $this->load->view('administrator/default_template', $data);
+        }
+    }
+
+    function print_ips_observation($file_no)
+    {
+        $file_No=base64_decode($file_no);
+        
+        $q=$this->db->query("select a.remarks,b.dept_forw_no,b.receipt_date,b.pensionee_name,b.designation,c.address_department from observation a, pension_receipt_file_master b, pension_receipt_register_master c where a.case_no=b.file_no and c.dept_forw_no=b.dept_forw_no and a.case_no='$file_No'");
+        $result = $q->result();
+        $res['resu'] = $result;
+      
+        $data['title'] = "IPS detail Report";
+        $data['content'] = $this->load->view('administrator/pension/report/ips/ips_observations', $res, true);
+        $this->load->view('administrator/default_template', $data);
+    }
+
+
+    function print_pension_observation($file_no)
+    {
+        $file_No=base64_decode($file_no);
+        
+        $q=$this->db->query("select a.case_no,a.remarks,b.dept_forw_no,b.receipt_date,b.pensionee_name,b.designation,c.address_department,d.salutation from observation a, pension_receipt_file_master b, pension_receipt_register_master c,pension_receipt_file_master d where a.case_no=b.file_no and c.dept_forw_no=b.dept_forw_no and a.case_no='$file_No'");
+        $result = $q->result();
+        $res['resu'] = $result;
+      
+        $data['title'] = "IPS detail Report";
+        $data['content'] = $this->load->view('administrator/pension/report/ips/pension_observations', $res, true);
+        $this->load->view('administrator/default_template', $data);
+    }
 
 	function search_family()
 	{
@@ -118,10 +188,26 @@ class pension extends CI_Controller
 		} else {
 			$this->load->library('Pensioner', array('serial_no'=>$serial_no));
 			$vrp['values'] = $this->pensioner;
+			/*echo $this->pensioner->case_no;
+			die();
+			Pen/AP/30227/18-19/192
+			*/
 			$data['title'] = "Superannuation pension";
+
+			//Transfer History Info
+			$vrp['files'] = $this->getTransferHistory($this->pensioner->case_no);
 			$data['content'] = $this->load->view('administrator/pension/superannuation_after/superannuation_pension', $vrp, true);
 			$this->load->view('administrator/default_template', $data);
 		}
+	}
+
+	function getTransferHistory($case_no){
+		$this->db->select('pt.*');
+		$this->db->from('pensioner_transfer as pt');
+		$this->db->order_by("id", "desc");
+		$this->db->where(array('case_no'=>$case_no));
+		$this->db->limit(1);
+		return $this->db->get()->result_array();
 	}
 
 	function compulsory_retirement_pension($serial_no)
@@ -133,6 +219,7 @@ class pension extends CI_Controller
 			$this->load->library('Pensioner', array('serial_no'=>$serial_no));
 			$vrp['values'] = $this->pensioner;
 			$data['title'] = "Compulsory Retirement Pension";
+			$vrp['files'] = $this->getTransferHistory($this->pensioner->case_no);
 			$data['content'] = $this->load->view('administrator/pension/superannuation_after/compulsory_retirement_pension', $vrp, true);
 			$this->load->view('administrator/default_template', $data);
 		}
@@ -147,6 +234,7 @@ class pension extends CI_Controller
 			$this->load->library('Pensioner', array('serial_no'=>$serial_no));
 			$vrp['values'] = $this->pensioner;
 			$data['title'] = "Voluntary retirement pension";
+			$vrp['files'] = $this->getTransferHistory($this->pensioner->case_no);
 			$data['content'] = $this->load->view('administrator/pension/superannuation_after/voluntary_retirement_pension', $vrp, true);
 			$this->load->view('administrator/default_template', $data);
 		}
@@ -161,6 +249,7 @@ class pension extends CI_Controller
 			$this->load->library('Pensioner', array('serial_no'=>$serial_no));
 			$vrp['values'] = $this->pensioner;
 			$data['title'] = "Invalid retirement pension";
+			$vrp['files'] = $this->getTransferHistory($this->pensioner->case_no);
 			$data['content'] = $this->load->view('administrator/pension/superannuation_after/invalid_retirement_pension', $vrp, true);
 			$this->load->view('administrator/default_template', $data);
 		}
@@ -175,6 +264,7 @@ class pension extends CI_Controller
 			$this->load->library('Pensioner', array('serial_no'=>$serial_no));
 			$vrp['values'] = $this->pensioner;
 			$data['title'] = "Absorption in autonomous body pension";
+			$vrp['files'] = $this->getTransferHistory($this->pensioner->case_no);
 			$data['content'] = $this->load->view('administrator/pension/superannuation_after/absorption_in_autonomous_body_pension', $vrp, true);
 			$this->load->view('administrator/default_template', $data);
 		}
@@ -189,6 +279,7 @@ class pension extends CI_Controller
 			$this->load->library('Pensioner', array('serial_no'=>$serial_no));
 			$vrp['values'] = $this->pensioner;
 			$data['title'] = "Disability pension";
+			$vrp['files'] = $this->getTransferHistory($this->pensioner->case_no);
 			$data['content'] = $this->load->view('administrator/pension/superannuation_after/disability_pension', $vrp, true);
 			$this->load->view('administrator/default_template', $data);
 		}
@@ -203,7 +294,38 @@ class pension extends CI_Controller
 			$this->load->library('Sanjay', array('serial_no'=>$serial_no));
 			$vrp['values'] = $this->sanjay;
 			$data['title'] = "Normal Family Pension";
+			$vrp['files'] = $this->getTransferHistory($this->sanjay->case_no);
 			$data['content'] = $this->load->view('administrator/pension/family/normal_family_pension', $vrp, true);
+			$this->load->view('administrator/default_template', $data);
+		}
+	}
+
+	function death_gratuity($serial_no)
+	{
+		$cop = $this->model_pension->get_pension_class($serial_no);
+		if($cop!='Death_Gratuity'){
+			redirect(site_url('administrator/pension/file'));
+		} else {
+			$this->load->library('Sanjay', array('serial_no'=>$serial_no));
+			$vrp['values'] = $this->sanjay;
+			$data['title'] = "Death_Gratuity";
+			$vrp['files'] = $this->getTransferHistory($this->sanjay->case_no);
+			$data['content'] = $this->load->view('administrator/pension/family/death_gratuity', $vrp, true);
+			$this->load->view('administrator/default_template', $data);
+		}
+	}
+
+	function nps($serial_no)
+	{
+		$cop = $this->model_pension->get_pension_class($serial_no);
+		if($cop!='NPS'){
+			redirect(site_url('administrator/pension/file'));
+		} else {
+			$this->load->library('Sanjay', array('serial_no'=>$serial_no));
+			$vrp['values'] = $this->sanjay;
+			$data['title'] = "NPS";
+			$vrp['files'] = $this->getTransferHistory($this->sanjay->case_no);
+			$data['content'] = $this->load->view('administrator/pension/family/nps', $vrp, true);
 			$this->load->view('administrator/default_template', $data);
 		}
 	}
@@ -218,6 +340,7 @@ class pension extends CI_Controller
 			$this->load->library('Pensioner', array('serial_no'=>$serial_no));
 			$ep['values'] = $this->pensioner;
 			$data['title'] = "Extraordinary pension";
+			$ep['files'] = $this->getTransferHistory($this->pensioner->case_no);
 			$data['content'] = $this->load->view('administrator/pension/family/extraordinary_pension', $ep, true);
 			$this->load->view('administrator/default_template', $data);
 		}
@@ -233,6 +356,7 @@ class pension extends CI_Controller
 			$this->load->library('Pensioner', array('serial_no'=>$serial_no));
 			$ep['values'] = $this->pensioner;
 			$data['title'] = "Liberalised pension";
+			$ep['files'] = $this->getTransferHistory($this->pensioner->case_no);
 			$data['content'] = $this->load->view('administrator/pension/family/liberalised_pension', $ep, true);
 			$this->load->view('administrator/default_template', $data);
 		}
@@ -248,6 +372,7 @@ class pension extends CI_Controller
 			$this->load->library('Pensioner', array('serial_no'=>$serial_no));
 			$ep['values'] = $this->pensioner;
 			$data['title'] = "Dependent pension";
+			$ep['files'] = $this->getTransferHistory($this->pensioner->case_no);
 			$data['content'] = $this->load->view('administrator/pension/family/dependent_pension', $ep, true);
 			$this->load->view('administrator/default_template', $data);
 		}
@@ -263,6 +388,7 @@ class pension extends CI_Controller
 			$this->load->library('Pensioner', array('serial_no'=>$serial_no));
 			$ep['values'] = $this->pensioner;
 			$data['title'] = "Parents pension";
+			$ep['files'] = $this->getTransferHistory($this->pensioner->case_no);
 			$data['content'] = $this->load->view('administrator/pension/family/parents_pension', $ep, true);
 			$this->load->view('administrator/default_template', $data);
 		}

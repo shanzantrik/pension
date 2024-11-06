@@ -1,0 +1,3 @@
+How to change age at retirement according to Designation
+
+Pension_ui->application->helpers->base helper->open getRetireAge() function and add designation in the switch case condition

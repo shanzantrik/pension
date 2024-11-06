@@ -6,6 +6,66 @@ class Model_pension extends CI_Model {
 		parent:: __construct();
 	}
 
+
+	function get_record($file_no)
+	 {
+		$this->db->select('*');
+		$this->db->where('case_no', $file_no);
+		$query = $this->db->get('observation');
+		if($query) 
+		{
+		 //return 'exist';
+		 return $query->result_array();
+		} 
+		else 
+		{
+			//return 'not_exist';
+			return false;
+		}
+		
+    }
+
+  //   function get_pension_record($file_no)
+	 // {
+		// $this->db->select('*');
+		// $this->db->where('case_no', $file_no);
+		// $query = $this->db->get('observation');
+		// if($query) 
+		// {
+		//  //return 'exist';
+		//  return $query->result_array();
+		// } 
+		// else 
+		// {
+		// 	//return 'not_exist';
+		// 	return false;
+		// }
+		
+  //   }
+
+    
+
+    function edit_ips_observation() {
+		$case_no 		= $this->security->xss_clean($this->input->post('case_no'));
+		$observation_by	= $this->security->xss_clean($this->input->post('observation_by'));
+		$remarks 		= $this->security->xss_clean($this->input->post('remarks'));
+		$ips_pass	    = $this->security->xss_clean($this->input->post('ips_pass'));
+		$observation_date= $this->security->xss_clean($this->input->post('observation_date'));
+
+		$observation = array('observation_by'=>$observation_by, 'remarks'=>$remarks, 'ips_pass'=>$ips_pass, 'observation_date'=>$observation_date);
+
+		$this->db->trans_begin();
+		//$this->db->insert('observation', $observation);
+		$this->db->where('case_no', $case_no);
+		$this->db->update('observation', $observation);
+
+		$this->db->where('file_no', $case_no);
+		$this->db->update('file_status', ['ips_pass'=>$ips_pass]);
+		$this->db->trans_complete();
+
+			
+	}
+
 	function check_file_no($case_no) {
 		$this->db->select('serial_no');
 		$this->db->where('case_no', $case_no);

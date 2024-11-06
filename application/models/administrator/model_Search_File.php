@@ -18,14 +18,21 @@ class Model_Search_File extends CI_Model
 			where a.entry_time between '$from_date' and '$to_date' 
 			and a.member_code=$member_code
 			and a.file_No=b.file_no order by a.entry_time desc";*/
-			$sql="SELECT *,a.file_status as stt from file_tracking_details a,pension_receipt_file_master b
+			if($member_code=="100005"){ $sql="SELECT *,a.file_status as stt,a.member_code as empp from file_tracking_details a,pension_receipt_file_master b
+			where a.entry_time between '$from_date' and '$to_date' 
+			and a.file_No=b.file_no group by a.file_no order by a.entry_time desc";}
+			else{
+
+ $sql="SELECT *,a.file_status as stt,a.member_code as empp from file_tracking_details a,pension_receipt_file_master b
 			where a.entry_time between '$from_date' and '$to_date' 
 			and a.member_code=$member_code
 			and a.file_No=b.file_no group by a.file_no order by a.entry_time desc";
+
+			}
 			//echo $sql;
 		}
 		else if($type=="Forwarded"){
-			$sql="SELECT *,a.file_status as stt from file_tracking_details a,pension_receipt_file_master b
+			$sql="SELECT *,a.file_status as stt,a.member_code as empp from file_tracking_details a,pension_receipt_file_master b
 			where a.entry_time between '$from_date' and '$to_date'
 			and a.file_status like '%forwarded%' 
 			and a.member_code=$member_code
@@ -33,7 +40,7 @@ class Model_Search_File extends CI_Model
 			$type="Forwarded";
 		}
 		else if($type=="Received"){
-			$sql="SELECT *,a.file_status as stt from file_tracking_details a,pension_receipt_file_master b
+			$sql="SELECT *,a.file_status as stt,a.member_code as empp from file_tracking_details a,pension_receipt_file_master b
 			where entry_time between '$from_date' and '$to_date'
 			and a.file_status like '%received%' 
 			and a.member_code=$member_code

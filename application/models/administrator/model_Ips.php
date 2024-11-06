@@ -82,6 +82,79 @@ class Model_Ips extends CI_Model
 		}
 		
 	}
+
+
+	function add_ips_observation() {
+		$case_no 		= $this->security->xss_clean($this->input->post('case_no'));
+		$observation_by	= $this->security->xss_clean($this->input->post('observation_by'));
+		$remarks 		= $this->security->xss_clean($this->input->post('remarks'));
+		$ips_pass	    = $this->security->xss_clean($this->input->post('ips_pass'));
+		$observation_date= $this->security->xss_clean($this->input->post('observation_date'));
+
+		$observation = array('case_no'=>$case_no, 'observation_by'=>$observation_by, 'remarks'=>$remarks, 'ips_pass'=>$ips_pass, 'observation_date'=>$observation_date);
+
+		$this->db->trans_begin();
+		$this->db->insert('observation', $observation);
+		$this->db->trans_complete();
+
+			
+	}
+
+	function get_record($file_no)
+	 {
+		$this->db->select('*');
+		$this->db->where('case_no', $file_no);
+		$query = $this->db->get('observation');
+		if($query) 
+		{
+		 //return 'exist';
+		 return $query->result_array();
+		} 
+		else 
+		{
+			//return 'not_exist';
+			return false;
+		}
+		
+    }
+
+	function edit_ips_observation() {
+		$case_no 		= $this->security->xss_clean($this->input->post('case_no'));
+		$observation_by	= $this->security->xss_clean($this->input->post('observation_by'));
+		$remarks 		= $this->security->xss_clean($this->input->post('remarks'));
+		$ips_pass	    = $this->security->xss_clean($this->input->post('ips_pass'));
+		$observation_date= $this->security->xss_clean($this->input->post('observation_date'));
+
+		$observation = array('observation_by'=>$observation_by, 'remarks'=>$remarks, 'ips_pass'=>$ips_pass, 'observation_date'=>$observation_date);
+
+		$this->db->trans_begin();
+		//$this->db->insert('observation', $observation);
+		$this->db->where('case_no', $case_no);
+		$this->db->update('observation', $observation);
+		$this->db->trans_complete();
+
+			
+	}
+
+	function checkFile()
+	{
+		$q=$this->db->query("SELECT file_no from pensioner_ips_details");
+	    $array = array();
+	    foreach($q->result() as $key=>$row) :
+	    	array_push($array, $row->file_no);
+	    endforeach;
+	  	return $array;
+	}
+
+	function checkFile_observation()
+	{
+		$q=$this->db->query("SELECT case_no from observation");
+	    $array_ob = array();
+	    foreach($q->result() as $key_ob=>$row) :
+	    	array_push($array_ob, $row_ob->case_no);
+	    endforeach;
+	  	return $array_ob;
+	}
 	
 	function get_file_from($file_No) {
 		$this->db->select('*');
@@ -232,6 +305,28 @@ class Model_Ips extends CI_Model
 		return $result[0]->member_code;
 	}
 
+	function reportIO($case_no) {
+		$this->db->select('*');
+    	$this->db->from('observation');
+    	$this->db->where(array('case_no' => $case_no));
+		$query = $this->db->get();
+		if($query->num_rows()>0) 
+		{
+			// $row = $query->row(); 
+			// if($row->sub_to!="") 
+			// {
+			// 	return "exists";
+			// } 
+			// else 
+			// {
+			// 	return "not_exists";
+			// }
+		} 
+		else 
+		{
+			//return "not_exists";
+		}
+	}
 
 	function getAll()
 	 {
@@ -271,6 +366,13 @@ class Model_Ips extends CI_Model
     	$result = $q->result();
  		return $result;
 	 }
+
+	 function getObservation($case_no)
+	 {
+	    $q=$this->db->query("SELECT * from observation where case_no=$case_no");
+    	$result = $q->result();
+ 		return $result;
+	 }
 	 
 	 function get_receipt($file_no)
 	 {
@@ -284,6 +386,9 @@ class Model_Ips extends CI_Model
 		}
 		
     }
+
+    
+
 	 function get_ips_detail($serial_no)
 	 {
 		$this->db->select('*');
@@ -576,7 +681,7 @@ class Model_Ips extends CI_Model
  	    } 
  	}
  	
-function fetchData1($Branch_Code, $serial_no,$file_No){
+function fetchData1( $serial_no,$file_No){//$Branch_Code,
 
 		if ($serial_no==0){ 
 			//receipt
@@ -586,17 +691,19 @@ function fetchData1($Branch_Code, $serial_no,$file_No){
  	    else
  	    {
  	    	//pension
-          $this->db->select('*');
-          $this->db->from('pensioner_personal_details');
-          $this->db->where(array('pensioner_personal_details.serial_no' => $serial_no));
-          $this->db->join('pensioner_service_details', 'pensioner_service_details.serial_no = pensioner_personal_details.serial_no', 'left');
-          $this->db->join('pensioner_pay_details', 'pensioner_pay_details.serial_no = pensioner_service_details.serial_no', 'left');
-          $this->db->join('master_pay_scale', 'master_pay_scale.id = pensioner_pay_details.pay_scale', 'left');
-         // $this->db->join('master_department', 'master_department.dept_code = pensioner_personal_details.department', 'left');
-          //$this->db->join('pensioner_pay_details`', 'pensioner_pay_details`.serial_no = pensioner_personal_details.serial_no', 'left');
-            
-			$query = $this->db->get();
- 			return $query->result_array();
+   //        $this->db->select('*');
+   //        $this->db->from('pensioner_personal_details');
+   //        $this->db->where(array('pensioner_personal_details.serial_no' => $serial_no));
+   //        $this->db->join('pensioner_service_details', 'pensioner_service_details.serial_no = pensioner_personal_details.serial_no', 'left');
+   //        $this->db->join('pensioner_pay_details', 'pensioner_pay_details.serial_no = pensioner_service_details.serial_no', 'left');
+   //        $this->db->join('master_pay_scale', 'master_pay_scale.id = pensioner_pay_details.pay_scale', 'left');
+   //       // $this->db->join('master_department', 'master_department.dept_code = pensioner_personal_details.department', 'left');
+   //        //$this->db->join('pensioner_pay_details`', 'pensioner_pay_details`.serial_no = pensioner_personal_details.serial_no', 'left') 
+			// $query = $this->db->get();
+			$qry=$this->db->query("select ppd.*, psd.*, pyd.*, mps.* from pensioner_personal_details ppd, pensioner_service_details psd, pensioner_pay_details pyd, master_pay_scale mps where ppd.serial_no='$serial_no' and ppd.serial_no=psd.serial_no and psd.serial_no=pyd.serial_no and mps.id=pyd.pay_scale");
+
+
+ 			return $qry->result_array();
  	    } 
  	}
 
@@ -639,7 +746,7 @@ function fetchData1($Branch_Code, $serial_no,$file_No){
 	}
 	function get_serial_no1($file_No) 
 	{
-		$this->db->select('');
+		$this->db->select('*');
 		$this->db->where('file_No', $file_No);
 		$query = $this->db->get('pension_receipt_file_master');
 		if($query->num_rows() > 0) {

@@ -125,6 +125,56 @@ class Inside extends CI_Controller {
         }
 	}
 
+	function nps($serial_no)
+	{
+		$cop = $this->model_pension->get_pension_class($serial_no);
+		if($cop!='NPS') {
+			redirect(site_url('administrator/pension/file'));
+		}else{
+			$this->load->library('Sanjay', array('serial_no'=>$serial_no));
+			$vrp['values'] = $this->sanjay;
+			$dor_y=explode('-',$vrp['values']->dor);
+			if($dor_y[0]>2006){
+           //6th pay commission
+            $vrp['account_enfacement'] ="false";
+			$data['title'] = "NPS";
+			$data['content'] = $this->load->view('administrator/pension/report/family/inside/nps_06', $vrp, true);
+			$this->load->view('administrator/default_template', $data);
+			}elseif($dor_y[0]<2006){
+           //5th pay commission
+            $vrp['account_enfacement'] ="false";
+			$data['title'] = "NPS";
+			$data['content'] = $this->load->view('administrator/pension/report/family/inside/nps_05', $vrp, true);
+			$this->load->view('administrator/default_template', $data);
+			}
+        }
+	}
+
+	function death_gratuity($serial_no)
+	{
+		$cop = $this->model_pension->get_pension_class($serial_no);
+		if($cop!='Death_Gratuity') {
+			redirect(site_url('administrator/pension/file'));
+		}else{
+			$this->load->library('Sanjay', array('serial_no'=>$serial_no));
+			$vrp['values'] = $this->sanjay;
+			$dor_y=explode('-',$vrp['values']->dor);
+			if($dor_y[0]>2006){
+           //6th pay commission
+            $vrp['account_enfacement'] ="false";
+			$data['title'] = "death_gratuity";
+			$data['content'] = $this->load->view('administrator/pension/report/family/inside/death_gratuity_06', $vrp, true);
+			$this->load->view('administrator/default_template', $data);
+			}elseif($dor_y[0]<2006){
+           //5th pay commission
+            $vrp['account_enfacement'] ="false";
+			$data['title'] = "Death_Gratuity";
+			$data['content'] = $this->load->view('administrator/pension/report/family/inside/death_gratuity_05', $vrp, true);
+			$this->load->view('administrator/default_template', $data);
+			}
+        }
+	}
+
 	function extraordinary_pension($serial_no)
 	{
 		$cop = $this->model_pension->get_pension_class($serial_no);

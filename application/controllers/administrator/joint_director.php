@@ -32,6 +32,49 @@ class joint_director extends CI_Controller
 			$this->load->view('administrator/default_template', $data);
 		}
 	}
+
+	function load_editremarks($file_No='')
+    {
+            $file_No=base64_decode($file_No);
+                    
+            $data['title']   = "Check IPS Observations";
+            $dv['receipt']   =$this->model_joint_director->get_record($file_No);
+
+            $data['content'] = $this->load->view('administrator/joint_director/edit_remarks',$dv, true);
+            $this->load->view('administrator/default_template', $data);
+        
+            
+     }
+
+     function edit_remarks_controller()
+    {
+        
+        if($_POST) {
+            $ret=$this->model_joint_director->edit_ips_observation();
+            $this->session->set_flashdata('message', '<div class="alert alert-success">IPS observation updated successfully.</div>');
+            redirect('administrator/joint_director/index');
+            $this->load->view('administrator/default_template', $data);
+            
+            } else {
+            
+            redirect('administrator/joint_director/load_editremarks');
+            $this->load->view('administrator/default_template', $data);
+        }
+    }
+
+    function print_ips_observation($file_no)
+    {
+        $file_No=base64_decode($file_no);
+        
+        $q=$this->db->query("select a.remarks,b.dept_forw_no,b.receipt_date,b.pensionee_name,b.designation,c.address_department from observation a, pension_receipt_file_master b, pension_receipt_register_master c where a.case_no=b.file_no and c.dept_forw_no=b.dept_forw_no and a.case_no='$file_No'");
+        $result = $q->result();
+         
+        $res['resu'] = $result;
+      
+        $data['title'] = "IPS detail Report";
+        $data['content'] = $this->load->view('administrator/pension/report/ips/ips_observations', $res, true);
+        $this->load->view('administrator/default_template', $data);
+    }
        
 	function joint_director_confirm_for_approval()
 	{
@@ -100,6 +143,9 @@ class joint_director extends CI_Controller
 	    {
 		    $pid['values'] = $this->model_Gis->get_checklist_details($file_no);
 			$data['title'] = "Checklist detail Report";
+			$dept_forwading_no = $this->model_Gis->get_dept_forwarding_no($file_no);
+		    $get_district_id= $this->model_Gis->get_district_id($dept_forwading_no);
+		    $pid['district_id']=$get_district_id;
 		    $data['content'] = $this->load->view('administrator/pension/report/gis/authority_form_gr_other', $pid, true);
 			$this->load->view('administrator/default_template', $data);
 	    }

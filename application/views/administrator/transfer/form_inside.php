@@ -11,6 +11,7 @@
     $ordinary_rate      = $ordinary_rate;
     $address_after_retirement = $pensioner->address_after_retirement;
     $attr               = 'class="form-control" autocomplete="off"';
+
 ?>
 
 <form method="POST" action="<?php echo site_url('administrator/transfer/inside'); ?>" accept-charset="UTF-8">
@@ -65,7 +66,7 @@
         <label for="dearness_relief" class="control-label max-height">Dearness Relief</label>
         <div style="float: left; margin: 5px 5px 0 0;">@</div>
         <input <?php echo $attr; ?> value="<?php echo $da_percent; ?>" id="dearness_relief" type="text" required="required" name="dearness_relief" placeholder="Dearness Relief" <?php if($case_type == 'inside') : ?>style="width: 10%;"<?php else : ?>style="width: 85%;"<?php endif; ?>>
-        <input <?php echo $attr; ?> readonly id="dr_total" value="<?php echo ($basic_pension*$da_percent/100); ?>" class="form-control" type="number" step="any" style="width: 72%;" />
+        <input <?php echo $attr; ?> readonly id="dr_total" value="<?php echo ($basic_pension*$da_percent/100); ?>" class="form-control" type="hidden" step="any" style="width: 72%;"  /><!--type="number"-->
     </div>
      <div class="form-group">
         <label for="medical_allowance" class="control-label max-height">Medical Allowance</label>
@@ -98,6 +99,18 @@
         <label for="address" class="control-label">Address</label>
         <textarea required minlength="10" id="address" name="address" placeholder="Address" style="width: 90%; height: 60px;"><?php echo $address_after_retirement; ?></textarea>
     </div>
+
+    <!-- Existing Basic Pay -->
+    <div class="form-group">
+        <label for="address" class="control-label">Existing Basic Pay (Case of Normal Family Pension)</label>
+        <input type="text" id="txtExBasicPay" name="existing_basicpay_tres" placeholder="0" >
+    </div>
+    <div class="form-group">
+        <label for="address" class="control-label">Date</label>
+        <input type="text" id="txtExDate" name="existing_date_tres" placeholder="dd-mm-yyyy" >
+    </div>
+
+
     <div class="form-group" style="float: none;">
         <label class="control-label max-height">&nbsp;</label>
         <input type="submit" name="save_transfer" value="Save" class="form-control btn btn-success" id="Save" />
@@ -110,7 +123,7 @@
 </style>
 <script type="text/javascript">
     $(function() {
-        $("#paid_upto, #letter_date").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
+        $("#paid_upto,#letter_date,#txtExDate").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
 
         $('#send_to').click(function() {
             var me = $(this);

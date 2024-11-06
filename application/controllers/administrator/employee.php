@@ -6,7 +6,7 @@ class employee extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('auth/model_auth');
-		$this->load->helper(array('designation', 'department', 'base'));
+		$this->load->helper(array('designation', 'department', 'base', 'member_type'));
 		$this->load->model(array('administrator/model_employee'));
 	}
 

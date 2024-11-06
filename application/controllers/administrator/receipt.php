@@ -71,7 +71,10 @@ class receipt extends CI_Controller {
 
 	function update()
 	{
-		$srl=$_GET['srl'];
+		/*$srl=$_GET['srl'];
+		$address_department=$_GET['address_department'];
+		$dept_forw_no=$_GET['dept_forw_no'];
+
 		$file_no=$_GET['file_no'];
 		$data=array(
 				'emp_code'=>$_GET['emp_code'],
@@ -80,6 +83,38 @@ class receipt extends CI_Controller {
 			);
 		$this->model_receipt->update($srl,$data);
 		//$this->model_receipt->update_token($file_no,$this->model_receipt->getTokenNo($file_no));
+	$qry=$this->db->query("Update pension_receipt_register_master set address_department='$address_department'  where dept_forw_no='$dept_forw_no'");
+       $res=$qry->result();
+
+
+		$q=$this->db->query("select * from pension_receipt_file_master where srl_No=$srl");
+		foreach($q->result() as $key){
+			$ecode=$key->emp_code;
+			$name=$key->pensionee_name;
+		}
+		$json=array('ecode'=>$ecode,'pensionee_name'=>$name);
+		echo json_encode($json);*/
+		//13-02-2020
+		$srl=$_POST['srl'];
+		$address_department=$_POST['address_department'];
+		$dept_forw_no=$_POST['dept_forw_no'];
+
+				$file_no=$_POST['file_no'];
+
+			/*echo "Update pension_receipt_register_master set address_department='".$address_department."'  where dept_forw_no='".$dept_forw_no."'";
+			die();*/
+		$data=array(
+				'emp_code'=>$_POST['emp_code'],
+				'pensionee_name'=>$_POST['name'],
+				'designation'=>$_POST['designation'],
+			);
+		$this->model_receipt->update($srl,$data);
+		//$this->model_receipt->update_token($file_no,$this->model_receipt->getTokenNo($file_no));
+	   /*$qry=$this->db->query("Update  set address_department='".."'  where ='".."'");
+       $res=$qry->result();*/
+        $this->db->set('address_department',$address_department);
+        $this->db->where('dept_forw_no',$dept_forw_no);
+        $this->db->update("pension_receipt_register_master");
 
 		$q=$this->db->query("select * from pension_receipt_file_master where srl_No=$srl");
 		foreach($q->result() as $key){
@@ -88,6 +123,7 @@ class receipt extends CI_Controller {
 		}
 		$json=array('ecode'=>$ecode,'pensionee_name'=>$name);
 		echo json_encode($json);
+		//13-02-2020
 	}
 
 	function edit($srl){
@@ -186,6 +222,19 @@ while($row=mysql_fetch_array($result))
 				$this->load->view('administrator/receipt/confirm_view', $data);
 		}
 	}
+
+	function updateDeptForwNo(){
+		$this->db->set('`dept_forw_no`',$this->input->post("deptfornow"));
+		$this->db->where('`dept_forw_no`',$this->input->post("key"));
+		$this->db->update('pension_receipt_register_master');
+
+		$this->db->set('`dept_forw_no`',$this->input->post("deptfornow"));
+		$this->db->where('`dept_forw_no`',$this->input->post("key"));
+		$this->db->update('pension_receipt_file_master');
+		
+		echo "{\"response\":\"success\"}";
+	}
+
 	function get_address(){
 		$d=$_GET['dept'];
 		$q=$this->db->get_where('master_department',array('dept_code'=>$d));

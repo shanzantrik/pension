@@ -21,8 +21,9 @@ class reauthorization extends CI_Controller
     
     function get_report($serial_no, $file_id, $sal)
     {
+        
         $file_id       = base64_decode($file_id);
-        //$this->load->helper('pension/superannuation_after/superannuation_pension');
+        $this->load->helper('pension/superannuation_after/superannuation_pension');
         $pid['sal']    = $sal;
         $pid['values'] = $this->model_Reauthorization->get_reauthorization_details($file_id);
         
@@ -181,8 +182,13 @@ class reauthorization extends CI_Controller
                 $pid['enhanrate_upto_for_child']=$enhanrate_upto_for_child;
                 $pid['ordrate_from']=$ordrate_from;*/
                 $pid['sal'] = $sal;
-                
-                if ($this->model_Reauthorization->add_reautho($file_no, $enhanrate_from, $age_25, $enhanrate_upto, $enhanrate_upto_for_child, $ordrate_from)) {
+ $claiment_name= $this->input->post('claiment_name');    
+ $son_daughter= $this->input->post('son_daughter');         
+$qryx=$this->db->query("select * from reauthorization where file_no='$file_no' and claiment_name='$claiment_name'");
+$ctrx= $qryx->num_rows();
+if($ctrx==0){
+                if ($this->model_Reauthorization->add_reautho($file_no, $enhanrate_from, $age_25, $enhanrate_upto, $enhanrate_upto_for_child, $ordrate_from,$son_daughter)) {
+
                     $this->load->helper('pension/superannuation_after/superannuation_pension');
                     $pid['values'] = $this->model_Reauthorization->get_reauthorization_details_by_file_no($file_no);
                     //$pid['records'] = $this->model_pension->get_servicebook($serial_no);
@@ -200,7 +206,39 @@ class reauthorization extends CI_Controller
                     $this->session->set_flashdata('message', '<div class="alert alert-error">Some error occured during Insertion.</div>');
                     redirect('administrator/Gis/');
                 }
-                
+ }  
+ else{
+
+ $child_dob= $this->input->post('child_dob');
+ $dod_pensioner= $this->input->post('dod_pensioner');
+ $dod_pensioner_wife_husband= $this->input->post('dod_pensioner_wife_husband');
+ $benificery_type= $this->input->post('benificery_type');
+ 
+
+
+   if($this->db->query("Update reauthorization set claiment_dob='$child_dob',pensioner_dod='$dod_pensioner',pensioner_husbandwife_dod='$dod_pensioner_wife_husband',benificery_type='$benificery_type',son_daughter='$son_daughter'  where file_no='$file_no' and claiment_name='$claiment_name'")){
+$this->load->helper('pension/superannuation_after/superannuation_pension');
+                    $pid['values'] = $this->model_Reauthorization->get_reauthorization_details_by_file_no($file_no);
+                    //$pid['records'] = $this->model_pension->get_servicebook($serial_no);
+                    //$pay_scale = $pid['records'][0]['pay_scale'];
+                    
+                    $this->load->library('Pensioner', array('serial_no' => $serial_no));
+                    $pid['records'] = $this->pensioner;
+                    $pay_scale      = $pid['records']->pay_scale;
+                    
+                    $pid['pay_scale'] = $this->model_Reauthorization->get_payscale($pay_scale);
+                    $data['title']    = "Reauthorization detail Report";
+                    $data['content']  = $this->load->view('administrator/pension/report/reauthorization/disburser', $pid, true);
+                    $this->load->view('administrator/default_template', $data);
+                } else {
+                    $this->session->set_flashdata('message', '<div class="alert alert-error">Some error occured during Insertion.</div>');
+                    redirect('administrator/Gis/');
+                }
+    
+
+
+ }     
+
                 // }
                 
                 

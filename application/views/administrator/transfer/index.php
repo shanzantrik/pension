@@ -54,8 +54,8 @@ endforeach;
                 	$ppo 			= $file['case_no']."/".$file['ppo'];
                 	$url 			= 'administrator/transfer/inside';
                 elseif($file['type'] == 'outside') :
-                    $recieved_from 	= str_replace(", ", ",<br />", $ag[$file['orf']]);
-                	$sent_to 		= str_replace(", ", ",<br />", $treasury[$file['ost']]);
+                    $recieved_from 	= str_replace(", ", ",<br />", $treasury[$file['orf']]);
+                	$sent_to 		= str_replace(", ", ",<br />", $ag[$file['ost']]);
                 	$ppo 			= $file['ppo'];
                 	$url 			= 'administrator/transfer/outside';
                 endif;

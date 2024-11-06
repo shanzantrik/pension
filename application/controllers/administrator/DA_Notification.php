@@ -8,6 +8,7 @@ class da_notification extends CI_Controller
 		$this->load->model('auth/model_auth');
 		$this->load->helper('base');
 		$this->load->model('administrator/model_notification');
+		$this->load->model('administrator/model_ips');
 	}
 
 	function index()
@@ -21,6 +22,35 @@ class da_notification extends CI_Controller
 		$this->load->view('administrator/default_template',$data);
 	}
 
+  function add()
+	{
+		//$file_No=base64_decode($file_no);
+		//var_dump($file_No);
+		if($_POST){
+			     
+				if($this->model_notification->addObservation()) {
+					$file_no = $_POST['file_no'];
+					//var_dump($file_no);
+					
+					$pid['values'] = $this->model_notification->get_details($file_no);
+					$data['title'] = "IPS detail Report";
+					//var_dump($pid);
+					$data['content'] = $this->load->view('administrator/pension/report/ips/pension_report', $pid, true);
+		            $this->load->view('administrator/default_template', $data);
+					//$this->session->set_flashdata('message','<div class="alert alert-success">Data saved successfully.</div>');
+					//redirect('administrator/DA_Notification/add');
+				} else {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger">Some error occured during insertion.</div>');
+					redirect('administrator/DA_Notification/add');
+				}
+			
+		} else {
+			
+			$data['title'] = "Pension Observation Entry";
+			//$data['content'] = $this->load->view('administrator/notification/add',true);
+			$this->load->view('administrator/da_default', $data);
+		}
+	}
 	function da_confirm()
 	{
 		$file=$_GET['file'];
@@ -90,7 +120,7 @@ class da_notification extends CI_Controller
 		 	//redirect('administrator/Gis');
 			redirect('administrator/da_notification');
 		} else {
-		 	$this->session->set_flashdata('message',"<div class='alert alert-success'>Successfully Allocated to GIS Superintendent</div>");
+		 	$this->session->set_flashdata('message',"<div class='alert alert-success'>Successfully Allocated </div>");
 		 	//redirect('administrator/Gis');
 			redirect('administrator/da_notification');
 		}
@@ -122,5 +152,70 @@ class da_notification extends CI_Controller
 		 	$this->session->set_flashdata('message',"<div class='alert alert-success'>Successfully Allocated to Superiendantant</div>");
 		 	redirect('administrator/da_notification/from_superintendent');
 		}
-	}	
+	}
+
+
+	function load_remarks($file_No='')//,$type
+	{
+		
+		{
+			
+			$file_No=base64_decode($file_No);
+					
+			$data['title']   = "Check IPS Observations";
+			$dv['receipt']   =$this->model_ips->get_receipt($file_No);
+
+			$data['content'] = $this->load->view('administrator/notification/add_remarks',$dv, true);
+			$this->load->view('administrator/default_template', $data);
+		}
+	  
+	    			
+	 }	
+
+
+	 function add_remarks_controller()
+	{
+		
+		if($_POST) {
+			
+			$ret=$this->model_notification->add_ips_observation();
+			$this->session->set_flashdata('message', '<div class="alert alert-success">IPS observation saved successfully.</div>');
+			redirect('administrator/da_notification');
+			$this->load->view('administrator/default_template', $data);
+			
+			} else {
+			redirect('administrator/notification/load_remarks');
+			$this->load->view('administrator/default_template', $data);
+		}
+	}
+
+	function load_editremarks($file_No='')
+    {
+            $file_No=base64_decode($file_No);
+                    
+            $data['title']   = "Check IPS Observations";
+            $dv['receipt']   =$this->model_ips->get_record($file_No);
+
+            $data['content'] = $this->load->view('administrator/notification/edit_remarks',$dv, true);
+            $this->load->view('administrator/default_template', $data);
+        
+            
+     }
+
+
+     function edit_remarks_controller()
+    {
+        
+        if($_POST) {
+            $ret=$this->model_ips->edit_ips_observation();
+            $this->session->set_flashdata('message', '<div class="alert alert-success">IPS observation updated successfully.</div>');
+            redirect('administrator/da_notification');
+            $this->load->view('administrator/default_template', $data);
+            
+            } else {
+            //$dv['receipt']=$this->model_ips->get_receipt($file_No);
+            redirect('administrator/ips/load_editremarks');
+            $this->load->view('administrator/default_template', $data);
+        }
+    }
 }

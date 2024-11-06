@@ -106,6 +106,32 @@ class report extends CI_Controller {
 		}
 	}
 
+	function death_gratuity($serial_no) {
+		$cop = $this->model_pension->get_pension_class($serial_no);
+		if($cop!='Death_Gratuity'){
+			redirect(site_url('administrator/pension/file'));
+		} else {
+			$this->load->library('Sanjay', array('serial_no'=>$serial_no));
+			$vrp['values'] = $this->sanjay;
+			$data['title'] = "Death_Gratuity";
+			$data['content'] = $this->load->view('administrator/pension/report/worksheet/family/after/death_gratuity_06', $vrp, true);
+			$this->load->view('administrator/default_template', $data);
+		}
+	}
+
+	function nps($serial_no) {
+		$cop = $this->model_pension->get_pension_class($serial_no);
+		if($cop!='NPS'){
+			redirect(site_url('administrator/pension/file'));
+		} else {
+			$this->load->library('Sanjay', array('serial_no'=>$serial_no));
+			$vrp['values'] = $this->sanjay;
+			$data['title'] = "NPS";
+			$data['content'] = $this->load->view('administrator/pension/report/worksheet/family/nps', $vrp, true);
+			$this->load->view('administrator/default_template', $data);
+		}
+	}
+
 	function extraordinary_pension($serial_no) {
 		$this->load->helper('pension/family/extraordinary_pension');
 		$cop = $this->model_pension->get_pension_class($serial_no);

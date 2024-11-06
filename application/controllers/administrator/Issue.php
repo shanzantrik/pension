@@ -50,7 +50,12 @@ class issue extends CI_Controller
 		$data['title'] = "File Details";
 		$dv['records']=$this->model_notification->pensionee_info($file);
 		if (empty($dv['records']['details'])) {
+			
 			$dv['records']=$this->model_issue->getData($file_no);
+			// ====================================================================
+			$this->load->library('Pensioner', array('case_no'=>$file_no));
+			$dv['values'] = $this->pensioner;
+			// ====================================================================
 			$data['content'] = $this->load->view('administrator/issue/dispatch_pre_ips', $dv, true);
 			$this->load->view('administrator/default_template', $data);
 		}
@@ -96,6 +101,8 @@ class issue extends CI_Controller
 		$data['content'] = $this->load->view('administrator/issue/view_issued_file', $dv, true);
 		$this->load->view('administrator/default_template', $data);
 	}
+
+	
 
 	function update_ajax()
 	{

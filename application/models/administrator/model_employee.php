@@ -7,7 +7,7 @@ class Model_employee extends CI_Model {
 	}
 
 	function index() {
-		$this->db->select('id, name, designation, doj, dor, total_pay, account_no, photograph');
+		$this->db->select('id, name, role, user_id, designation, doj, dor, total_pay, account_no, photograph');
 		$this->db->from('employees');
 		$query = $this->db->get();
 		return $query->result_array();
@@ -49,7 +49,15 @@ class Model_employee extends CI_Model {
 	}
 
 	function update($id, $filePath) {
+
 		$name=$this->security->xss_clean($this->input->post('name'));
+		$user_id=$this->security->xss_clean($this->input->post('id'));
+		$rand=rand(1000, 9000);
+		$user_id='pen'.$rand;
+		//dd($user_id);
+		$role=$this->security->xss_clean($this->input->post('role'));
+		
+		$mobile_no=$this->security->xss_clean($this->input->post('mobile_no'));
 		$fhname=$this->security->xss_clean($this->input->post('fhname'));
 		$dep=$this->security->xss_clean($this->input->post('branch_code'));
 		$designation=$this->security->xss_clean($this->input->post('designation'));
@@ -73,7 +81,13 @@ class Model_employee extends CI_Model {
 		$branch=$this->security->xss_clean($this->input->post('branch'));
 		$ddo_address=$this->security->xss_clean($this->input->post('ddo_address'));
 		$remarks=$this->security->xss_clean($this->input->post('remarks'));
-		$employees_details = array('name'=>$name, 'fhname'=>$fhname, 'dep'=>$dep, 'designation'=>$designation, 'dob'=>$dob, 'doj'=>$doj, 'dor'=>$dor, 'sex'=>$sex, 'category'=>$category, 'appoint_as'=>$appointas, 'pay_band'=>$pay_band, 'grade_pay'=>$grade_pay, 'increament_amount'=>$increament_amount, 'total_pay'=>$total_pay, 'sca'=>$sca, 'other_allowance'=>$other_allowance, 'da'=>$da, 'total_allowance'=>$total_allowance, 'total_emolument'=>$total_emolument, 'account_no'=>$account_no, 'bank_name'=>$bank_name, 'branch'=>$branch, 'ddo_address'=>$ddo_address, 'remarks'=>$remarks);
+		if($this->input->post('password')!=''){
+			$password=md5($this->input->post('password'));
+			$employees_details = array('name'=>$name, 'role'=>$role, 'user_id'=>$user_id, 'mobile_no'=>$mobile_no, 'password'=>$password,  'fhname'=>$fhname, 'dep'=>$dep, 'designation'=>$designation, 'dob'=>$dob, 'doj'=>$doj, 'dor'=>$dor, 'sex'=>$sex, 'category'=>$category, 'appoint_as'=>$appointas, 'pay_band'=>$pay_band, 'grade_pay'=>$grade_pay, 'increament_amount'=>$increament_amount, 'total_pay'=>$total_pay, 'sca'=>$sca, 'other_allowance'=>$other_allowance, 'da'=>$da, 'total_allowance'=>$total_allowance, 'total_emolument'=>$total_emolument, 'account_no'=>$account_no, 'bank_name'=>$bank_name, 'branch'=>$branch, 'ddo_address'=>$ddo_address, 'remarks'=>$remarks);
+	    }
+	    else{
+	    	$employees_details = array('name'=>$name, 'role'=>$role, 'user_id'=>$user_id, 'mobile_no'=>$mobile_no,  'fhname'=>$fhname, 'dep'=>$dep, 'designation'=>$designation, 'dob'=>$dob, 'doj'=>$doj, 'dor'=>$dor, 'sex'=>$sex, 'category'=>$category, 'appoint_as'=>$appointas, 'pay_band'=>$pay_band, 'grade_pay'=>$grade_pay, 'increament_amount'=>$increament_amount, 'total_pay'=>$total_pay, 'sca'=>$sca, 'other_allowance'=>$other_allowance, 'da'=>$da, 'total_allowance'=>$total_allowance, 'total_emolument'=>$total_emolument, 'account_no'=>$account_no, 'bank_name'=>$bank_name, 'branch'=>$branch, 'ddo_address'=>$ddo_address, 'remarks'=>$remarks);
+	    }
 		if(!empty($filePath)) { $employees_details['photograph'] = $filePath; }
 
 		$this->db->where('id', $id);

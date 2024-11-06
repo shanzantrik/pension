@@ -1,4 +1,4 @@
-<button style="float:right;" class="btn btn-info" onclick="javascript:printReport('print')"><i class="icon-white icon-print"></i>Print</button>
+
 <?php $pensioner = $values; ?>
 
 <?php
@@ -7,38 +7,107 @@
 		$expired_statement = '<span style="font-size:12px; color: red;font-weight: bold;"> (Expired on '.$pensioner->dateTimeToDate($pensioner->dod).')</span>';
 		$salutation = 'Shri';
 		$sixteen	= 'Retirement Gratuity';
+
+		//30-11-2022 Anupam
+		$enhan_upto_seven= new DateTime($pensioner->dod);
+		$enhan_upto_seven->modify('+7 year');
+		$ordinary_from_seven=$enhan_upto_seven->modify('+1 day');
+		$ordinary_from_upto_seven="<b> ".$ordinary_from_seven->format('d-m-Y')." until his/her remarriage or death"."</b>";
+		$ordinary_from_upto_seven_above25="<b> ".$ordinary_from_seven->format('d-m-Y')." until earns livelihood or gets married"."</b>";
+		$ordinary_from_upto_seven_below25="<b> ".$ordinary_from_seven->format('d-m-Y')." until he/she attains 25 years or earns livelihood or gets married"."</b>";
+		
+		$enhan_upto= new DateTime($pensioner->dod);
+		$enhan_upto->modify('+10 year -1 day');
+		$ordinary_from=$enhan_upto->modify('+2 day');
+		$ordinary_from_upto="<b> ".$ordinary_from->format('d-m-Y')." until his/her remarriage or death"."</b>";
+		//30-11-2022 Anupam
 	elseif($pensioner->dod == $pensioner->dor) :
 		$fiveandsix = 'Death';
 		$expired_statement = '';
 		$salutation = 'Late';
 		$sixteen	= 'Death Gratuity';
+
+		$enhan_upto_seven= new DateTime($pensioner->dod);
+		$enhan_upto_seven->modify('+10 year');
+		$ordinary_from_seven=$enhan_upto_seven->modify('+1 day');
+		$ordinary_from_upto_seven="<b> ".$ordinary_from_seven->format('d-m-Y')." until his/her remarriage or death"."</b>";
+		$ordinary_from_upto_seven_above25="<b> ".$ordinary_from_seven->format('d-m-Y')." until earns livelihood or gets married"."</b>";
+		$ordinary_from_upto_seven_below25="<b> ".$ordinary_from_seven->format('d-m-Y')." until he/she attains 25 years or earns livelihood or gets married"."</b>";
+		
+		$enhan_upto= new DateTime($pensioner->dod);
+		$enhan_upto->modify('+10 year -1 day');
+		$ordinary_from=$enhan_upto->modify('+2 day');
+		$ordinary_from_upto="<b> ".$ordinary_from->format('d-m-Y')." until his/her remarriage or death"."</b>";
 	endif;
 
 	$account_no = ($pensioner->account_no != '') ? '('.$pensioner->account_no.')' : '';
 	$ac 		= ($pensioner->name_of_accountant_general != '') ? $pensioner->sub_to : $pensioner->treasury_name;
 	$payable 	= $ac.' '.$pensioner->bank_name.' '.$account_no;
+	$total_amount=$pensioner->total_amount;
+
+	$enhan_from= new DateTime($pensioner->dod);
+	$enhan_from->modify('+1 day');
+	$enhan_upto= new DateTime($pensioner->dod);
+	$enhan_upto->modify('+10 year');
+	$enhance_from_upto="<b>from ".$enhan_from->format('Y-m-d')." upto ".$enhan_upto->format('Y-m-d')."</b>";
+
+	$enhan_from_7_arrPen= new DateTime($pensioner->dod);
+	$enhan_from_7_arrPen->modify('-1 year +9 month -3 day');//2017-03-04 to 2016-12-01
+	$enhan_upto_7_arrPen= new DateTime($pensioner->dod);
+	$enhan_upto_7_arrPen->modify('0 day');
+	$enhance_from_upto_7_arrPen="<b>from ".$enhan_from_7_arrPen->format('Y-m-d')." to ".$enhan_upto_7_arrPen->format('Y-m-d')."</b>";
+	
+	//2017-03-04 to 2017-03-04
+	$enhan_from_7_enhRate= new DateTime($pensioner->dod);
+	$enhan_from_7_enhRate->modify('+1 day');
+    $enhan_upto_7_enhRate= new DateTime($pensioner->dod);
+	$enhan_upto_7_enhRate->modify('+6 year +8 month +26 day');
+	$enhance_from_upto_7_enhRate="<b>from ".$enhan_from_7_enhRate->format('Y-m-d')." to ".$enhan_upto_7_enhRate->format('Y-m-d')."</b>";
+
+	$enhan_upto_seven=new DateTime($pensioner->effect_of_pension);
+	$enhan_upto_seven->modify('+6 year +12 month +0 day');
+	$enhan_upto_seven_final="<b>w.f. ".$enhan_upto_seven->format('Y-m-d')." until his/her remarriage or death</b>";
 ?>
 
-<div id="print" style="width: 1000px; margin: 0px auto;">
-	<div style="width:1000px; min-height:600px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 2em">
+<?php 
+
+/*Two or more wives */
+
+		$NumberOfWives=$pensioner->getNumberOfWives();
+
+		if($NumberOfWives==0){
+			$NumberOfWives=1;
+		}
+
+	/*End */
+
+for ($i=0; $i < $NumberOfWives; $i++) { ?>
+
+<button style="float:right;" class="btn btn-info" onclick="javascript:printReport('print<?php echo $i+1;?>')"><i class="icon-white icon-print"></i>Print</button>	
+
+<div id="print<?php echo $i+1;?>" style="width: 1000px; margin: 0px auto;">
+	<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
 	    <div style="text-align:center; padding-top:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
 	        <u><strong>Working Sheet</strong></u>
 	    </div>
+	    <!-- <div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.4em"> -->
 	    <div style="padding-top:20px">
 	        <div style="float:left; padding-left:20px">
-	        	<strong>No. <?php echo $pensioner->case_no; ?></strong>
+	        	<strong>No. <?php //echo $pensioner->case_no; 
+				echo $pensioner->case_file_no;
+				?></strong>
 	        </div>
 	      	<div style="float:right;padding-right:20px">
 	        	<strong>Date</strong>: <?php echo date('d/m/Y')?>
 	        </div>
 	  	</div>
-
+        <!-- <div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.4em"> -->
 		<table width="100%" border="0" cellpadding="2" id="report">
 			<tr>
 				<td valign="top" width="7%"><div align="right">1.</div></td>
 				<td valign="top" width="35%"><b>Name of Pensioner</b></td>
 				<td valign="top" width="2%">:</td>
-				<td valign="top" width="60%"><?php echo $salutation." ".$pensioner->name; ?></td>
+				<td valign="top" width="60%"><?php echo $salutation." ".$pensioner->name.' ('.$pensioner->designation.')'; ?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">2.</div></td>
@@ -90,7 +159,7 @@
 				<td valign="top"><div align="right"></div></td>
 				<td valign="top"><b>(i) Service before attaining age of 18 years</b></td>
 				<td valign="top">:</td>
-				<td valign="top">0 year 0 month 0 day</td>
+				<td valign="top"></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right"></div></td>
@@ -98,6 +167,12 @@
 				<td valign="top">:</td>
 				<td valign="top"><?php echo $pensioner->non_qualifying_service(); ?></td>
 			</tr>
+			<tr>
+				<td valign="top"><div align="right"><span class="style2"><span class="style3"></span></span></div></td>
+				<td valign="top"><span class="style3"><b>(iii) Add Weightage</b></span></td>
+			  <td valign="top"><span class="style3">:</span></td>
+			  <td valign="top"><span class="style3"><?php echo $pensioner->Weightage(); ?></span></td>
+		  </tr>
 			<tr>
 				<td valign="top"><div align="right"></div></td>
 				<td valign="top"><b>Net qualifying Service</b></td>
@@ -108,7 +183,13 @@
 				<td valign="top"><div align="right">8.</div></td>
 				<td valign="top"><b>Six monthly period</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->smp; ?></td>
+				<td valign="top"><?php 
+				//echo $pensioner->smp; 
+				if($pensioner->net_qualifying_service()<20)
+				{echo 'N/A';}
+				else
+				{echo $pensioner->smp; }
+				?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">9.</div></td>
@@ -146,41 +227,111 @@
 				<td valign="top"><b>Last Pay (as per LPC)</b></td>
 				<td valign="top">:</td>
 				<td valign="top" colspan="3">
-					<?php echo $pensioner->getLastPay(); ?>
+					<?php 
+                    if($pensioner->pay_commission==7)
+                    {echo $total_amount;}
+                    else
+					{echo $pensioner->getLastPay(); }
+					?>
 				</td>
 			</tr>
 			<!-- <tr style="height:50px;"> -->
+			<?php 
+			// if($pensioner->consolidated==1) 
+			// { 	  echo 'N/A'; 
+			// 	//echo $pensioner->consolidated;
+			// }
+			// else
+			// {
+			?>
+			
 			<tr>
 				<td valign="top"><div align="right">13.</div></td>
 				<td valign="top"><b>Last Incremented Pay</td>
 				<td valign="top">:</td>
 				<td valign="top">
-					<?php echo $pensioner->getLastIncreamentPay(); ?>
+				<?php 
+				//echo $avg_em=$pensioner->getLastIncreamentPay(); 
+
+				if($pensioner->consolidated==1) 
+				{ 	
+					  echo 'N/A'; 
+				}
+				else
+				{ echo $avg_em=$pensioner->getLastIncreamentPay(); }
+				?>
 				</td>
 			</tr>
+			
 			<tr>
 				<td valign="top"><div align="right">14.</div></td>
 				<td valign="top"><b>Average Emoluments</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getAverageEmolument(); ?></td>
+				<td valign="top">
+				<?php 
+							// if($avg_em!=0)
+							// {
+							// 	echo $pensioner->getAverageEmolument(); 
+							// }
+							// else
+							// {
+							// 	echo 'N/A';
+							// }
+				
+				if($pensioner->class_of_pension=='Normal_Family_Pension')
+				{
+					echo 'N/A';
+				}
+				else
+				{
+					echo $pensioner->getAverageEmolument(); 	
+				}
+     			?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">15.</div></td>
 				<td valign="top"><b>Amount of Pension</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getAmountofPension(); ?></td>
+				<td valign="top">
+				<?php 
+				echo $pensioner->getAmountofPension();
+				
+				?>
+					
+				</td>
 			</tr>
+
 			<tr>
 				<td valign="top"><div align="right">16.</div></td>
 				<td valign="top"><b>Amount of <?php echo $sixteen; ?></b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getDCRG(); ?></td>
+				<td valign="top">
+				
+				<?php 
+				// //echo $pensioner->getDCRG();
+
+				// if($pensioner->more_wives==1 && $pensioner->no_of_wives>=2)
+				// 	{
+				// 		echo $pensioner->getDCRG()/$pensioner->no_of_wives.' (for each wife)';
+				// 	}
+				// 	else
+					//{
+						echo $pensioner->getDCRG()/$NumberOfWives;
+					//}
+				?>
+					
+				</td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">17.</div></td>
 				<td valign="top"><b>DA</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->da_percentage();?></td>
+				<td valign="top">
+				<?php 
+                echo $pensioner->da_percentage();
+				?>
+					
+				</td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">18.</div></td>
@@ -192,37 +343,190 @@
 				<td valign="top"><div align="right"></div></td>
 				<td valign="top"><b>(a) Life time arrear pension</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getNormalFamilyEnhanceRate(); ?></td>
+				<td valign="top">
+				<?php 
+				echo $pensioner->getNormalFamilyEnhanceRate(); 
+				?>
+                
+				</td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right"></div></td>
 				<td valign="top"><b>(b) Enhanced Rate</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getEnhanceRate(); ?></td>
+				<td valign="top">
+				<?php 
+				//echo $pensioner->getEnhanceRate(); 
+				
+					$date = new DateTime($pensioner->childDOB);
+					$now = new DateTime();
+					$age = new DateTime();
+					$age = $date->diff($now)->format("%y");
+					$currentYear=$now->format("Y");
+					
+					$Entrydate = new DateTime($pensioner->doj);
+					$EntryYear = $Entrydate->format("Y");
+					if($EntryYear>='2008')
+					{ echo 'N/A';
+					}
+					elseif($EntryYear<'2008')
+					{
+						//if($age==$currentYear || $age==0)
+						if($age>=2018 || $age==0)
+						{
+
+							if($NumberOfWives==1){
+								echo $pensioner->getEnhanceRate(); 	
+							}else{
+								echo $pensioner->getEnhanceRateX($NumberOfWives);
+							}
+							//echo $pensioner->getEnhanceRate()/$NumberOfWives; 
+						}
+						elseif($age<25)
+						{
+							echo $pensioner->getEnhanceRate_ForLessThan25Child(); 
+						}
+						elseif($age>=25)
+						{
+							//echo $pensioner->getEnhanceRate(); 
+							echo 'N/A';
+						}
+					}
+
+				?>
+					
+				</td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right"><b></b></div></td>
 				<td valign="top"><b>(c) Ordinary Rate</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getOrdinaryRate(); ?></td>
+				<td valign="top">
+				<?php 
+				
+					$date = new DateTime($pensioner->childDOB);
+					$now = new DateTime();
+					$age = new DateTime();
+					$age = $date->diff($now)->format("%y");
+					$currentYear=$now->format("Y");
+							
+					$Entrydate = new DateTime($pensioner->doj);
+					$EntryYear = $Entrydate->format("Y");
+					if($EntryYear>='2008')
+					{ echo 'N/A';
+					}
+					elseif($EntryYear<'2008')
+					{
+						
+					//if($age==$currentYear || $age==0)
+					if($age>=2018 || $age==0)
+					{
+						/*if($pensioner->pay_commission==7 && $pensioner->getOrdinaryRate()<9000)
+						{ echo '9000';} 
+						else
+						{*/
+							// //echo $pensioner->getOrdinaryRate();
+							// if($pensioner->more_wives==1 && $pensioner->no_of_wives>=2)
+							// {
+							// 	echo $pensioner->getOrdinaryRate()/$pensioner->no_of_wives.' (for each wife)';
+							// }
+							// else
+							//{
+							if ($pensioner->getOrdinaryRate()<9000){
+								echo 9000/$NumberOfWives;
+							}
+							else{
+								echo $pensioner->getOrdinaryRate()/$NumberOfWives;
+							}
+							
+							//}
+						//} 
+						?> <b>from</b> <?php 
+						
+						if($pensioner->pay_commission==7)
+						{ echo $ordinary_from_upto_seven;} 
+						else
+						{echo $ordinary_from_upto;
+						}
+					}
+					elseif($age>=25 && $pensioner->consolidated==1)
+					{
+						echo 'N/A';
+					}
+					elseif($age>=25 && $pensioner->consolidated==0)
+					{
+						/*echo $pensioner->getOrdinaryRate();?> <b>from</b> <?php echo $ordinary_from_upto_seven_above25;*/
+						echo 'N/A';
+					}
+					elseif($age<25)
+					{
+						/*echo $pensioner->getOrdinaryRate();?> <b>from</b> <?php echo $ordinary_from_upto_seven_below25;*/
+						echo 'N/A';
+					}
+					}
+			 ?>
+			 
+					
+				</td>
 			</tr>
+		
+			<?php if($pensioner->consolidated==1) 
+			{
+			?>
+			<tr>
+				<td valign="top"><div align="right"></div></td>
+				<td valign="top"><b>(d) Consolidated Enhanced Rate</b></td>
+				<td valign="top">:</td>
+				<td valign="top">
+				<?php 
+				echo $pensioner->getEnhanceRateConsolidated_WorkingSheet(); 
+				
+				?>
+					
+				</td>
+			</tr>
+			<?php } ?>
+
 		    <tr>
 				<td valign="top"><div align="right">19.</div></td>
 				<td valign="top"><b>Commuted Value</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getCommutedValue();?></td>
+				<td valign="top">
+				<?php 
+				echo $pensioner->getCommutedValue();
+				?>
+					
+				</td>
 			</tr>
+
 			<tr>
 				<td valign="top"><div align="right">20.</div></td>
 				<td valign="top"><b>Place of Payment (under which Treasury/Bank)</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $payable; ?></td>
+				<td valign="top"><?php 
+				//if($NumberOfWives>1){
+				    $ac=$pensioner->getAG($i).$pensioner->getTg($i);
+				//
+				//}
+				    if($pensioner->getSub_To($i)!=""){
+					 	echo "The Treasury Officer</br>".$pensioner->getSub_To($i);
+					 }else{
+					 	echo $ac.' '.$pensioner->bank_name.' '.$account_no;
+					}
+
+				 ?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">21.</div></td>
 				<td valign="top"><b>Address after Retirement</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->address_after_retirement; ?></td>
+				<td valign="top"><?php
+
+				echo $pensioner->getAddressAfterRetirement($i);
+
+				//echo $pensioner->address_after_retirement; 
+
+				 ?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">22.</div></td>
@@ -234,7 +538,13 @@
 				<td valign="top"><div align="right">23.</div></td>
 				<td valign="top"><b>Name of Legal Heir</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getNameOfLegalHeir(); ?></td>
+				<td valign="top"><?php
+					if($NumberOfWives==1){
+						echo $pensioner->getNameOfLegalHeir();	
+					}else{
+						echo $pensioner->getNameOfLegalHeirX($i+1);
+					}
+					?></td>
 			</tr>
 			<tr style="height:50px;">
 				<td valign="top"><div align="right">24.</div></td>
@@ -246,7 +556,16 @@
 				<td valign="top"><div align="right">25.</div></td>
 				<td valign="top"><b>Provisional Gratuity Status</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->provisional_gratuity; ?></td>
+				<td valign="top"><?php 
+				////echo $pensioner->provisional_gratuity; 
+
+				// if($pensioner->more_wives==1 && $pensioner->no_of_wives>=2)
+				// {
+				// 	echo $pensioner->provisional_gratuity/$pensioner->no_of_wives.' (for each wife)';
+				// }
+				// else
+				{echo $pensioner->provisional_gratuity/$NumberOfWives;}
+				?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">26.</div></td>
@@ -254,31 +573,31 @@
 				<td valign="top">:</td>
 				<td valign="top"><?php echo $pensioner->provisional_pension; ?></td>
 			</tr>
-		    <tr>
-		        <td valign="top">&nbsp;</td>
-		        <td valign="top" colspan="4"><b>RECOVERIES:</b></td>
-		    </tr>
+		    
 		    <tr>
 				<td valign="top"><div align="right">27.</div></td>
 				<td valign="top"><b>Earned Leave Encashment</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getEarnMoney(); ?></td>
+				<td valign="top"><?php echo $pensioner->getEarnMoney()/$NumberOfWives; ?></td>
 			</tr>
 		    <tr>
 				<td valign="top"><div align="right">28.</div></td>
 				<td valign="top"><b>Half Leave Encashment</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getHalfMoney(); ?></td>
+				<td valign="top"><?php echo $pensioner->getHalfMoney()/$NumberOfWives; ?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">29.</div></td>
 				<td valign="top"><b>Total Leave Encashment</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getTotalLeaveEncashment(); ?></td>
+				<td valign="top"><?php echo $pensioner->getTotalLeaveEncashment()/$NumberOfWives; ?></td>
 			</tr>
 		</table>
+		<!-- </div> -->
 	</div>
 </div>
+
+<?php } ?>
 <style type="text/css">
 	.table td {padding: 10px;}
 	.da{font-size: 12px;}

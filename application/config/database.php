@@ -48,9 +48,9 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '172.16.16.2';
-$db['default']['username'] = 'pension_ui';
-$db['default']['password'] = 'bikram123';
+$db['default']['hostname'] = 'localhost';
+$db['default']['username'] = 'root';
+$db['default']['password'] = 'ask1313#';
 $db['default']['database'] = 'pension_ui';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
@@ -71,8 +71,10 @@ $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
-$db['default']['password'] = 'root';
+$db['default']['password'] = 'Digitalbrain1313#';
+//$db['default']['password'] = '';
 $db['default']['database'] = 'pension_ui';
+//$db['default']['database'] = 'pension_uiold';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

@@ -7,11 +7,16 @@
 		"illuminate/database": "4.2.6"
 	},
 	"require-dev": {
-		"mikey179/vfsStream": "1.1.*"
+		"mikey179/vfsstream": "1.1.*"
 	},
 	"autoload": {
         "classmap": [
            "application/models"
         ]
-    }
+    },
+	"config": {
+		"allow-plugins": {
+			"kylekatarnls/update-helper": true
+		}
+	}
 }

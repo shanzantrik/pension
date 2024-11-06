@@ -49,7 +49,7 @@ class Model_receipt extends CI_Model {
 			 		$lst_no=1;
 			 	}
 		    } else {
-		   		$lst_no=1;
+		   		$lst_no=191;
 	        }
 
 			$file = $this->model_receipt->getfinal_file_format($file1,$lst_no);
@@ -314,7 +314,7 @@ class Model_receipt extends CI_Model {
 		$result=$this->db->get_where('pension_receipt_file_master',array('branch_code'=>$branch_code));
 	    $row = $result->result();
 	    if($row[0]->srl_No == ''){
-	    	return "34778";
+	    	return "30226";
 	    } else {
 	    	return $row[0]->srl_No+1;
 	    }

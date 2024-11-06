@@ -18,7 +18,8 @@
                 <td><b>Receipt Date</b></td>
                 <td><b>Allocated Date</b></td>
                 <td><b>Received</b>[<small style="color:red; font-size: 10px;">Mark as Received</small>]</td>
-                <td><b>View</b></td>
+                <!-- <td><b>View</b></td> -->
+                <td><b>IPS remark</b></td>
 
             </tr>
         </thead>
@@ -38,8 +39,16 @@
                     <td><button onclick="ajax('<?php echo $rec->file_no?>','<?php echo $i?>')" id="<?php echo $i ?>" type="button" <?php if($rec->notification=='pending'){echo "class='btn'";}else{echo "class='btn btn-success'"; echo "disabled='true'";} ?>><i class="icon-ok"></i></button>
                         <?php $i=$i+1;?>
                      </td>
-                     <td>
+                     <!-- <td>
                      <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/report/'.strtolower($rec->class_of_pension).'/'.$rec->serial_no)?>/Receipt" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>View</a>
+                     </td> -->
+                     <td>
+                     <a title="Add Observation" href="<?php echo site_url('/administrator/notification/load_editremarks/'.base64_encode($rec->file_no))?>/Pension" class="open-dialog-edit btn btn-default btn-rad" data-id=""><i class="icon-book"></i>Edit Remarks</a>
+
+                     <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/notification/print_ips_observation/'.base64_encode($rec->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>IPS Obs. Print</a>
+                     
+                     <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/pension/print_pension_observation/'.base64_encode($rec->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Pension Obs. Print</a>
+                </td>
                      </td>
                 </tr>
             <?php endforeach ?>

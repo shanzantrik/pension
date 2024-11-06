@@ -61,7 +61,7 @@
 					{
 					//$name=$ci['name'];
 					$name=trim($ci['name']);
-                    //$salutation=trim($ci['salutation']);
+                    $salutation=trim($ci['salutation']);
 			
                     }
 				}
@@ -73,6 +73,12 @@
   <div class="form-group">
     <label for="exampleInputEmail1">Name</label>
     <input type="text" class="form-control" name="claiment_name" value="<?php echo $name?>" id="exampleInputEmail1"><?php echo form_error('claiment_name', '<div class="error">', '</div>');?>
+    <input type="hidden" class="form-control" name="son_daughter" value="<?php 
+    if($salutation=='miss') 
+        {echo $salutation='Daughter';}
+    elseif($salutation=='mr') 
+       {echo $salutation='Son';}
+    ?>" id="exampleInputEmail1"><?php echo form_error('claiment_name', '<div class="error">', '</div>');?>
   </div>
 
   
@@ -90,6 +96,21 @@
     <label for="exampleInputPassword1">Date of death(pensioner wife/husband)</label>
     <input type="text" class="form-control" name="dod_pensioner_wife_husband" value="" id="dod_pensioner_wife_husband"><?php echo form_error('dod_pensioner_wife_husband', '<div class="error">', '</div>'); ?></td>
   </div>
+
+ <div class="form-group">
+    <label for="exampleInputPassword1">Benificery Type</label>
+    <select name="benificery_type" id="benificery_type" class="form-control">
+    <option value="" selected="selected">Select</option>
+    <option value="gets married or starts earning or attains the age of 25 years.">Gets married or starts earning or attains the age of 25 years.</option>
+    <option value="up to the date of marriage or starts earning.">Up to the date of marriage or starts earning.</option>
+    <option value="up to the date of re-marriage or starts earning.">Up to the date of re-marriage or starts earning.</option>
+    <option value="gets re-married or death.">Gets re-married or death.</option>
+    
+    
+    </select>
+    <?php echo form_error('benificery_type', '<div class="error">', '</div>'); ?></td>
+  </div>
+   
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
 

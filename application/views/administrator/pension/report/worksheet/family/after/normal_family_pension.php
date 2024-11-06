@@ -18,7 +18,7 @@ if($pensioner->dor=="0000-00-00" && $pensioner->dod!="0000-00-00"){
     $enhance_from_upto="<b>from ".$enhan_from->format('Y-m-d')." upto ".$enhan_upto->format('Y-m-d')."</b>";
     
 	$ordinary_from=$enhan_upto->modify('+1 day');
-	$ordinary_from_upto="<b> from ".$ordinary_from->format('Y-m-d')." to untill her death or remarriage"."</b>";
+	$ordinary_from_upto="<b> from ".$ordinary_from->format('Y-m-d')." until his/her remarriage or death"."</b>";
 	
 	$life_time_from_upto="";
     }else if($val['dor']!="0000-00-00" && $val['dod']!="0000-00-00"){
@@ -32,16 +32,22 @@ if($pensioner->dor=="0000-00-00" && $pensioner->dod!="0000-00-00"){
 
     $enhance_from_upto="<b>from ".$enhan_from->format('Y-m-d')." upto ".$enhan_upto->format('Y-m-d')."</b>";
 	$ordinary_from=$enhan_upto->modify('+1 day');
-	$ordinary_from_upto="<b>from ".$ordinary_from->format('Y-m-d')." to untill her Death or remarriage"."</b>";
+	$ordinary_from_upto="<b>from ".$ordinary_from->format('Y-m-d')." until his/her remarriage or death"."</b>";
 	$life_time_from_upto=$val['revised_amount_of_pension']." <b>from ".$from->format('Y-m-d')." upto ".$val['dod']."</b>";
 	
     }
 ?>
 
-<div id="print" style="width:1000px; min-height:600px; color:#000000; background-color:#FFFFFF">
+<!-- <div id="print" style="width:1000px; min-height:600px; color:#000000; background-color:#FFFFFF">
     <div style="text-align:center; padding-top:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
         <u><strong>Working Sheet</strong></u>
-    </div>
+    </div> -->
+    <div id="print" style="width: 1000px; margin: 0px auto;">
+	<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+	
+		<div style="text-align:center; padding-top:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
+	        <u><strong>Working Sheet</strong></u>
+	    </div>
     <div style="padding-top:20px">
         <div style="float:left; padding-left:20px">
         	<strong>No. <?php echo $pensioner->case_no; ?></strong>
@@ -123,6 +129,12 @@ if($pensioner->dor=="0000-00-00" && $pensioner->dod!="0000-00-00"){
 			<td valign="top">:</td>
 			<td valign="top"><?php echo $pensioner->non_qualifying_service(); ?></td>
 		</tr>
+		<tr>
+				<td valign="top"><div align="right"><span class="style2"><span class="style3"></span></span></div></td>
+				<td valign="top"><span class="style3"><b>(iii) Add Weightage</b></span></td>
+			  <td valign="top"><span class="style3">:</span></td>
+			  <td valign="top"><span class="style3"><?php echo $pensioner->Weightage(); ?></span></td>
+		  </tr>
 		<tr>
 			<td valign="top"><div align="right"></div></td>
 			<td valign="top"><b>Net qualifying Service</b></td>
@@ -223,7 +235,15 @@ if($pensioner->dor=="0000-00-00" && $pensioner->dod!="0000-00-00"){
 			<td valign="top"><div align="right"><b></b></div></td>
 			<td valign="top"><b>(b) Ordinary Rate</b></td>
 			<td valign="top">:</td>
-			<td valign="top"><?php echo $pensioner->getOrdinaryRate(); ?><?php echo $ordinary_from_upto;?></td>
+			<td valign="top"><?php 
+			if ($pensioner->class_of_pension = 7 && $pensioner->getOrdinaryRate() < 9000 ){
+				echo '9000';
+			}else{
+				echo $pensioner->getOrdinaryRate();
+			}
+			
+			 ?>
+			 <?php echo $ordinary_from_upto;?></td>
 		</tr>
 	    <tr>
 			<td valign="top"><div align="right">19.</div></td>
@@ -285,10 +305,7 @@ if($pensioner->dor=="0000-00-00" && $pensioner->dod!="0000-00-00"){
 			<td valign="top">:</td>
 			<td valign="top"><?php echo $pensioner->provisional_pension; ?></td>
 		</tr>
-	    <tr>
-	        <td valign="top">&nbsp;</td>
-	        <td colspan="4"><b>RECOVERIES:</b></td>
-	    </tr>
+	    
 	    <tr>
 			<td valign="top"><div align="right">29.</div></td>
 			<td valign="top"><b>Earned Leave Encashment</b></td>
@@ -308,6 +325,7 @@ if($pensioner->dor=="0000-00-00" && $pensioner->dod!="0000-00-00"){
 			<td valign="top"><?php echo $pensioner->getTotalLeaveEncashment(); ?></td>
 		</tr>
 	</table>
+	</div>
 </div>
 <style type="text/css">
 	.table td {padding: 10px;}

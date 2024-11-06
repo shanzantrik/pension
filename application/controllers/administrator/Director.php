@@ -64,6 +64,61 @@ class director extends CI_Controller
         $this->load->view('administrator/default_template', $data);
     }
 
+    function load_editremarks($file_No='')
+    {
+            $file_No=base64_decode($file_No);
+                    
+            $data['title']   = "Check IPS Observations";
+            $dv['receipt']   =$this->model_director->get_record($file_No);
+
+            $data['content'] = $this->load->view('administrator/director/edit_remarks',$dv, true);
+            $this->load->view('administrator/default_template', $data);
+        
+            
+     }
+
+     function edit_remarks_controller()
+    {
+        
+        if($_POST) {
+            $ret=$this->model_director->edit_ips_observation();
+            $this->session->set_flashdata('message', '<div class="alert alert-success">IPS observation updated successfully.</div>');
+            //redirect('administrator/Ips/load_remarks');//,$dv, true);
+            redirect('administrator/director/index');
+            //$data['content'] = $this->load->view('administrator/ips/add_remarks',$dv, true);
+            $this->load->view('administrator/default_template', $data);
+            
+            } else {
+            //$dv['receipt']=$this->model_ips->get_receipt($file_No);
+            redirect('administrator/director/load_editremarks');
+            $this->load->view('administrator/default_template', $data);
+        }
+    }
+
+    function print_ips_observation($file_no)
+    {
+        $file_No=base64_decode($file_no);
+        //dd($file_No);
+        $q=$this->db->query("select a.remarks,b.dept_forw_no,b.receipt_date,b.pensionee_name,b.designation,c.address_department from observation a, pension_receipt_file_master b, pension_receipt_register_master c where a.case_no=b.file_no and c.dept_forw_no=b.dept_forw_no and a.case_no='$file_No'");
+        $result = $q->result();
+         //dd($result);
+        $res['resu'] = $result;
+
+        // $p=$this->db->query("select dept_forw_no from pension_receipt_file_master where file_no='$file_No'");
+        // $resultp = $p->result();
+    //   //dd($p);
+        // $resp['resup'] = $resultp;
+        //dd($resp);
+        // $serial_no = $this->model_ips->get_serial_no($file_No);
+        // $pid['values'] = $this->model_ips->get_ips_detail2($file_No);
+        // $pid['status'] = $this->model_ips->get_file_from($file_No);
+        // $this->load->library('Pensioner');//, array('serial_no'=>$serial_no));
+        // $vrp['values'] = $this->pensioner;
+        $data['title'] = "IPS detail Report";
+        $data['content'] = $this->load->view('administrator/pension/report/ips/ips_observations', $res, true);
+        $this->load->view('administrator/default_template', $data);
+    }
+
     function view_checklist($file_no)
     {
         $file_no         = base64_decode($file_no);

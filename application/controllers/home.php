@@ -8,13 +8,22 @@ class Home extends CI_Controller {
 		$this->load->model('administrator/model_page_manager');
 	}
 
-	function index() {
+	/*function index() {
 		if($this->session->userdata('logged_in') != TRUE) {
 			$page=$this->model_page_manager->getPageDetails_byId('Home');
 			$data['title'] = $page['page_title'];
 			$dv['content']=$page['codebase'];
 			$data['content'] = $this->load->view('Home/index', $dv, true);
 			$this->load->view('administrator/home_template', $data);
+		} else {
+			redirect('administrator/home');
+		}
+	}*/
+
+
+	function index() {
+		if($this->session->userdata('logged_in') != TRUE) {
+			$this->load->view('login_view');
 		} else {
 			redirect('administrator/home');
 		}
@@ -25,13 +34,13 @@ class Home extends CI_Controller {
 	}
 
 	function doLogin() {
-		$username = $this->input->post('username');
+		$username = $this->input->post('mobile_no');
 		$pass  = $this->input->post('password');
 		$md5_pass = md5($pass);	
 			if($this->model_home->login($username,$md5_pass)) {
 				$this->member_type_redirection();
 			} else {
-				$this->session->set_flashdata("message", "<div class='alert alert-danger'>Member code or password doesn't match.</div>");
+				$this->session->set_flashdata("message", "<div class='alert alert-danger'>User id or password doesn't match.</div>");
 				$err=base64_encode('error');
 				redirect(site_url('home/login').'?msg='.$err);
 			}

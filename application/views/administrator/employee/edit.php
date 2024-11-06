@@ -15,6 +15,7 @@
             <label class="col-sm-3 control-label">Name of Father/Husband</label>
             <div class="col-sm-6">
                 <input autocomplete="off" type="text" name="fhname" id="fhname" value="<?php echo $row['fhname']; ?>">
+                <input autocomplete="off" type="hidden" name="id" id="id" value="<?php echo $row['id']; ?>">
             </div>
         </div>
         <div class="form-group">
@@ -202,10 +203,37 @@
                 <div id="error-label"></div>
             </div>
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
             <label class="col-sm-3 control-label">Remarks</label>
             <div class="col-sm-6">
                 <textarea name="remarks"><?php echo $row['remarks']; ?></textarea>
+            </div>
+        </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Mobile No.</label>
+            <div class="col-sm-6">
+                <input autocomplete="off" maxlength="10" type="text" name="mobile_no" value="<?php echo $row['mobile_no']; ?>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Password</label>
+            <div class="col-sm-6">
+                <input autocomplete="off" type="password" name="password" value="">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Role</label>
+            <div class="col-sm-6">
+                <select id="role" required="required" class="form-control" name="role">
+                    <option value="">--Please Select--</option>
+                    <?php foreach (getAllMember_Type() as $role) { ?>
+                        <?php if($role['member_type_code'] == $row['role']) { ?>
+                            <option value="<?php echo $role['member_type_code']; ?>" selected><?php echo $role['member_type_name']; ?></option>';
+                        <?php } else { ?>
+                            <option value="<?php echo $role['member_type_code']; ?>"><?php echo $role['member_type_name']; ?></option>';
+                        <?php } ?>
+                    <?php } ?>
+                </select>
             </div>
         </div>
         <div class="clear"></div>

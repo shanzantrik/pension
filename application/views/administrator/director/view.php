@@ -228,7 +228,8 @@
                         <th width="20%">Department</th>
                         <th width="40%">Designation</th>
                         <th width="10%">Received</th>
-                        <th width="10%">view</th>
+                        <!-- <th width="10%">view</th> -->
+                        <th width="10%">IPS remark</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -255,8 +256,15 @@
                                 <button onclick="ajax3('<?php echo $key->file_no ?>','<?php echo $i ?>')" id="<?php echo $i ?>" type="button" <?php if($key->notification=='pending'){echo "class='btn'";}else{echo "class='btn btn-success'"; echo "disabled='true'";} ?>><i class="icon-ok"></i></button>
                             </td>
                             <?php $i=$i+1; ?>
-                            <td>
+                            <!-- <td>
                                 <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/report/'.strtolower($key->class_of_pension).'/'.$key->serial_no)?>/Receipt" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>View</a>
+                            </td> -->
+                            <td>
+                                <a title="Add Observation" href="<?php echo site_url('/administrator/director/load_editremarks/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-default btn-rad" data-id=""><i class="icon-book"></i>Edit Remarks</a>
+
+                                <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/director/print_ips_observation/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>IPS Obs. Print</a>
+
+                                <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/fao/print_pension_observation/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Pension Obs. Print</a>
                             </td>
                         </tr>
                     <?php endforeach ?>
@@ -318,6 +326,7 @@
                     <th width="20%">Name | Designation</th>
                     <th width="10%">Received</th>
                     <th width="15%">View</th>
+                    <th width="15%">IPS remark</th>
                 </thead>
                 <tbody>
                     <?php $i=100000; ?>
@@ -342,7 +351,13 @@
                                 <button onclick="ajax2('<?php echo $key->file_no ?>','<?php echo $i ?>')" id="<?php echo $i ?>" type="button" <?php if($key->notification=='pending'){echo "class='btn'";}else{echo "class='btn btn-success'"; echo "disabled='true'";} ?>><i class="icon-ok"></i></button>
                             </td>
                             <?php $i=$i+1; ?>
-                            <td><a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/director/view_report/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Report</a></td>
+                            <td><a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/director/view_report/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Report</a>
+                            </td>
+                            <td>
+                            <a title="Add Observation" href="<?php echo site_url('/administrator/director/load_editremarks/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-default btn-rad" data-id=""><i class="icon-book"></i>Edit Remarks</a>
+
+                            <a title="Attach IPS for this claimant from receipt branch" href="<?php echo site_url('/administrator/director/print_ips_observation/'.base64_encode($key->file_no))?>/Pension" class="open-dialog-edit btn btn-success btn-rad" data-id=""><i class="icon-book"></i>Print</a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

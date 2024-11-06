@@ -23,6 +23,19 @@ class tracking extends CI_Controller {
 		$this->load->view('administrator/default_template', $data);
 	}
 
+	function export()
+	{
+		$result = FTracking::distinct('file_no')
+									->select('*')
+									//->limit(10)
+									->orderBy('entry_time', 'asc')
+									->get();
+
+		$data['title'] = "File Export";
+		$data['content'] = $this->load->view('administrator/tracking/export', compact('result'), true);
+		$this->load->view('administrator/default_template', $data);
+	}
+
 	function track_details()
 	{
 		$file=trim($_GET['file_no']);

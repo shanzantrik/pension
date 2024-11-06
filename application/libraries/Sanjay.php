@@ -23,7 +23,7 @@ class CI_Sanjay extends CI_Pensioner
 				$from->modify('+1 day');
 				$upto = new DateTime($this->dor);
 				$upto->modify('+7 years');
-	          	if ($class_of_pension=='Normal_Family_Pension' || $class_of_pension=='Extraordinary_Pension' || $class_of_pension=='Liberalised_Pension' || $class_of_pension=='Dependent_Pension' || $class_of_pension=='Parents_Pension'){
+	          	if ($class_of_pension=='Normal_Family_Pension' || $class_of_pension=='NPS' || $class_of_pension=='Death_Gratuity' || $class_of_pension=='Extraordinary_Pension' || $class_of_pension=='Liberalised_Pension' || $class_of_pension=='Dependent_Pension' || $class_of_pension=='Parents_Pension'){
 	          		$return = round($total*50/100);
 	          		//if($detail == true) :
 	          			//$return.= " <b>from ".$from->format('d-m-Y')." upto ".$upto->format('d-m-Y')."</b>";

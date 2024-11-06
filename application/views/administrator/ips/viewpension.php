@@ -23,6 +23,11 @@
      $('body').on('focus',"#appointment", function(){
         $(this).datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
     });
+
+    $('body').on('focus',"#dob", function(){
+        $(this).datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
+    });
+
       $('body').on('focus',"#regularization", function(){
         $(this).datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
     });
@@ -127,7 +132,7 @@
                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">12.One additional increment for falling between Feb' to June'2006 and shall be re-fixed pay w.e.f 01-01-2006 in revised pay vide order No.10/2/2011-E-III(A) dated 19-03-2012 and communicated by Govt.of A.P order No.FIN/E-II/22/2008 dated 21-11-2012:</label></td>
                         <td><textarea rows="4" cols="20" name="additional" id="additional" class="form-control"></textarea></td>  
                         <td></td>
-                        <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">13.IPS 1973/1986/1996/2006 :passed/observations:</label></td>
+                        <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">13.IPS 1973/1986/1996/2006/2016 :passed/observations:</label></td>
                         <td><textarea rows="4" cols="20" name="ips" id="ips" class="form-control"></textarea></td> 
                        
                                                                         
@@ -315,10 +320,10 @@
                         <td><input title="Name" readonly name="file_no" type="text"  class="form-control parsley-validated" value="<?php echo $row['file_No']; ?>"><?php echo form_error('name', '<div class="error">', '</div>'); ?></td>
                         <td></td>
                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">2.Date:</label></td>
-                        <td><input name="entry" id="entry" type="text" value="" class="form-control parsley-validated" placeholder="Enter Date"></td>                                                    
+                        <td><input name="entry" id="entry" type="text" value="" class="form-control parsley-validated" placeholder="Enter Date" required="true"></td>                                                    
                     </tr>
                      <tr>
-                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">Department</label></td>
+                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">3.Department:</label></td>
                        <td> 
                             <select title="Choose Department" class="form-control parsley-validated parsley-success" name="dept">
                             <?php if(!$dept_code=='') {
@@ -340,25 +345,49 @@
                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">5.Name</label></td>
                         <td><input title="Name" readonly name="name" type="text"  class="form-control parsley-validated" value="<?php echo $row['pensionee_name']; ?>"><?php echo form_error('name', '<div class="error">', '</div>'); ?></td>
                     <td></td>
-                        <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">6.Date of 1st appointment</label></td>
-                        <td><input title="appointment" readonly name="appointment"  type="date" class="form-control parsley-validated" value="<?php echo $row1['doj']; ?>"><?php echo form_error('member_name', '<div class="error">', '</div>');?></td>                                                    
+                        <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">6.Date of 1st appointment <span class="required-field">*</span></label></td>
+                        <td><!-- <input title="appointment" readonly name="appointment"  type="date" class="form-control parsley-validated" value="<?php echo $row1['dojac']; ?>"><?php echo form_error('member_name', '<div class="error">', '</div>');?> -->
+                            
+                        <input name="appointment" required="true" id="appointment" type="text" value="" class="form-control parsley-validated" placeholder="Enter Appointment Date"><?php echo form_error('member_name', '<div class="error">', '</div>');?>    
+                        </td>                                                    
                     </tr>
                     <tr>
                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">7.Designation:</label></td>
                         <td><input title="designation" readonly name="designation" type="text" value="<?php echo $row['designation']; ?>"  class="form-control parsley-validated"><?php echo form_error('name', '<div class="error">', '</div>'); ?></td>
                         <td></td>
-                        <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">7.Regular/Ad hoc/officiating/WC/Contact:</label></td>
-                        <td><input title="appoint_as" readonly name="appoint_as" type="text"  class="form-control parsley-validated" value="<?php echo $row1['appoint_as']; ?>"><?php echo form_error('name', '<div class="error">', '</div>'); ?></td>
+                        <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">7a.Regular/Ad hoc/officiating/WC/Contact:</label></td>
+                        <td><!-- <input title="appoint_as" readonly name="appoint_as" type="text"  class="form-control parsley-validated" value="<?php echo $row1['appoint_as']; ?>"><?php echo form_error('name', '<div class="error">', '</div>'); ?> -->
+                            
+                       <!--  <input name="appoint_as" id="appoint_as" type="text" value="" class="form-control parsley-validated" placeholder=""> -->  
+
+
+                        <div class="col-sm-6">
+                           <select class="appoint_as" name="appoint_as">
+                             <option value="0">Select</option>
+                             <option value="Adhoc">Adhoc</option>
+                             <option value="Officiating">Officiating</option>
+                             <option value="WC">WC</option>
+                             <option value="Temporary">Temporary</option>
+                             <option value="Permanent">Permanent</option>
+                          </select>
+                       </div> <?php echo form_error('name', '<div class="error">', '</div>'); ?>  
+                        </td>
                         
                                                                        
                     </tr>
                      <tr>
                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">8.Scale of Pay:</label></td>
-                        <td><input title="Designation" readonly name="scale" value="<?php echo $row1['pay_scale']; ?>"  type="text" class="form-control parsley-validated"><?php echo form_error('member_name', '<div class="error">', '</div>');?></td>
+                        <td><!-- <input title="Designation" readonly name="scale" value="<?php echo $row1['pay_scale']; ?>"  type="text" class="form-control parsley-validated"><?php echo form_error('member_name', '<div class="error">', '</div>');?> -->
+                            
+                        <input name="scale" id="scale" type="text" value="" class="form-control parsley-validated" placeholder=""><?php echo form_error('member_name', '<div class="error">', '</div>');?>    
+                        </td>
                         <td></td>
                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">9.Date of regularization if appointment on ad hoc/officiating/WC:</label></td>
 
-                        <td><input title="regularization" readonly name="regularization"  type="date" class="form-control parsley-validated" value=""><?php echo form_error('member_name', '<div class="error">', '</div>');?></td>
+                        <td><!-- <input title="regularization" readonly name="regularization"  type="date" class="form-control parsley-validated" value="<?php echo $row1['doj']; ?>"><?php echo form_error('member_name', '<div class="error">', '</div>');?> -->
+                            
+                        <input name="regularization" id="regularization" type="text" value="" class="form-control parsley-validated" placeholder="Date of Regularization"><?php echo form_error('member_name', '<div class="error">', '</div>');?>    
+                        </td>
                         
                                                                        
                     </tr>
@@ -374,7 +403,7 @@
                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">12.One additional increment for falling between Feb' to June'2006 and shall be re-fixed pay w.e.f 01-01-2006 in revised pay vide order No.10/2/2011-E-III(A) dated 19-03-2012 and communicated by Govt.of A.P order No.FIN/E-II/22/2008 dated 21-11-2012:</label></td>
                         <td><textarea rows="4" cols="20" name="additional" id="additional" class="form-control"></textarea></td>  
                         <td></td>
-                        <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">13.IPS 1973/1986/1996/2006 :passed/observations:</label></td>
+                        <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">13.IPS 1973/1986/1996/2006/2016 :passed/observations:</label></td>
                         <td><textarea rows="4" cols="20" name="ips" id="ips" class="form-control"></textarea></td> 
                        
                                                                         
@@ -383,10 +412,16 @@
                    
                     <tr>
                         <td><strong>14.Retirement Date on Superannuation/Voluntary/Death</strong></td>
-                        <td><input title="dor" readonly name="dor"  type="date" class="form-control parsley-validated" value="<?php echo $row1['dor']; ?>"><?php echo form_error('member_name', '<div class="error">', '</div>');?></td>
+                        <td><!-- <input title="dor" readonly name="dor"  type="date" class="form-control parsley-validated" value="<?php echo $row1['dor']; ?>"><?php echo form_error('member_name', '<div class="error">', '</div>');?> -->
+                            
+                        <input name="dor" id="dor" type="text" value="" class="form-control parsley-validated" placeholder="Retirement Date">    
+                        </td>
                         <td></td>
                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">15.Date of Birth</label></td>
-                        <td><input title="dob" readonly name="dob"  type="date" class="form-control parsley-validated" value="<?php echo $row1['dob']; ?>"><?php echo form_error('member_name', '<div class="error">', '</div>');?></td>
+                        <td><!-- <input title="dob" readonly name="dob"  type="date" class="form-control parsley-validated" value="<?php echo $row1['dob']; ?>"><?php echo form_error('member_name', '<div class="error">', '</div>');?> -->
+                            
+                        <input name="dob" id="dob" type="text" value="" class="form-control parsley-validated" placeholder="Birth Date">    
+                        </td>
                     </tr>
                     <tr>
                         <td><label style="width:auto;font-weight:bold" class="col-sm-3 control-label">16.Scale of &raquo;</label></td>
@@ -540,7 +575,7 @@
                     </tbody>
             </table>
 
-            <input name="serial_no" type="hidden" value="<?php echo $row1['serial_no']; ?>" class="form-control parsley-validated" placeholder="Please Enter Member Name">
+            <input name="serial_no" type="hidden" value="<?php //echo $row1['serial_no']; ?>" class="form-control parsley-validated" placeholder="Please Enter Member Name">
         </div>     
                    
     </div>       

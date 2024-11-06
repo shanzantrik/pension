@@ -28,7 +28,7 @@ if($pensioner->dor==$pensioner->dod){
 	$enhan_upto->modify('+10 year');
 
 	$ordinary_from=$enhan_upto->modify('+1 day');
-	$ordinary_from_upto="<b>from ".$ordinary_from->format('Y-m-d')." to untill her Death or remarriage"."</b>";
+	$ordinary_from_upto="<b>from ".$ordinary_from->format('Y-m-d')." until his/her remarriage or death"."</b>";
 
 	$effect_of_pension=$enhan_from->format('Y-m-d');
     $dp50percent=((($pensioner->getEnhanceRate_sanjay(false)*50)/100)+($pensioner->getEnhanceRate_sanjay(false)));
@@ -47,7 +47,7 @@ if($pensioner->dor==$pensioner->dod){
     $enhance_from_upto="E/R of Family Pension Rs".$pensioner->getEnhanceRate_sanjay(false)."<b> from ".$enhan_from->format('Y-m-d')."upto 2005-03-31 and Rs.".$dp50percent."/-PM+DR+MA(including 50% DP)w.e.f 2005-04-01 to 2005-12-31 and consolidated rate Rs. ".$consolidated_amount." /-PM+DR+MA w.e.f 2006-01-01 to".$enhan_upto->format('Y-m-d')."thereafter Ordinary rate Rs.".$pensioner->getOrdinaryRate()." w.e.f ".$ordinary_from_upto."</b>";
 
 	$ordinary_from=$enhan_upto->modify('+1 day');
-	$ordinary_from_upto="<b> from ".$ordinary_from->format('Y-m-d')." to untill her death or remarriage"."</b>";
+	$ordinary_from_upto="<b> from ".$ordinary_from->format('Y-m-d')." until his/her remarriage or death"."</b>";
 	$amount_pension='N/A';
     $cpo_no="N/A";
 	$salutation="Late";
@@ -81,7 +81,7 @@ if($pensioner->dor==$pensioner->dod){
 
 
     $ordinary_from=$enhan_upto->modify('+1 day');
-	$ordinary_from_upto="<b>from ".$ordinary_from->format('Y-m-d')." to untill her Death or remarriage"."</b>";
+	$ordinary_from_upto="<b>from ".$ordinary_from->format('Y-m-d')." until his/her remarriage or death"."</b>";
 
     print_r($enhan_upto->format('Y-m-d'));
     if($enhan_upto->format('Y-m-d')>'2005-03-31'){
@@ -96,7 +96,7 @@ if($pensioner->dor==$pensioner->dod){
      $dp50percent=((($pensioner->getOrdinaryRate()*50)/100)+($pensioner->getOrdinaryRate));
 
 
-     $enhance_from_upto="Life time arrear Rs".$pensioner->getEnhanceRate_sanjay(false)."<b>from ".$pensioner->dor." upto".$pensioner->dod."thereafter E/R of Family Pension Rs ".$pensioner->getEnhanceRate_sanjay(false)."w.e.f ".$enhan_from->format('Y-m-d')."upto.".$enhan_upto->format('Y-m-d')." and ordinary rate Rs".$pensioner->getOrdinaryRate()."from".$ordinary_from->format('Y-m-d')." upto 2005-03-31 and Rs. ".$dp50percent."/-PM+DR+MA(including 50% DP)w.e.f 2005-04-01 to 2005-12-31 and consolidated rate Rs. ".$consolidated_amount."/-PM+DR+MA w.e.f 2006-01-01 to untill her death or remarriage</b>";
+     $enhance_from_upto="Life time arrear Rs".$pensioner->getEnhanceRate_sanjay(false)."<b>from ".$pensioner->dor." upto".$pensioner->dod."thereafter E/R of Family Pension Rs ".$pensioner->getEnhanceRate_sanjay(false)."w.e.f ".$enhan_from->format('Y-m-d')."upto.".$enhan_upto->format('Y-m-d')." and ordinary rate Rs".$pensioner->getOrdinaryRate()."from".$ordinary_from->format('Y-m-d')." upto 2005-03-31 and Rs. ".$dp50percent."/-PM+DR+MA(including 50% DP)w.e.f 2005-04-01 to 2005-12-31 and consolidated rate Rs. ".$consolidated_amount."/-PM+DR+MA w.e.f 2006-01-01 until his/her remarriage or death</b>";
 
     }
     
@@ -107,14 +107,14 @@ if($pensioner->dor==$pensioner->dod){
     $salutation=$pensioner->salutation;
     //$enhance_from_upto="<b>from ".$enhan_from->format('Y-m-d')." upto ".$enhan_upto->format('Y-m-d')."</b>";
 	//$ordinary_from=$enhan_upto->modify('+1 day');
-	//$ordinary_from_upto="<b>from ".$ordinary_from->format('Y-m-d')." to untill her Death or remarriage"."</b>";
+	//$ordinary_from_upto="<b>from ".$ordinary_from->format('Y-m-d')." until his/her remarriage or death"."</b>";
 	//$life_time_from_upto=$val['revised_amount_of_pension']." <b>from ".$from->format('Y-m-d')." upto ".$val['dod']."</b>";
     
     $commuted_value=$pensioner->getCommutedValue();
 }
 ?>
 <?php
-	$ppo_no = $pensioner->case_no."/".$pensioner->ppo_no;
+	$ppo_no = $pensioner->case_file_no."/".$pensioner->ppo_no;
 	$gpo_no = 'Pen/AP/GPO/'.$pensioner->gpo_no;
 	//$cpo_no = 'Pen/AP/COM/'.$pensioner->cpo_no;
 	$ac = ($pensioner->treasury_officer!='') ? str_replace(", ", ",<br />", $pensioner->treasury_name): str_replace(", ", ",<br />", $pensioner->accountant_general_name);
@@ -133,16 +133,19 @@ if($pensioner->dor==$pensioner->dod){
 	<?php endif; ?>
     <option value="disburser_disburser_portion">Disburser Portion</option>
 	<option value="disburser_pensioner_portion">Pensioner Portion</option>
+	<option value="id_card">ID Card</option>
 </select>
 <div id="form1" style="display: block;">
 	<button style="float:right;" class="btn btn-info" onclick="javascript:printReport('print1')"><i class="icon-white icon-print"></i>Print</button>
 	<div id="print1" style="width: 1000px; margin: 0px auto;">
-		<div style="width:1000px; min-height:600px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 1.4em">
+		<!-- <div style="width:1000px; min-height:600px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 1.4em"> -->
+		<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+
 			<table width="100%" cellpadding="3" id="report" border="0">
 				<tr>
 					<td style="vertical-align: top;" colspan="3">
 						<div id="heading" style="text-align:center; padding:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
-					        <div style="font-family: initial; margin-left: 200px;">GOVERNMENT OF ARUNACHAL PRADESH<br/>DIRECTORATE OF AUDIT & PENSION<br/><u>NAHARLAGUN</u>.</div>
+					        <div style="font-weight: bold;font-family: initial; margin-left: 200px;">GOVERNMENT OF ARUNACHAL PRADESH<br/>DIRECTORATE OF AUDIT & PENSION<br/><u>NAHARLAGUN</u>.</div>
 					    </div>
 					</td>
 					<td>
@@ -213,7 +216,7 @@ if($pensioner->dor==$pensioner->dod){
 					</td>
 				</tr>
 				<tr>
-					<td style="vertical-align: top;" colspan="4">Enclo :-
+					<td style="vertical-align: top;" colspan="4"><b>Enclo :-
 					<ol>
 						<li>
 							PPO (Pensioner's and Disburser's Portion)
@@ -228,7 +231,7 @@ if($pensioner->dor==$pensioner->dod){
 							Photograph
 						</li>
 						
-					</ol>
+					</ol></b>
 					</td>
 				</tr>
 				<tr>
@@ -248,9 +251,9 @@ if($pensioner->dor==$pensioner->dod){
 				<tr>
 					<td style="vertical-align: top;" colspan="4">
 						Copy forwarded to:- <br />
-						1) <b><?php echo strtoupper($pensioner->salutation." ".$pensioner->name).',<br />'.str_replace(",", ",<br />", $pensioner->address_after_retirement); ?></b><br /><br />
-						2) <b><?php echo str_replace(",", ",<br />", $pensioner->office_address); ?></b><br />
-						3) The Accountant General (A&E) Arunachal Pradesh, Itanagar.
+						<b>1) <?php echo strtoupper($pensioner->salutation." ".$pensioner->name).',<br />'.str_replace(",", ",<br />", $pensioner->address_after_retirement); ?></b><br /><br />
+						<b>2) <?php echo str_replace(",", ",<br />", $pensioner->office_address); ?></b> for information with reference to letter No. <b><?php echo $pensioner->dept_forw_no; ?></b>. The enclosures which are no longer required are returned herewith.<br />
+						<b>3) The Accountant General (A&E) Arunachal Pradesh, Itanagar.</b>
 					</td>
 				</tr>
 				<tr>
@@ -266,10 +269,12 @@ if($pensioner->dor==$pensioner->dod){
 <div id="form2" style="display: none;">
 	<button style="float:right;" class="btn btn-info" onclick="javascript:printReport('print2')"><i class="icon-white icon-print"></i>Print</button>
 	<div id="print2" style="width: 1000px; margin: 0px auto;">
-		<div style="width:1000px; min-height:600px; padding: 0 20px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+		<!-- <div style="width:1000px; min-height:600px; padding: 0 20px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 1.5em"> -->
+		<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+
 			<br />
-			<div style="text-align:center; padding:10px 0 35px 0; font:Arial, Helvetica, sans-serif; font-size:16px">
-		        <div style="font-weight: bold; text-align: center;">
+			<div style="text-align:center; padding:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
+		        <div style="font-weight: bold; text-align: center;font-family: initial;">
 		    		OFFICE OF THE </br>DIRECTOR OF AUDIT & PENSION </br>GOVERNMENT OF ARUNACHAL PRADESH </br>NAHARLAGUN
 		    	</div>
 		    </div>
@@ -370,10 +375,12 @@ if($pensioner->dor==$pensioner->dod){
 <div id="form3" style="display: none;">
 	<button style="float:right;" class="btn btn-info" onclick="javascript:printReport('print3')"><i class="icon-white icon-print"></i>Print</button>
 	<div id="print3" style="width: 1000px; margin: 0px auto;">
-		<div style="width:1000px; min-height:600px; padding: 0 20px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+		<!-- <div style="width:1000px; min-height:600px; padding: 0 20px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 1.5em"> -->
+		<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+
 			<br />
-			<div style="text-align:center; padding:10px 0 35px 0; font:Arial, Helvetica, sans-serif; font-size:16px;">
-	        	<div style="font-weight: bold; text-align: center;">
+			<div style="text-align:center; padding:10px; font:Arial, Helvetica, sans-serif; font-size:16px;">
+	        	<div style="font-weight: bold; text-align: center;font-family: initial;">
 		    		OFFICE OF THE </br>DIRECTOR OF AUDIT & PENSION </br>GOVERNMENT OF ARUNACHAL PRADESH </br>NAHARLAGUN
 		    	</div>
 	    	</div>
@@ -407,12 +414,12 @@ if($pensioner->dor==$pensioner->dod){
 					<td colspan="4" style="padding: 10px 0;"><div align="left" style="text-align: justify;"><?php echo nbs(6); ?>The receipt of authority may please be acknowledged.</div></td>
 				</tr>
 				<tr>
-					<td colspan="3" style="padding: 20px 0 25px 0;"><b>RECOVERY</b>: - Over payment, if any,<br/> due to non-payment of reduced pension<br/> of Rs.__________ per month should be<br/> adjusted at the time of payment.</td>
+					<td colspan="3" style="padding: 20px 0 25px 0;"><!--<b>RECOVERY</b>: - Over payment, if any,<br/> due to non-payment of reduced pension<br/> of Rs.__________ per month should be<br/> adjusted at the time of payment.--></td>
 					<td><div style="text-align: center;">Yours faithfully,</div></td>
 				</tr>
 				<tr>
 					<td colspan="3"></td>
-					<td style="text-align: center;">Director/Joint Director</td>
+					<td style="text-align: center;"><br/><br/><br/>Director/Joint Director</td>
 				</tr>
 				<tr>
 					<td colspan="3" style="padding: 10px 0;"><div align="left">Memo No- <b><?php echo $cpo_no; ?></b></div></td>
@@ -441,10 +448,12 @@ if($pensioner->dor==$pensioner->dod){
 <div id="form4" style="display: none;">
 	<button style="float:right;" class="btn btn-info" onclick="javascript:printReport('print4')"><i class="icon-white icon-print"></i>Print</button>
 	<div id="print4" style="width: 1000px; margin: 0px auto;">
-		<div style="width:1000px; min-height:600px; padding: 0 20px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 1.4em">
+		<!-- <div style="width:1000px; min-height:600px; padding: 0 20px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 1.4em"> -->
+		<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+		
 			<br /><br />
 			<div style="text-align:center; padding-top:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
-	        	<div style="font-weight: bold; text-align: center;">
+	        	<div style="font-weight: bold; text-align: center;font-family: initial;">
 		    		OFFICE OF THE </br>DIRECTOR OF AUDIT & PENSION </br>GOVERNMENT OF ARUNACHAL PRADESH </br>NAHARLAGUN
 		    	</div>
 	    	</div>
@@ -472,13 +481,14 @@ if($pensioner->dor==$pensioner->dod){
 					</td>
 					<td colspan="2" valign="top" style="padding: 10px 0;">
 						<b>PENSION RS. <?php echo $amount_pension;?>/-</b></br>
-		                <b>GRATUTIY RS. <?php echo $pensioner->getDCRG(); ?>/-</b></br>
+		                <b>GRATUITY RS. <?php echo $pensioner->getDCRG(); ?>/-</b></br>
 		                <b>COMMUTATION RS. <?php echo $pensioner->getCommutationOfPension(); ?>/-</b></br>
+		                <b><?php echo $pensioner->dateTimeToDate($pensioner->effect_of_pension); ?></b><br/>
 	    			</td>
 				</tr>
 				<tr>
 					<td colspan="2" valign="top" style="padding: 10px 0;"><div align="left">3. FAMILY PENSION </div></td>
-					<td colspan="2" valign="top" style="padding: 10px 0;"><div align="left"><b><?php echo $pensioner->dateTimeToDate($pensioner->effect_of_pension); ?></b></div></td>
+					<td colspan="2" valign="top" style="padding: 10px 0;"><div align="left"><b></b></div></td>
 				</tr>
 		      	<tr>
 					<td colspan="2" valign="top" style="padding: 10px 0 20px 20px;"><div align="left"> (a) Amount admitted and the period of payment</div></td>
@@ -511,7 +521,12 @@ if($pensioner->dor==$pensioner->dod){
 					<td colspan="2" valign="top" style="padding: 10px 0;">
 						<b>1) PPO No. <?php echo $pensioner->ppo_no; ?></b></br>
 					    <b>2) GPO No. <?php echo $pensioner->gpo_no; ?></b></br>
-					    <b>3) CPO No. <?php echo $cpo_no;?></b></br>
+					    <b>3) CPO No. <?php //echo $cpo_no;
+						if($pensioner->com_applied == 1)
+						{echo $cpo_no; }
+						else
+						{echo 'N/A';}
+					    ?></b></br>
 					</td>
 				</tr>
 				<tr>
@@ -521,7 +536,7 @@ if($pensioner->dor==$pensioner->dod){
 					<td colspan="4" valign="top" style="padding: 10px 0;"><div align="left">1. <?php echo $pensioner->office_address; ?></div></td>
 				</tr>
 	    		<tr>
-					<td colspan="4" valign="top" style="padding: 10px 0;"><div align="left">2.The Accountant General (A& E), Arunachal Pradesh, Itanagar</div></td>
+					<td colspan="4" valign="top" style="padding: 10px 0;"><div align="left">2.The Accountant General (A&E), Arunachal Pradesh, Itanagar</div></td>
 				</tr>
 				<tr>
 					<td colspan="4" valign="top" style="padding: 20px 0;" align="right">Director/Joint Director</td>
@@ -533,9 +548,12 @@ if($pensioner->dor==$pensioner->dod){
 <div id="form5" style="display: none;">
 	<button style="float:right;" class="btn btn-info" onclick="javascript:printReport('print5')"><i class="icon-white icon-print"></i>Print</button>
 	<div id="print5" style="width: 1000px; margin: 0px auto;">
-		<div id="print" style="width:1000px; min-height:600px; padding: 0 20px; color:#000000; background-color:#FFFFFF; line-height: 1.4em">
+		<!-- <div id="print" style="width:1000px; min-height:600px; padding: 0 20px; color:#000000; background-color:#FFFFFF; line-height: 1.4em"> -->
+		<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+		
 			<br /><br />
-			<div style="font-size: 18px; font-weight: bold; text-align: center;">FORM 7 (Part-II)</div><br /><br />
+			<div style="font-size: 18px; font-weight: bold; text-align: center;font:Arial, Helvetica, sans-serif;">
+			<div style="font-weight: bold;font-family: initial; ">FORM 7 (Part-II)</div></div><br /><br />
 
 			<table width="100%" border="0" cellspacing="3" cellpadding="3" align="center">
 				<tr>
@@ -580,7 +598,12 @@ if($pensioner->dor==$pensioner->dod){
 				<tr>
 					<td valign="top"><?php echo nbs(6); ?>(i) Commuted value of portion of<br /><?php echo nbs(11); ?>pension commuted, if any</td>
 					<td valign="top">:-</td>
-					<td valign="top"><b>Rs. <?php echo $commuted_value;?>/-</b></td>
+					<td valign="top"><b>Rs. <?php //echo $commuted_value;
+					if($pensioner->com_applied == 1)
+						{echo $commuted_value; }
+						else
+						{echo 'N/A';}	
+					?>/-</b></td>
 				</tr>
 				<tr>
 					<td valign="top"><?php echo nbs(6);?>(ii) Residuary pension after commutation</td>
@@ -618,7 +641,15 @@ if($pensioner->dor==$pensioner->dod){
 				<tr>
 					<td valign="top"><?php echo nbs(6); ?>(iv) Excess Provisional Gratuity</td>
 					<td valign="top">:-</td>
-					<td valign="top"><b><?php echo $pensioner->excess_pay_and_allowances; ?></b></td>
+					<td valign="top"><b><?php //echo $pensioner->excess_pay_and_allowances; 
+					if($pensioner->provisional_gratuity>$pensioner->getDCRG())
+						{$pg=$pensioner->provisional_gratuity;
+						 $g=$pensioner->getDCRG();
+						 $r=$pg-$g;
+						echo $r;}
+						else
+							{echo '0';}
+					?></b></td>
 				</tr>
 				<tr>
 					<td valign="top"><?php echo nbs(6); ?>(v) Net amount to be released immediately</td>
@@ -659,7 +690,8 @@ if($pensioner->dor==$pensioner->dod){
 <div id="disburser_disburser_portion" style="display: none;">
 	<button style="float:right;" class="btn btn-info" onclick="javascript:printReport('print6')"><i class="icon-white icon-print"></i>Print</button>
 	<div id="print6" style="width: 1000px; margin: 0px auto;">
-		<div id="print" style="width:1000px; min-height:600px; padding: 0 20px; color:#000000; background-color:#FFFFFF; line-height: 1.4em">
+		<!-- <div id="print" style="width:1000px; min-height:600px; padding: 0 20px; color:#000000; background-color:#FFFFFF; line-height: 1.4em"> -->
+		<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
 		
 		<table width="100%" cellpadding="3" id="report" border="0">
 			<tr>
@@ -671,7 +703,7 @@ if($pensioner->dor==$pensioner->dod){
 			<tr>
 				<td style="vertical-align: top;" colspan="3">
 					<div id="heading" style="text-align:center; padding:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
-				        <div style="font-family: initial; margin-left: 200px;">FORM-43<br/>(See paragraph 306)<br/>PENSION PAYMENT ORDER<br/>DISBURSER'S PORTION</div>
+				        <div style="font-weight: bold;font-family: initial; margin-left: 200px;">FORM-43<br/>(See paragraph 306)<br/>PENSION PAYMENT ORDER<br/>DISBURSER'S PORTION</div>
 				    </div>
 				</td>
 				<td style="vertical-align: top;" align="right" rowspan="3"><div id="photograph" style="width: 150px; height: 128px; border: 1px solid #bababa; border-radius: 3px; -moz-border-radius: 3px; margin-top: 63px;"><p style="text-align: center; margin-top: 50px; font-weight: bold;">Photograph</p></div></td>
@@ -702,17 +734,17 @@ if($pensioner->dor==$pensioner->dod){
 					<table border="1" cellspacing="2" cellpadding="2" id="inner-table">
 						<tr>
 							<th width="20%" style="vertical-align: top;">Class of Pension and date of commencement</th>
-							<th width="20%" style="vertical-align: top;">Date of Birth</th>
-							<th width="20%" style="vertical-align: top;">Religion and Nationality</th>
-							<th width="20%" style="vertical-align: top;">Residence showing village pargana</th>
+							<th width="0%" style="vertical-align: top;">Date of Birth</th>
+							<th width="0%" style="vertical-align: top;">Religion and Nationality</th>
+							<th width="30%" style="vertical-align: top;">Residence showing village pargana</th>
 							<th width="20%" style="vertical-align: top;">Amount of monthly pension</th>
 						</tr>
 						<tr>
 							<td style="vertical-align: top; text-align: center;" width="20%"><?php echo str_replace("_", " ", $class_of_pension); ?><br/>w.e.f <?php echo $effect_of_pension;//$pensioner->dateTimeToDate($pensioner->effect_of_pension); ?>
 </td>
-							<td style="vertical-align: top; text-align: center;" width="20%"><?php echo $pensioner->getDOBofSpouse(); ?></td>
-							<td style="vertical-align: top; text-align: center;" width="20%"><?php echo $pensioner->religion.", ".$pensioner->nationality;?></td>
-							<td style="vertical-align: top; text-align: center;" width="20%"><?php echo $pensioner->address_after_retirement; ?></td>
+							<td style="vertical-align: top; text-align: center;" width="0%"><?php echo $pensioner->getDOBofSpouse(); ?></td>
+							<td style="vertical-align: top; text-align: center;" width="0%"><?php echo $pensioner->religion.", ".$pensioner->nationality;?></td>
+							<td style="vertical-align: top; text-align: center;" width="30%"><?php echo $pensioner->address_after_retirement; ?></td>
 							<td style="vertical-align: top; text-align: center;" width="20%"><?php echo $enhance_from_upto;?></td>
 						</tr>
 					</table>
@@ -744,7 +776,9 @@ if($pensioner->dor==$pensioner->dod){
 				</td>
 			</tr>
 			<tr>
-				<td style="vertical-align: top;" colspan="2"><strong>No. <?php echo $pensioner->case_no."/".$pensioner->ppo_no; ?></strong></td>
+				<td style="vertical-align: top;" colspan="2"><strong>No. <?php //echo $pensioner->case_no."/".$pensioner->ppo_no; 
+				echo $pensioner->case_file_no."/".$pensioner->ppo_no;
+				?></strong></td>
 				<td style="vertical-align: top;text-align:right;" colspan="2">Date: <b><?php echo date('d.m.Y')?> </b></td>
 			</tr>
 			<tr>
@@ -757,7 +791,7 @@ if($pensioner->dor==$pensioner->dod){
 					<?php
 						$array = array('Superannuation_Pension', 'Compulsory_Retirement_Pension', 'Voluntary_Retirement_Pension', 'Invalid_Retirement_Pension', 'Absorption_in_autonomous_body_pension', 'Disability_Pension');
 						if(in_array($class_of_pension, $array)) {
-							echo nbs(6);echo  'UNTILL FURTHER NOTICE and on the expiration of every month, be pleased to pay to '.strtoupper($pensioner->salutation." ".$pensioner->name).' Rtd '.$pensioner->designation.'</b>, a sum of <b>Rs.'.$pensioner->getAmountofPension().'/-</b>PM+DR+MA w.e.f  only (less income-tax), being the amount of <b>'.strtoupper(str_replace("_", " ", $class_of_pension)).'</b>, as Arunachal Pradesh Government Pensioner upon the production of this Order and a receipt according to usual form.<br/>
+							echo nbs(6);echo  'UNTIL FURTHER NOTICE and on the expiration of every month, be pleased to pay to '.strtoupper($pensioner->salutation." ".$pensioner->name).' Rtd '.$pensioner->designation.'</b>, a sum of <b>Rs.'.$pensioner->getAmountofPension().'/-</b>PM+DR+MA w.e.f  only (less income-tax), being the amount of <b>'.strtoupper(str_replace("_", " ", $class_of_pension)).'</b>, as Arunachal Pradesh Government Pensioner upon the production of this Order and a receipt according to usual form.<br/>
 The payment should commence from '.date_format(date_create($pensioner->effect_of_pension), "d-m-Y").'</b>.<br/>&nbsp';
 							$attained_age = ($pensioner->designation == "Teacher" || $pensioner->designation == "MTF(group D)") ? '67' : '65';
 							echo '<br/>2.In the event of the death of <b>'.strtoupper($pensioner->salutation." ".$pensioner->name).'</b>, Family Pension of <b>Rs. '.$pensioner->getAmountofPension().'/- PM+DR+MA</b>, may be paid to <b>'.$pensioner->getNameofSpouse().'</b>, whose date of birth is <b>'.$pensioner->getDOBofSpouse().' </b>in equal share from the day following the date of death of <b>'.strtoupper($pensioner->salutation." ".$pensioner->name).'</b> for a period of 7 years, or for a period up to the date on which he/she would have attained the age of '.$attained_age.' years, had he/she survived, whichever is less; thereafter normal rate of Family pension of <b>Rs. '.$pensioner->getOrdinaryRate().'/- PM+DR+MA</b>, till the date of her/his remarriage or death whichever is earlier (on receipt of death certificate and Form of application from widow/widower). Further, the quantum of pension/Family pension shall be increased as follows:-<br /><br />';
@@ -833,7 +867,6 @@ The payment should commence from '.date_format(date_create($pensioner->effect_of
 		 	<tr>
 				<td style="vertical-align: top;" colspan="2"><b>
 					To<br/>
-					The Treasury Officer,<br/>
 					<!-- Minor Head<br/>
 					Dist. Lower Subansiri, Arunachal Pradesh</b> -->
 					<?php echo $pensioner->sub_to; ?>
@@ -849,7 +882,9 @@ The payment should commence from '.date_format(date_create($pensioner->effect_of
 <div id="disburser_pensioner_portion" style="display: none;">
 	<button style="float:right;" class="btn btn-info" onclick="javascript:printReport('print7')"><i class="icon-white icon-print"></i>Print</button>
 	<div id="print7" style="width: 1000px; margin: 0px auto;">
-		<div id="print" style="width:1000px; min-height:600px; padding: 0 20px; color:#000000; background-color:#FFFFFF; line-height: 1.4em">
+		<!-- <div id="print" style="width:1000px; min-height:600px; padding: 0 20px; color:#000000; background-color:#FFFFFF; line-height: 1.4em"> -->
+		<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+		
 		<table width="100%" cellpadding="3" id="report" border="0">
 			<tr>
 				<td style="vertical-align: top;" width="25%"></td>
@@ -860,7 +895,7 @@ The payment should commence from '.date_format(date_create($pensioner->effect_of
 			<tr>
 				<td style="vertical-align: top;" colspan="3">
 					<div id="heading" style="text-align:center; padding:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
-				        <div style="font-family: initial; margin-left: 200px;">FORM-43<br/>(See paragraph 306)<br/>PENSION PAYMENT ORDER<br/>DISBURSER'S PORTION</div>
+				        <div style="font-weight: bold;font-family: initial; margin-left: 200px;">FORM-43<br/>(See paragraph 306)<br/>PENSION PAYMENT ORDER<br/>DISBURSER'S PORTION</div>
 				    </div>
 				</td>
 				<td style="vertical-align: top;" align="right" rowspan="3"><div id="photograph" style="width: 150px; height: 128px; border: 1px solid #bababa; border-radius: 3px; -moz-border-radius: 3px; margin-top: 63px;"><p style="text-align: center; margin-top: 50px; font-weight: bold;">Photograph</p></div></td>
@@ -891,17 +926,17 @@ The payment should commence from '.date_format(date_create($pensioner->effect_of
 					<table border="1" cellspacing="2" cellpadding="2" id="inner-table">
 						<tr>
 							<th width="20%" style="vertical-align: top;">Class of Pension and date of commencement</th>
-							<th width="20%" style="vertical-align: top;">Date of Birth</th>
-							<th width="20%" style="vertical-align: top;">Religion and Nationality</th>
-							<th width="20%" style="vertical-align: top;">Residence showing village pargana</th>
+							<th width="0%" style="vertical-align: top;">Date of Birth</th>
+							<th width="0%" style="vertical-align: top;">Religion and Nationality</th>
+							<th width="30%" style="vertical-align: top;">Residence showing village pargana</th>
 							<th width="20%" style="vertical-align: top;">Amount of monthly pension</th>
 						</tr>
 						<tr>
 							<td style="vertical-align: top; text-align: center;" width="20%"><?php echo str_replace("_", " ", $class_of_pension); ?><br/>w.e.f <?php echo $effect_of_pension;//$pensioner->dateTimeToDate($pensioner->effect_of_pension); ?>
 </td>
-							<td style="vertical-align: top; text-align: center;" width="20%"><?php echo $pensioner->getDOBofSpouse(); ?></td>
-							<td style="vertical-align: top; text-align: center;" width="20%"><?php echo $pensioner->religion.", ".$pensioner->nationality;?></td>
-							<td style="vertical-align: top; text-align: center;" width="20%"><?php echo $pensioner->address_after_retirement; ?></td>
+							<td style="vertical-align: top; text-align: center;" width="0%"><?php echo $pensioner->getDOBofSpouse(); ?></td>
+							<td style="vertical-align: top; text-align: center;" width="0%"><?php echo $pensioner->religion.", ".$pensioner->nationality;?></td>
+							<td style="vertical-align: top; text-align: center;" width="30%"><?php echo $pensioner->address_after_retirement; ?></td>
 							<td style="vertical-align: top; text-align: center;" width="20%"><?php echo $enhance_from_upto;?></td>
 						</tr>
 					</table>
@@ -933,7 +968,9 @@ The payment should commence from '.date_format(date_create($pensioner->effect_of
 				</td>
 			</tr>
 			<tr>
-				<td style="vertical-align: top;" colspan="2"><strong>No. <?php echo $pensioner->case_no."/".$pensioner->ppo_no; ?></strong></td>
+				<td style="vertical-align: top;" colspan="2"><strong>No. <?php //echo $pensioner->case_no."/".$pensioner->ppo_no; 
+				echo $pensioner->case_file_no."/".$pensioner->ppo_no;
+				?></strong></td>
 				<td style="vertical-align: top;text-align:right;" colspan="2">Date: <b><?php echo date('d.m.Y')?> </b></td>
 			</tr>
 			<tr>
@@ -946,7 +983,7 @@ The payment should commence from '.date_format(date_create($pensioner->effect_of
 					<?php
 						$array = array('Superannuation_Pension', 'Compulsory_Retirement_Pension', 'Voluntary_Retirement_Pension', 'Invalid_Retirement_Pension', 'Absorption_in_autonomous_body_pension', 'Disability_Pension');
 						if(in_array($class_of_pension, $array)) {
-							echo nbs(6);echo  'UNTILL FURTHER NOTICE and on the expiration of every month, be pleased to pay to '.strtoupper($pensioner->salutation." ".$pensioner->name).' Rtd '.$pensioner->designation.'</b>, a sum of <b>Rs.'.$pensioner->getAmountofPension().'/-</b>PM+DR+MA w.e.f  only (less income-tax), being the amount of <b>'.strtoupper(str_replace("_", " ", $class_of_pension)).'</b>, as Arunachal Pradesh Government Pensioner upon the production of this Order and a receipt according to usual form.<br/>
+							echo nbs(6);echo  'UNTIL FURTHER NOTICE and on the expiration of every month, be pleased to pay to '.strtoupper($pensioner->salutation." ".$pensioner->name).' Rtd '.$pensioner->designation.'</b>, a sum of <b>Rs.'.$pensioner->getAmountofPension().'/-</b>PM+DR+MA w.e.f  only (less income-tax), being the amount of <b>'.strtoupper(str_replace("_", " ", $class_of_pension)).'</b>, as Arunachal Pradesh Government Pensioner upon the production of this Order and a receipt according to usual form.<br/>
 The payment should commence from '.date_format(date_create($pensioner->effect_of_pension), "d-m-Y").'</b>.<br/>&nbsp';
 							$attained_age = ($pensioner->designation == "Teacher" || $pensioner->designation == "MTF(group D)") ? '67' : '65';
 							echo '<br/>2.In the event of the death of <b>'.strtoupper($pensioner->salutation." ".$pensioner->name).'</b>, Family Pension of <b>Rs. '.$pensioner->getAmountofPension().'/- PM+DR+MA</b>, may be paid to <b>'.$pensioner->getNameofSpouse().'</b>, whose date of birth is <b>'.$pensioner->getDOBofSpouse().' </b>in equal share from the day following the date of death of <b>'.strtoupper($pensioner->salutation." ".$pensioner->name).'</b> for a period of 7 years, or for a period up to the date on which he/she would have attained the age of '.$attained_age.' years, had he/she survived, whichever is less; thereafter normal rate of Family pension of <b>Rs. '.$pensioner->getOrdinaryRate().'/- PM+DR+MA</b>, till the date of her/his remarriage or death whichever is earlier (on receipt of death certificate and Form of application from widow/widower). Further, the quantum of pension/Family pension shall be increased as follows:-<br /><br />';
@@ -1022,7 +1059,6 @@ The payment should commence from '.date_format(date_create($pensioner->effect_of
 		 	<tr>
 				<td style="vertical-align: top;" colspan="2"><b>
 					To<br/>
-					The Treasury Officer,<br/>
 					<!-- Minor Head<br/>
 					Dist. Lower Subansiri, Arunachal Pradesh</b> -->
 					<?php echo $pensioner->sub_to; ?>
@@ -1035,6 +1071,196 @@ The payment should commence from '.date_format(date_create($pensioner->effect_of
 
 	</div>
 </div>
+
+
+<?php
+if($pensioner->dod > $pensioner->dor) :
+		$fiveandsix = 'Retirement';
+		$expired_statement = '<span style="font-size:12px; color: red;font-weight: bold;"> (Expired on '.$pensioner->dateTimeToDate($pensioner->dod).')</span>';
+		$salutation = 'Shri';
+		$sixteen	= 'Retirement Gratuity';
+	elseif($pensioner->dod == $pensioner->dor) :
+		$fiveandsix = 'Death';
+		$expired_statement = '';
+		$salutation = 'Late';
+		$sixteen	= 'Death Gratuity';
+	endif;
+	?>
+
+<div id="id_card" style="display: none;">
+	<button style="float:right;" class="btn btn-info" onclick="javascript:printReport('print8')"><i class="icon-white icon-print"></i>Print</button>
+	<div id="print8" style="width: 1000px; margin: 0px auto;">
+		<!-- <div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em"> -->
+
+			<table width="100%" cellpadding="3" id="report" border="0"> 
+				<tr>
+					<td style="font-size:15px;">
+					<table width="70%" height="265px" id="report" border="1" style="background-image:url('http://10.0.0.4/pension_ui/id_card_logo/idcard_front.jpg');background-repeat:no-repeat;background-size:cover;"> <!--class="table1">-->
+						<tr>
+							<td>
+					<table width="100%" id="report" border="0">
+						<tr>
+							<td><center>
+							<table width="100%" id="report" border="0">
+							<tr>
+								<td><center>
+								<?php echo '<img src="'.base_url('id_card_logo/logo.png').'" height="48">'; ?>
+								</center>
+								</td>
+                                <td></td>
+							</tr>
+							<tr><td></td></tr>
+							<tr><td></td></tr>
+							<tr><td></td></tr>
+							<tr><td></td></tr>
+							<tr><td></td></tr>
+							<tr><td></td></tr>
+							<tr>
+							<td><center>
+								<table width="100px" height="110px" id="report" border="1">
+							    <tr>
+								<td>
+								</td>
+								</tr>
+								</table></center>
+								</td>
+                            <td></td>
+                            </tr></table></center>
+							</td>
+							<td>
+								<table width="330px" id="report" border="0">
+								<tr>
+									<td style="color:#0410b6;"><center>
+									<b>GOVERNMENT OF ARUNACHAL PRADESH</b><br/>
+									DIRECTORATE OF AUDIT & PENSION<br/>
+									NAHARLAGUN<br/>
+									</center>
+									</td></tr>
+									<tr><td style="color:#ef018a;"><center>
+									PENSIONER'S IDENTITY CARD<br/>
+									</center></td>
+									</tr>
+									<tr><td><center>
+									No: <b><?php echo $pensioner->idcard_serial_no; ?></b><br/><br/>
+									</center></td>
+								</tr>
+								<tr>
+								<td height="100px">
+									Name: <b><?php echo $pensioner->getNameOfLegalHeir();
+					?>&nbsp;of<?php echo nbs(1).strtoupper($salutation." ".$pensioner->name);?></b><br/>
+									Address: <b><?php echo $pensioner->address_after_retirement;
+
+						?></b><br/>
+									
+									
+								</td>
+								</tr>
+								</table>
+							</td>
+							</tr>
+							<tr>
+								<td><br/></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td ><center>Signature of Pensioner</center></td>
+								<td >
+								<table width="330px" id="report" border="0">
+								<tr>
+								<td width="55%">Tel. No.: <?php echo $pensioner->phone_no; ?></td>
+								<td>Director/Jt. Director</td>
+								</tr>
+								</table>
+								</td>
+							<!--<td >&nbsp;&nbsp;Tel. No.: <?php //echo $pensioner->phone_no; ?>
+							<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Director/Jt. Director</td>-->
+							</tr>
+							</table>
+							</td>
+							</tr></table>
+					</td>
+					<!-- </tr>
+					<tr> -->
+					<td>
+					<table width="450px" id="report" border="1" style="background-image:url('http://10.0.0.4/pension_ui/id_card_logo/idcard_back.jpg');background-repeat:no-repeat;background-size:cover;">
+						<tr>
+							<td>
+						<table style="font-size:16px;" width="100%" height="275px" id="report" border="0">
+						<tr>
+							<td width="2%"></td>
+							<td width="37%">Blood Group</td>
+							<td width="2%">:</td>
+							<td><b><?php echo $pensioner->blood_group; ?></b></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>Date of Birth</td>
+							<td>:</td>
+							<td><b><?php echo $pensioner->getDOBofSpouse(); ?></b></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>Post Held</td>
+							<td>:</td>
+							<td><b>Ex. <?php echo $pensioner->designation; ?></b></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>Date of <?php echo $fiveandsix; ?></td>
+							<td>:</td>
+							<td><b><?php echo $pensioner->dateTimeToDate($pensioner->dor); ?></b></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>Pay Scale</td>
+							<td>:</td>
+							<td><b><?php echo $pensioner->pay_scale; ?>(<?php echo $pensioner->pay_scale_grade; ?>)</b></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>Last Pay</td>
+							<td>:</td>
+							<td><b>Rs. <?php if($pensioner->pay_commission==7){ echo $total_amount;} else{echo $pensioner->getLastPay(false);} ?>/-</b></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>Deptt. in which served</td>
+							<td>:</td>
+							<td><b><?php echo $pensioner->office_address; ?></b></td><!-- echo str_replace(",", ",<br />".nbs(5), $pensioner->office_address); -->
+						</tr>
+						<tr>
+							<td></td>
+							<td>Amount of Pension</td>
+							<td>:</td>
+							<td><b><?php 
+							if($pensioner->pay_commission==7)
+								{ echo "Rs. ".$total_amount*50/100;} 
+							else
+								{
+									if($amount_pension=="N/A")
+									{echo "N/A";}
+									else
+									{echo "Rs. ".$amount_pension;}
+								}
+									?></b></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>P.P.O No.</td>
+							<td>:</td>
+							<td><b><?php echo $pensioner->case_file_no."/".$pensioner->ppo_no; ?></b></td>
+						</tr>
+							</table>
+							</td>
+							</tr>
+							</table>
+					</td>
+				</tr>
+				</table>
+
+		<!-- </div> -->
+		</div>
+		</div>
 
 <script type="text/javascript">
 	$(document).ready(function(){

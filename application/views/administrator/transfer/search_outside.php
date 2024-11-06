@@ -43,7 +43,7 @@
                 <th>Designation</th>
                 <td><?php echo $cd['designation']; ?></td>
                 <th>From</th>
-                <td><?php echo str_replace(", ", ",<br />", $ag[$cd['orf']]); ?></td>
+                <td><?php echo str_replace(", ", ",<br />", $treasury[$cd['orf']]); ?></td>
             </tr>
         </table>
     
@@ -57,7 +57,7 @@
             </tr>
             <?php foreach ($transfer_details as $rd) : ?>
                 <tr>
-                    <td><?php echo str_replace(", ", ",<br />", $treasury[$rd['ost']]); ?></td>
+                    <td><?php echo str_replace(", ", ",<br />", $ag[$rd['ost']]); ?></td>
                     <td><?php echo $rd['memo_no']; ?></td>
                     <td><?php echo $rd['ppo']; ?></td>
                     <td><?php echo $rd['cpo']; ?></td>

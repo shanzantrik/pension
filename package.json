@@ -1,0 +1,22 @@
+{
+  "name": "pension",
+  "version": "1.0.0",
+  "description": "Pension Portal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shanzantrik/pension.git"
+  },
+  "keywords": [
+    "pension"
+  ],
+  "author": "Zantrik Tech",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shanzantrik/pension/issues"
+  },
+  "homepage": "https://github.com/shanzantrik/pension#readme"
+}

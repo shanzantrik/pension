@@ -271,10 +271,7 @@ $disability_pension='';
 		<td><b>Provisional Pension Status</b></td>
 		<td><?php echo $val['provisional_pension']; ?></td>
 	</tr>
-    <tr>
-        <td>&nbsp;</td>
-        <td colspan="4"><b>RECOVERIES:</b></td>
-    </tr>
+    
     <tr>
 		<td ><div align="right">29.</div></td>
 		<td><b>Earn Leave Encashment</b></td>

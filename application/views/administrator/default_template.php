@@ -127,7 +127,7 @@ window.setInterval(function () {
 				<a class="brand" href="<?php echo base_url() ?>index.php/administrator/home"> <img alt="" src="<?php echo base_url();?>includes/images/pension-project-logo.png" /></a>
 				
 				<!-- theme selector starts -->
-				<div class="btn-group pull-right theme-container" >
+				<!--<div class="btn-group pull-right theme-container" >
 					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 						<i class="icon-tint"></i><span class="hidden-phone"> Change Theme / Skin</span>
 						<span class="caret"></span>

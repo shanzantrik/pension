@@ -14,11 +14,8 @@
 | path to your installation.
 |
 */
-//$config['base_url']	= 'http://192.168.43.220:81/projects/codeigniter/pension_ui/';
-//$config['base_url']	= 'http://172.16.16.1/pension_ui/';
-$config['base_url']	= 'http://localhost:90/pension_ui/';
-
-//$config['base_url']	= 'http://169.254.80.181:81/projects/codeigniter/pension_ui/';
+ //$config['base_url']	= 'http://localhost/pension_ui/';
+$config['base_url']	= 'http://10.0.0.4/pension_ui/';
 
 /*
 |--------------------------------------------------------------------------

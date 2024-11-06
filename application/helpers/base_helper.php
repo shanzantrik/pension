@@ -334,7 +334,9 @@ function getAverageEmolument($lp, $ip, $dor, $doi='', $incr_BP='', $incr_GP='', 
 			        $total_amoulments_after=$total_after*$aftr_incr;
 			        //return $total_amoulments_after;
 			        $total_amoulments_after_january=$lp['post_BP']*$after_january;
-			        return round((($total_amoulments_pre+$total_amoulments_after+$total_amoulments_after_january)/10));
+			        return round((($total_amoulments_pre+$total_amoulments_after+$total_amoulments_after_january)/10
+			   //return round((($total_amoulments_pre+$total_amoulments_after+$total_amoulments_after_january)/10
+			        	));
 		        }
 			}
 
@@ -728,6 +730,11 @@ function getDCRG($serial_no, $revision = false, $data = array())
 	endif;
 }
 
+function getasDCRG()
+{
+	return "hi";
+}
+
 /*function getCommutationofPension($amountofPension, $age_at_retirement, $class_of_pension) {
 	$cop = $class_of_pension;
 	switch($cop) :
@@ -770,7 +777,7 @@ function getCommutationofPension($pay_commission,$amountofPension, $age_at_retir
 			//return ceil(floor(($amountofPension*40/100)*12)*check_age_at_next_birth($age_at_retirement+1));
 		     $fourty_percnt_pensn=floor(($amountofPension*40)/100);
 		     //return ceil(($fourty_percnt_pensn*12)*(check_age_at_next_birth($age_at_retirement)));
-			 $com_value=check_age_at_next_birth($pay_commission,$age_at_retirement+1);
+			 $com_value=check_age_at_next_birth($pay_commission,$age_at_retirement);
 			 return round(($fourty_percnt_pensn*$com_value)*12);
 
 			 //return check_age_at_next_birth($pay_commission,$age_at_retirement);
@@ -893,6 +900,18 @@ function getDiffInMonth($firstDate, $secondDate) {
 	$second = new DateTime($secondDate);
 	$diff = $first->diff($second);
 	return $diff->format('%m');
+}
+
+function getDiffInMonths($firstDate, $secondDate) {
+	$first = new DateTime($firstDate);
+	$second = new DateTime($secondDate);
+	$diff = $first->diff($second);
+	$d1=$diff->format('%m');
+	$d2=$diff->format('%d');
+	if($d2>0){
+		$d2=1;
+	}
+	return $diff=($d1+$d2);
 }
 
 /*function check_age_at_next_birth($age_at_retirement) {
@@ -1082,7 +1101,7 @@ function getNameofSpouse($fi) {
 			if($value['relation']=="wife") {
 				$return.="Smti ".$value['spouse_name']." - ".ucfirst($value['relation'])." (".ordSuffix($main_key)." ".$value['relation']."), ";
 			} else {
-				$return.="Shri ".$value['spouse_name']." - ".ucfirst($value['relation'])." (".ordSuffix($main_key)." ".$value['relation']."), ";
+				$return.=" ".$value['spouse_name']." - ".ucfirst($value['relation'])." (".ordSuffix($main_key)." ".$value['relation']."), ";
 			}
 		} else {
 			$return.="Late. ".$value['spouse_name']." - ".ucfirst($value['relation'])." (".ordSuffix($main_key)." ".$value['relation']."), ";
@@ -1192,7 +1211,15 @@ function get_member_name($mCode) {
 function getEntryTimeFromFTD($file_no, $branch='Receipt', $member_code) {
 	$CI =& get_instance();
 	$CI->db->select('serial_no, entry_time');
-	$CI->db->where(array('file_no' => $file_no, 'branch' => $branch, 'member_code' => $member_code));
+	//$CI->db->where(array('file_no' => $file_no, 'branch' => $branch, 'member_code' => $member_code));
+	if($member_code!='100005'){
+	$CI->db->where(array('file_no' => $file_no, 'member_code' => $member_code));
+	}
+	else
+	{
+			$CI->db->where(array('file_no' => $file_no));
+	}
+
 	$CI->db->order_by("entry_time", "asc"); 
 	$result = $CI->db->get('file_tracking_details');
 	$row = $result->result_array();
@@ -1299,7 +1326,7 @@ function get_increamented_option_value($option_name)
 
 function no_to_words($no)
 {   
- 	$words = array('0'=> '' ,'1'=> 'one' ,'2'=> 'two' ,'3' => 'three','4' => 'four','5' => 'five','6' => 'six','7' => 'seven','8' => 'eight','9' => 'nine','10' => 'ten','11' => 'eleven','12' => 'twelve','13' => 'thirteen','14' => 'fouteen','15' => 'fifteen','16' => 'sixteen','17' => 'seventeen','18' => 'eighteen','19' => 'nineteen','20' => 'twenty','30' => 'thirty','40' => 'fourty','50' => 'fifty','60' => 'sixty','70' => 'seventy','80' => 'eighty','90' => 'ninty','100' => 'hundred','1000' => 'thousand','100000' => 'lakh','10000000' => 'crore');
+ 	$words = array('0'=> '' ,'1'=> 'one' ,'2'=> 'two' ,'3' => 'three','4' => 'four','5' => 'five','6' => 'six','7' => 'seven','8' => 'eight','9' => 'nine','10' => 'ten','11' => 'eleven','12' => 'twelve','13' => 'thirteen','14' => 'fourteen','15' => 'fifteen','16' => 'sixteen','17' => 'seventeen','18' => 'eighteen','19' => 'nineteen','20' => 'twenty','30' => 'thirty','40' => 'forty','50' => 'fifty','60' => 'sixty','70' => 'seventy','80' => 'eighty','90' => 'ninty','100' => 'hundred','1000' => 'thousand','100000' => 'lakh','10000000' => 'crore');
     if($no == 0) :
         return ' ';
     else :
@@ -1346,9 +1373,89 @@ function getRetireAge($designation)
 	switch ($designation) :
 		case stripos($designation, "teacher") !== FALSE:
 		return 60;
-		case 'MTF(group D)':
-			return 60;
-			break;
+		case 'MTS'://MTS(group D)
+		case 'Mate':
+		case 'Mazdoor':
+		case 'W/C MAZDOOR':
+		case 'Mali':
+		case 'Chowkidar':
+		case 'Sweeper':
+		case 'Handyman':
+		case 'Jugali':
+		case 'Peon':
+		case 'Khalasi':
+		case 'AIS':
+		case 'Chainman':
+		case 'Oderly Peon':
+		case 'Orderly Peon':
+		case 'W/C KHALASI':
+		case 'Chowkidar-Cum- Mali':
+		case 'Principal':
+		case 'IAS Commissioner':
+		case 'Cook':
+		case 'Duftry':
+		case 'PGT':
+		case 'Senior Teacher':
+		case 'TGT':
+		case 'Junior Teacher':
+		case 'PRT':
+		case 'Homeo Attendent':
+		case 'W/C Mate':
+		case 'Sanitary Assistant':
+		case 'Stretcher Bearer':
+		case 'Dak Runner':
+		case 'Lecturer (DIET)':
+		case 'PET':
+		case 'Forest Watcher':
+		case 'IAS':
+		case 'Dispensary Attendent':
+		case 'Superior Field Worker':
+		case 'Associate Professor':
+		case 'Barber':
+		case 'Lab Assistant':
+		case 'T.G.T Music':
+		case 'Follower':
+		case 'Nursing Assistant':
+		case 'Washerman':
+		case 'W/C Handyman':
+		case 'W/C Fitter Helper':
+		case 'W/C Assistant Fitter':
+		case 'Commissioner':
+		case 'IAS Secretary (Agri./IPR)':
+        case 'W/C (R) Electric Jugali':
+		case 'Messenger':
+		case 'Water Carrier':
+		case 'W/C':
+		case 'Vice Principal':
+		case 'Assistant Painter':
+		case 'Junior Librarian':
+		case 'Helper':
+		case 'Barkandaz':
+		case 'W/C Chowkidar':
+		case 'W/C Mazdoor':
+		case 'Work Shop Attendent':
+		case 'Chowkidar cum Mali':
+		case 'Peon':
+		case 'Female Attendant':
+		case 'Chowkidar Cum Mali':
+		case 'W/C MAJDOOR':
+		case 'LDC':
+		case 'Fitter':
+		case 'Ayah':
+		case 'Mason':
+		case 'Forest Guard':
+		case 'Coach':
+		case 'Attendent':
+		case 'Gestener Operator':
+		case 'Lineman':
+		case 'PCCF& Prl.Secy. (E&F)':
+		case 'PCCF':
+		case 'Fisherman':
+		case 'W/C Wireman':
+		
+		
+        return 60;
+		break;
 		default:
 			return 58;
 			break;
@@ -1391,4 +1498,12 @@ function getConsolidatedPension($type, $value)
 	// 	return 'bp_with_dp';
 	// endif;
 	//print_r($dam->row());
+}
+
+function getRecordsByTableID($table_name,$column_name,$data){
+	$CI =& get_instance();
+	$CI->db->select("*");
+	$CI->db->where($column_name,$data);
+	$result = $CI->db->get($table_name);
+	return $result->result_array();
 }

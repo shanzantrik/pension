@@ -27,6 +27,7 @@ class service_book extends CI_Controller {
 				$data['content'] = $this->load->view('administrator/service_book/add', $dv, true);
 				$this->load->view('administrator/default_template', $data);
 			} else {
+
 				//call model to insert data
 				if($this->model_service_book->add()) {
 					$this->session->set_flashdata('message','<div class="alert alert-success">Details saved successfully.</div>');
@@ -37,6 +38,9 @@ class service_book extends CI_Controller {
 				}
 			}
 		} else {
+			$dv['ppo']=$this->model_service_book->getPPONo();
+			$dv['gpo']=$this->model_service_book->getGPONo();
+			$dv['cpo']=$this->model_service_book->getCPONo();
 			$dv['records']=$this->model_service_book->getPayComn();
 			$data['title'] = "Service Book Entry";
 			$data['content'] = $this->load->view('administrator/service_book/add', $dv, true);
@@ -59,6 +63,8 @@ class service_book extends CI_Controller {
 		} else {
 			$sb['records']=$this->model_service_book->getDataBySerialNo($serial_no);
 			$sb['payComn']=$this->model_service_book->getPayComn();
+			$this->load->library('Pensioner', array('serial_no'=>$serial_no));
+			$sb['values'] = $this->pensioner;
 			$data['title'] = "Edit Service Book";
 			$data['content'] = $this->load->view('administrator/service_book/edit', $sb, true);
 			$this->load->view('administrator/default_template', $data);
@@ -104,7 +110,7 @@ class service_book extends CI_Controller {
 		if($this->model_service_book->save_DA()) {
 			echo $this->db->insert_id();
 		} else {
-			echo "Error occured while insertion.";
+			echo "Record already Exist!";
 		}
 	}
 
@@ -211,9 +217,26 @@ class service_book extends CI_Controller {
 	function pre_revised(){
 		$id=$_GET['id'];
 		$data['pay_id']=$id;
+		//echo $id;
 		$data['records']=$this->model_service_book->get_text_boxes($id);
+		//if($id==6){
 		$this->load->view('administrator/service_book/ajax_data_pre', $data);
+		//}
+		
 	}
+	
+	function pre_revised_edit(){
+		$id=$_GET['id'];
+		$data['pay_id']=$id;
+		//echo $id;
+		$data['records']=$this->model_service_book->get_text_boxes($id);
+		//if($id==6){
+		$this->load->view('administrator/service_book/ajax_data_pre_edit', $data);
+		//}
+		
+	}
+	
+	
 
 	function revised(){
 		$id=$_GET['id'];
@@ -224,4 +247,35 @@ class service_book extends CI_Controller {
 	function save_vals(){
 		$this->model_service_book->save_vals();
 	}
+
+	function getSevenpay()
+    {
+        //$payseven= $this->input->post('payCommission');
+        $countryid=$_GET['country_id'];
+        $select = $this->input->post('seven_pol');
+        $this->db->select('id, grade,pay_slot');
+        $this->db->from('master_pay_scale_seven');
+        $this->db->where(array('grade'=>$countryid));
+        $qry = $this->db->get();
+
+        foreach ($qry->result_array() as $value) {
+            if($value['id'] == $select) {
+                echo '<option value="'.$value['pay_slot'].'" selected>'.$value['pay_slot'].'</option>';
+            } else {
+                echo '<option value="'.$value['pay_slot'].'">'.$value['pay_slot'].'</option>';
+            }
+        }
+        
+    }
+
+    function SaveGraturity()
+    {
+    	$savegr=$_POST['savegr'];
+    	$srno=$_POST['srno'];
+    	$this->db->set('sixgratu', $savegr);
+		$this->db->where('serial_no', $srno);
+		$this->db->update('pensioner_pay_details');
+
+
+    }
 }

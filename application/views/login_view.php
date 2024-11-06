@@ -49,18 +49,23 @@ window.setInterval(function () {
                     if($this->session->flashdata('message')){
                         echo $this->session->flashdata('message');
                     }else{
-                        echo "<div class='alert alert-success'>Login with your member code & password</div>";
+                        echo "<div class='alert alert-success'>Login with your user id & password</div>";
                     }
                  ?>
                 <form method="POST" class="form-horizontal" action="<?php echo site_url('home/doLogin'); ?>"> 
                         <fieldset>
-                            <div class="input-prepend" title="Username" data-rel="tooltip">
+                            <!--<div class="input-prepend" title="Username" data-rel="tooltip">
                                 <span class="add-on"><i class="icon-user"></i></span><input autofocus autocomplete="off" class="input-large span10" placeholder="Member Code" id="username" type="text" name="username" />
+                            </div>
+                            <div class="clearfix"></div>-->
+
+                            <div class="input-prepend" title="User Id" data-rel="tooltip">
+                                <span class="add-on"><i class="icon-"></i></span><input autofocus autocomplete="off" class="input-large span10" placeholder="User Id" id="user_id" type="text" name="user_id" />
                             </div>
                             <div class="clearfix"></div>
 
                             <div class="input-prepend" title="Password" data-rel="tooltip">
-                                <span class="add-on"><i class="icon-lock"></i></span><input class="input-large span10" name="password" id="password" placeholder="Password" type="password" />
+                                <span class="add-on"><i class="icon-lock"></i></span><input class="input-large span10" name="password" id="password" placeholder="Enter password" type="password" />
                             </div>
                             <div class="clearfix"></div>
                             <div class="clearfix"></div>

@@ -1,3 +1,6 @@
+
+<?php $pensioner = $values; ?>
+
 <form method="post" action="<?php echo site_url('administrator/issue/save_issue') ?>">
 <a href="#forwrd" class="open-dialog btn btn-info btn" data-toggle="modal"><i class=""></i>Final Dispatch</a>
 <button href="" class="open-dialog btn btn-success btn" style="float:right" data-toggle="modal" onclick="javascript:history.go(-1);"><i class=""></i>Back</button>
@@ -41,6 +44,60 @@
     <td><?php  echo getDistrictById($records['district']); ?></td>
   </tr>
 </table>
+
+<button style="float:right;" class="btn btn-info" onclick="javascript:printReport('print')"><i class="icon-white icon-print"></i>Print</button> 
+
+<?php //$pensioner = $values; ?>
+<div id="print" style="width: 1000px; margin: 0px auto;">
+  <div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 2em">
+      <div style="text-align:center; padding-top:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
+          <u><strong>Issue Print</strong></u><br/>
+               
+
+      </div>
+<div style="padding-top:20px">
+          <div style="float:left; padding-left:20px">
+            <strong>Sl. No............................................</strong>
+            <strong>Date</strong>: <?php echo date('d/m/Y')?><br/>
+            <p><strong>Subject:- GPO No. <?php echo $records['file_No'];?>/<?php echo $records['gpo_no']; ?> in favour of <?php 
+            //if($NumberOfWives==1){
+            echo $pensioner->getNameOfLegalHeir();  
+          // }else{
+          //   echo $pensioner->getNameOfLegalHeirX($i+1);
+          // } 
+          ?> of <?php echo $records['salutation'];?>&nbsp;<?php echo $pensioner->name; ?>, Ex-<?php echo $records['designation']; ?></strong></p>
+          </div>
+      </div>
+
+    <table width="100%" border="0" cellpadding="2" id="report">
+      <tr>
+        <td valign="top" width="7%"><div align="right" class="style3">1.</div></td>
+        <td valign="top" width="60%"><span class="style3"><?php echo $records['title']; ?></span></td>
+      </tr>
+       <tr>
+        <td valign="top" width="7%"><div align="right" class="style3">2.</div></td>
+        <td valign="top" width="60%"><span class="style3"><?php 
+            //if($NumberOfWives==1){
+            echo $pensioner->getNameOfLegalHeir();  
+          // }else{
+          //   echo $pensioner->getNameOfLegalHeirX($i+1);
+          // } 
+          ?> of <?php echo $records['salutation'];?>&nbsp;<?php echo $pensioner->name; ?>, Ex-<?php echo $records['designation'];?><br/><?php
+        echo $records['address_after_retirement']; ?></span></td>
+      </tr> <tr>
+        <td valign="top" width="7%"><div align="right" class="style3">3.</div></td>
+        <td valign="top" width="60%"><span class="style3"><?php echo $records['office_address']; ?></span></td>
+      </tr> <tr>
+        <td valign="top" width="7%"><div align="right" class="style3">4.</div></td>
+        <td valign="top" width="60%"><span class="style3">Accountant General (A&E), Arunachal Pradesh, Itanagar</span></td>
+      </tr> <tr>
+        <td valign="top" width="7%"><div align="right" class="style3">5.</div></td>
+        <td valign="top" width="60%"><span class="style3">Office copy</span></td>
+      </tr>
+      </table>
+  </div>
+</div>
+
 <div class="alert alert-success"><span style="color:#000000">Physical Files</span></div>
 
 
@@ -105,19 +162,24 @@
                 <h4 class="modal-title">Forward To</h4>
             </div>
             <div class="modal-body">
-                <textarea></textarea>
-                <input type="checkbox" name="chk[]" value="AG">AG Office<br/>
-                <textarea></textarea>
-                <input type="checkbox" name="chk[]" value="Treasury"> Treasury<br/>
-                <textarea></textarea>
+                <textarea><?php echo $records['title']; ?></textarea>
+                <input type="checkbox" name="chk[]" value="">AG Office/Treasury<br/>
+                <textarea><?php echo $records['address_after_retirement']; ?></textarea>
+                <input type="checkbox" name="chk[]" value="Treasury"> Pensioner Copy<br/>
+                <textarea><?php echo $records['office_address']; ?></textarea>
                 <input type="checkbox" name="chk[]" value="to_the_department"> Department <br/>
-                <textarea></textarea>
-                <input type="checkbox" name="chk[]" value="office_copy"> Pensioner Copy<br/>
+                <textarea>Accountant General (A&E), Arunachal Pradesh, Itanagar</textarea>
+                <input type="checkbox" name="chk[]" value="office_copy">Accountant General (A&E), Arunachal Pradesh, Itanagar <br/>
+                <textarea>Office copy</textarea>
                 <input type="checkbox" name="chk[]" value="office_copy"> Office Copy
-                
-                
-            </div>
+             </div>   
+    <!-- ============================================================================================= -->
+
+
             <div class="modal-footer">
+
+               <!-- <a href="#printIssue" class="open-dialog btn btn-info btn" data-toggle="modal"><i class=""></i>Print</a> -->
+
                <a class="btn btn-success" data-dismiss="modal">No</a>
                <!-- <a href="#" class="btn btn-danger" id="del">Forward</a> -->
                <input type="submit" class="btn btn-danger">

@@ -74,8 +74,15 @@
                 <td><?php echo $row['ddo_address']; ?></td>
             </tr>
             <tr>
-                <td><b>Remarks</b></td>
-                <td colspan="3"><?php echo $row['remarks']; ?></td>
+                <td><b>Mobile No.</b></td>
+                <td><?php echo $row['mobile_no']; ?></td>
+                <td><b>Role</b></td>
+                <td><?php foreach (getAllMember_Type() as $role) {
+                        if($role['member_type_code'] == $row['role']) {
+                            echo $role['member_type_name'];
+                         }
+                    } ?>
+                </td>
             </tr>
         </tbody>
     </table>

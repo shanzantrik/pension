@@ -11,11 +11,11 @@
         <label for="orf" class="control-label">Recived from </label>
         <select name="orf" class="form-control" required style="width: 100%;">
             <option value="">--Select--</option>
-            <?php foreach (getAllAccountantGeneral() as $ag) { ?>
-                <?php if($pensioner->orf == $ag['id']) : ?>
-                    <option value="<?php echo $ag['id']; ?>" selected><?php echo $ag['name'];?></option>
+            <?php foreach (getAllTreasury() as $treasury) { ?>
+                <?php if($pensioner->orf == $treasury['id']) : ?>
+                    <option value="<?php echo $treasury['id']; ?>" selected><?php echo $treasury['title']; ?></option>
                 <?php else : ?>
-                    <option value="<?php echo $ag['id']; ?>"><?php echo $ag['name'];?></option>
+                    <option value="<?php echo $treasury['id']; ?>"><?php echo $treasury['title'];?></option>
                 <?php endif; ?>
             <?php } ?>
         </select>
@@ -46,11 +46,11 @@
         <label for="ost" class="control-label">Send to</label>
         <select name="ost" class="form-control" required>
             <option value="">--Select--</option>
-            <?php foreach (getAllTreasury() as $treasury) { ?>
-                <?php if($pensioner->ost == $treasury['id']) : ?>
-                    <option value="<?php echo $treasury['id']; ?>" selected><?php echo $treasury['title']; ?></option>
+            <?php foreach (getAllAccountantGeneral() as $ag) { ?>
+                <?php if($pensioner->ost == $ag['id']) : ?>
+                    <option value="<?php echo $ag['id']; ?>" selected><?php echo $ag['name'];?></option>
                 <?php else : ?>
-                    <option value="<?php echo $treasury['id']; ?>"><?php echo $treasury['title'];?></option>
+                    <option value="<?php echo $ag['id']; ?>"><?php echo $ag['name'];?></option>
                 <?php endif; ?>
             <?php } ?>
         </select>

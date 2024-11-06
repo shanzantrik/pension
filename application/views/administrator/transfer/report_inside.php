@@ -9,10 +9,11 @@
     endforeach;
     $ppo = $result->case_no."/".$result->ppo;
     if($result->type == 'inside') :
-		$da_percent = $pensioner->da_percentage();
+		$da_percent = $result->dearness_relief;//$da_percent = $pensioner->da_percentage;
 	else :
 		$da_percent = $result->dearness_relief;
 	endif;
+	//$da_percent = $pensioner->da_percentage;
 ?>
 
 <div id="form1" style="display: block;">
@@ -28,7 +29,7 @@
 				<tr>
 					<td style="vertical-align: top;" colspan="3">
 						<div id="heading" style="text-align:center; padding:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
-					        <div style="font-family: initial;">GOVERNMENT OF ARUNACHAL PRADESH<br/>DIRECTORATE OF AUDIT & PENSION<br/><u>NAHARLAGUN</u>.</div>
+					        <div style="font-family: initial;">OFFICE OF THE <br>DIRECTORATE OF AUDIT AND PENSION<br/>GOVERNMENT OF ARUNACHAL PRADESH<br/><u>NAHARLAGUN</u>.</div>
 					    </div>
 					</td>
 				</tr>
@@ -53,9 +54,11 @@
                         ?>
 					</td>
 				</tr>
-				<tr>
+				<!--
+				As per new format
+				 <tr>
 					<td style="vertical-align: middle;" colspan="3">Sub: <?php echo nbs(17); ?><b>Transfer of pension documents.</b></td></tr>
-			 	<tr>
+			 	<tr> -->
 					<td style="vertical-align: top;" colspan="3">Sir,</td>
 				</tr>
 			 	<tr>
@@ -107,7 +110,7 @@
 							</tr>
 							<tr style="height: 20px;">
 								<td></td>
-								<td>(a) Enhance Rate</td>
+								<td>(a) Enhanced Rate</td>
 								<td>@</td>
 								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->enhance_rate); ?>/- pm</div></td>
 							</tr>
@@ -117,6 +120,14 @@
 								<td>@</td>
 								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->ordinary_rate); ?>/- pm</div></td>
 							</tr>
+							<?php if($result->existing_basicpay_tres>0){ ?>
+							<tr style="height: 20px;">
+								<td>6.</td>
+								<td>Existing Treasury Basic Pay</td>
+								<td>@</td>
+								<td><div style="width: 100%; font-weight: bold; border-bottom: 1px solid #000;">Rs. <?php echo round($result->existing_basicpay_tres); ?>/- &nbsp;Date - <?php echo date_format(date_create($result->existing_date_tres),"d-m-Y"); ?></div></td>
+							</tr>
+						<?php } ?>
 						</table>
 					</td>
 				</tr>
@@ -125,18 +136,19 @@
 				</tr>
 				<tr>
 					<td style="vertical-align: top;" colspan="2"></td>
-					<td style="vertical-align: top; text-align:center">Yours faithfully,</td>
+					<td style="vertical-align: top; text-align:center">Yours sincerely,</td>
 				</tr>
 				<tr style="height: 50px;">
 					<td style="vertical-align: top;" colspan="3"></td>
 				</tr>
 				<tr>
-					<td style="vertical-align: top;" colspan="2" width="50%">Memo No - <?php echo $result->memo_no; ?></td>
+					<td style="vertical-align: top;" colspan="2" width="50%">Memo No - <?php echo $result->memo_no; ?> </td>
 					<!-- <td style="vertical-align: top;text-align:center;font-size: 14px;" width="50%">Dated Naharlagun, the <div style="display: inline-block; min-width: 80px; text-align: center; font-weight: bold; border-bottom: 1px solid #000;"><?php echo date('d/m/Y')?></div></td> -->
-					<td style="vertical-align: top;text-align:center;font-size: 14px;" width="50%">Director/Joint Director<br />Govt. of Arunchal Pradesh,<br />Naharlagun</td>
+					<td style="vertical-align: top;text-align:center;font-size: 14px;" width="50%">Director/Joint Director<br />Govt. of Arunchal Pradesh,<br />Naharlagun<br><br> Dated: .........................</td>
 				</tr>
 				<tr>
 					<td style="vertical-align: top;" colspan="3">
+						Copy To:-<br>
 						1.	The Treasury Officer/Sub-Treasury
 						<div style="border-bottom: 1px solid #000; font-weight: bold; margin: 5px 0 10px 15px;width: 60%;">
 							<?php
@@ -159,6 +171,18 @@
 						?>
 					</td>
 				</tr>
+
+				<tr>
+					<td style="vertical-align: top;" colspan="3">3. The Superintentent Pension Section I/II, for information.
+					</td>
+				</tr>
+
+				<tr>
+					<td style="vertical-align: top;" colspan="3">4. Office Copy
+					</td>
+				</tr>
+
+
 				<tr>
 					<td style="vertical-align: top;" colspan="2"></td>
 					<td style="vertical-align: top;text-align:center;font-size: 14px;" width="50%">Director/Joint Director<br />Govt. of Arunchal Pradesh,<br />Naharlagun</td>

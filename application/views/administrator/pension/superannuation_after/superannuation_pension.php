@@ -117,7 +117,45 @@
 		<td><b>Provisional Pension Status</b></td>
 		<td><?php echo $pensioner->provisional_pension; ?></td>
 	</tr>
-
+	<tr>
+		<td colspan="100%"><b>TRANSFER HISTORY </b></td>
+	</tr>
+	<tr>
+	<?php
+$ag = array();
+$treasury = array();
+foreach(getAllAccountantGeneral() as $value) :
+    $ag[$value['id']] = $value['name'];
+endforeach;
+foreach (getAllTreasury() as $value) :
+    $treasury[$value['id']] = $value['title'];
+endforeach;
+?>
+	<?php
+	/*print_r($files);
+	die();*/
+	 foreach ($files as $file) { ?>
+    		<?php
+                if($file['type'] == 'inside') :
+                    $recieved_from 	= str_replace(", ", ",<br />", $treasury[$file['irf']]);
+                	$sent_to 		= str_replace(", ", ",<br />", $ag[$file['ist']]);
+                	$ppo 			= $file['case_no']."/".$file['ppo'];
+                	$url 			= 'administrator/transfer/inside';
+                elseif($file['type'] == 'outside') :
+                    $recieved_from 	= str_replace(", ", ",<br />", $ag[$file['orf']]);
+                	$sent_to 		= str_replace(", ", ",<br />", $treasury[$file['ost']]);
+                	$ppo 			= $file['ppo'];
+                	$url 			= 'administrator/transfer/outside';
+                endif;
+            ?>
+    		<tr>
+	            <td><b>Received From</b></td>
+	            <td><?php echo $recieved_from; ?></td>
+	            <td><b>Sent To</b></td>
+	            <td><?php echo $sent_to; ?></td>
+	        </tr>
+    	<?php } ?>
+	</tr>
 </table>
 <style type="text/css">
 	.table td {padding: 10px;}

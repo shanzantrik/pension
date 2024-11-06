@@ -4,11 +4,11 @@ $(document).ready(function() {
     $('.spouse_salutation').live('change', function()
     {
         trID = $(this).closest('tr').attr('id');
-        if($(this).val() == 'mr')
+        if($(this).val() == 'mr' || $(this).val() == 'Md')
         {
-            html = '<option value="">--Please Select--</option><option value="husband">Husband</option><option value="father">Father</option>';
+            html = '<option value="">--Please Select--</option><option value="husband">Husband</option><option value="father">Father</option><option value="legal heir">Legal Heir</option>';
         } else {
-            html = '<option value="">--Please Select--</option><option value="wife">Wife</option><option value="mother">Mother</option>';
+            html = '<option value="">--Please Select--</option><option value="wife">Wife</option><option value="mother">Mother</option><option value="legal heir">Legal Heir</option>';
         }
         $('#'+trID+' .family_relation').html(html);
     });
@@ -22,7 +22,7 @@ $(document).ready(function() {
         checkPensionCase();
     });
 
-	$('#pension_category').change(function() {
+    $('#pension_category').change(function() {
         if($(this).val() == 'B' || $(this).val() == 'C') {
             hidePensionFor();
             showPensionScheme();
@@ -35,8 +35,8 @@ $(document).ready(function() {
         }
     });
 
-	addChild();
-	changeLegalHeir();
+    addChild();
+    changeLegalHeir();
 
     $('#treasury_officer').change(function() {
         if($(this).val() != '') {
@@ -134,7 +134,7 @@ var dateDiff = function(d1, d2, includeCurrentDate, isObject) {
 }
 
 var ageAtJoining = function(dob, d2) {
-	result = dateDiff(dob, d2, 'true', 'true');
+    result = dateDiff(dob, d2, 'true', 'true');
     $('#aeyear').val(result.year);
     $('#aemonth').val(result.month);
     $('#aeday').val(result.day);
@@ -170,6 +170,21 @@ var ageAtRetirement = function() {
                 result = dateDiff(dob, dor, 'true', 'true');
             }
             break;
+
+        case 'NPS':
+            dor = $('#dor').val();
+            if(dor == '' || dor == '0000-00-00') {
+                dor = $('#dod').val();
+                if(dor != '') {
+                    result = dateDiff(dob, dor, 'true', 'true');
+                } else {
+                    result = {year: '', month: '', day: ''};
+                }
+            } else {
+                dor = $('#dor').val();
+                result = dateDiff(dob, dor, 'true', 'true');
+            }
+            break;    
         default:
             dor = $('#dod').val();
             if(dor != '') {
@@ -188,7 +203,7 @@ var ageAtRetirement = function() {
 }
 
 var effectOfPension = function(date) {
-	var eop = moment(date, "YYYY-MM-DD").add(1, 'day').format('YYYY-MM-DD');
+    var eop = moment(date, "YYYY-MM-DD").add(1, 'day').format('YYYY-MM-DD');
     $('#effect_of_pension').val(eop);
 }
 
@@ -278,11 +293,11 @@ var hideDOD = function() {
 }
 
 var disableDOR = function() {
-	if($('#action_type').val() == "edit") {
-		$('#dor').attr('readonly', true).datepicker("destroy");
-	} else {
-		$('#dor').val('').attr('readonly', true).datepicker("destroy");
-	}
+    if($('#action_type').val() == "edit") {
+        $('#dor').attr('readonly', true).datepicker("destroy");
+    } else {
+        $('#dor').val('').attr('readonly', true).datepicker("destroy");
+    }
 }
 
 
@@ -343,7 +358,21 @@ var checkPensionCase = function() {
         showDOD();
         $('#dor').removeAttr('required');
         $('.label-dor').html('Date of retirement');
-    } else if(cop == 'Superannuation_Pension') {
+    } 
+
+    else if(cop == 'NPS') {
+        hidePensionFor();
+        hidePensionScheme();
+        hidePensionCategory();
+        hideCompulsoryRate();
+        hideDisability();
+        enableDOR();
+        showDOR();
+        showDOD();
+        $('#dor').removeAttr('required');
+        $('.label-dor').html('Date of retirement');
+    } 
+    else if(cop == 'Superannuation_Pension') {
         hidePensionFor();
         hidePensionScheme();
         hidePensionCategory();
@@ -403,7 +432,7 @@ var onPayCommissionChange = function(url) {
 }
 
 var getFileDetails = function(url) {
-	case_no = $('#case_no').val();
+    case_no = $('#case_no').val();
     if(case_no != '') {
         $.post(url, {case_no: case_no}, function(data) {
             if(data!="") {
@@ -450,7 +479,7 @@ var changeSexBox = function(input) {
 }
 
 var addAccountantGeneral = function(url) {
-	$('.saveAccountantName').click(function(){
+    $('.saveAccountantName').click(function(){
         if($('#modalAccountantName').val()=='') {
             $('#modalAccountantMessage').html('Name is required.');
         } else {
@@ -464,7 +493,7 @@ var addAccountantGeneral = function(url) {
 }
 
 var addTreasuryOfficer = function(url) {
-	$('.saveTreasuryTitle').click(function(){
+    $('.saveTreasuryTitle').click(function(){
         if($('#modalTreasuryTitle').val()=='') {
             $('#modalTreasuryMessage').html('Title is required.');
         } else {
@@ -497,7 +526,7 @@ var checkAppointAs = function() {
                 alert('Date of appointment as permanent should be greater than date of appointment as casual.');
                 $(this).val('');
             } else {
-            	result = dateDiff($('#dojac').val(), date, 'false', 'true');
+                result = dateDiff($('#dojac').val(), date, 'false', 'true');
                 var years, months, days, halfY, totalMonths, totalDays;
                 halfY = result.year/2;
                 totalMonths = halfY*12;
@@ -525,7 +554,7 @@ var checkAppointAs = function() {
                     alert('Date of joining should be greater than date of birth.');
                     $(this).val('');
                 } else {
-                	ageAtJoining($('#dob').val(), date);
+                    ageAtJoining($('#dob').val(), date);
                 }
             } else {
                 alert('Please select date of birth field first.');
@@ -535,7 +564,7 @@ var checkAppointAs = function() {
         }});
     } else {
         $("#dojac").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0', onSelect: function(date){
-			if($('#dob').val() != '') {
+            if($('#dob').val() != '') {
                 ageAtJoining($('#dob').val(), date);
             } else {
                 alert('Please select date of birth field first.');
@@ -545,7 +574,7 @@ var checkAppointAs = function() {
         }});
         $("#dojap").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0', onSelect: function(date){
             if($('#dob').val() != '') {
-    			ageAtJoining($('#dob').val(), date);
+                ageAtJoining($('#dob').val(), date);
 
                 var h = dateDiff($(this).val(), $('#dob').val(), 'true', 'true');
                 if(h.year < 16) {
@@ -563,7 +592,7 @@ var checkAppointAs = function() {
 }
 
 var changeLegalHeir = function() {
-	var obj = [];
+    var obj = [];
     $('.legal_heir').live('change', function() {
         var me = $(this);
         var rowIndex = $(this).closest('tr').index();
@@ -618,11 +647,11 @@ var changeLegalHeir = function() {
 }
 
 var addChild = function() {
-	$('.addChild').live('click', function(){
+    $('.addChild').live('click', function(){
         var parentID = $(this).closest('tr').attr('id');
         var ID = parentID.split('-');
         //var html = '<tr class="child-'+ID[1]+'"><td><input style="opacity:4!important;" type="checkbox" name="chk[]" /></td><td><select class="form-control" name="child_salutation'+ID[1]+'[]"><option value="0">--Please Select--</option><option value="mr">Mr</option><option value="mrs">Mrs</option><option value="miss">Miss</option></select></td><td><input type="text" name="parentchild_name'+ID[1]+'[]" class="form-control name" placeholder="Name of Child"/></td><td><input type="text" class="dob form-control" name="child_dob'+ID[1]+'[]" placeholder="Child\'s date of birth"/></td><td><input type="text" class="dod form-control" name="child_dod'+ID[1]+'[]" placeholder="Child\'s date of death"/></td><td><input type="text" class="form-control" name="child_income'+ID[1]+'[]" placeholder="Child\'s income per month"/></td><td colspan="3"><input type="checkbox" name="legal_heir[]" class="legal_heir" /><label style="font-size:12px; color:red; margin-left: 18px;">Check this if spouse is not alive.</label></td></tr>';
-        var html = '<tr class="child-'+ID[1]+'"><td><input style="opacity:4!important;" type="checkbox" name="chk[]" /></td><td><select class="form-control" name="child_salutation'+ID[1]+'[]"><option value="0">--Please Select--</option><option value="mr">Mr</option><option value="mrs">Mrs</option><option value="miss">Miss</option></select></td><td><input type="text" name="parentchild_name'+ID[1]+'[]" class="form-control name" placeholder="Name of Child"/></td><td><input type="text" class="dob form-control" name="child_dob'+ID[1]+'[]" placeholder="Child\'s date of birth"/></td><td><input type="text" class="form-control" name="child_income'+ID[1]+'[]" placeholder="Child\'s income per month"/></td><td><select class="marital_status form-control" name="marital_status'+ID[1]+'[]" required><option value="">--Marital Status--</option><option value="married">Married</option><option value="unmarried">Unmarried</option><option value="divorcee">Divorcee</option><option value="widow">Widow</option></select></td><td colspan="3"><input type="checkbox" name="legal_heir[]" class="legal_heir" /><label style="font-size:12px; color:red; margin-left: 18px;">Check this if spouse is not alive.</label><div style="float: left; margin: 4px;">Handicapped</div><select name="handicapped'+ID[1]+'[]" style="float: left; width: 25%"><option value="yes">Yes</option><option value="no" selected>No</option></select></td></tr>';
+        var html = '<tr class="child-'+ID[1]+'"><td><input style="opacity:4!important;" type="checkbox" name="chk[]" /></td><td><select class="form-control" name="child_salutation'+ID[1]+'[]"><option value="0">--Please Select--</option><option value="mr">Mr</option><option value="mrs">Mrs</option><option value="miss">Miss</option></select></td><td><input type="text" name="parentchild_name'+ID[1]+'[]" class="form-control name" placeholder="Name of Child"/></td><td><input type="text" class="dob form-control" name="child_dob'+ID[1]+'[]" placeholder="Child\'s date of birth"/></td><td><input type="text" class="form-control" name="child_income'+ID[1]+'[]" placeholder="Child\'s income per month"/></td><td><select class="marital_status form-control" name="marital_status'+ID[1]+'[]" required><option value="">--Marital Status--</option><option value="married">Married</option><option value="unmarried">Unmarried</option><option value="divorcee">Divorcee</option><option value="widow">Widow</option><option value="legal_guardian">Legal Guardian</option></select></td><td colspan="3"><input type="checkbox" name="legal_heir[]" class="legal_heir" /><label style="font-size:12px; color:red; margin-left: 18px;">Check this if spouse is not alive.</label><div style="float: left; margin: 4px;">Handicapped</div><select name="handicapped'+ID[1]+'[]" style="float: left; width: 25%"><option value="yes">Yes</option><option value="no" selected>No</option></select></td></tr>';
         var parentID = $(this).closest('tr').attr('id');            
         $(html).insertAfter("#"+parentID);
         $('.dob').datepicker({dateFormat: 'yy-mm-dd', changeYear: true, changeMonth:true, yearRange: '1900:+0'});
@@ -635,7 +664,7 @@ var addChild = function() {
 }
 
 var deleteRow = function(tableID) {
-	var table = document.getElementById(tableID);
+    var table = document.getElementById(tableID);
     var rowCount = table.rows.length;
 
     if($('.chk:checked').length == 0) {
@@ -658,7 +687,7 @@ var deleteRow = function(tableID) {
 }
 
 var validate = function() {
-	var frm = document.getElementById("receipt_form");
+    var frm = document.getElementById("receipt_form");
     for (var i=0; frm.elements[i]; i++) {
         if (frm.elements[i].tagName=="INPUT" && frm.elements[i].getAttribute("type")=="text" && frm.elements[i].getAttribute("id")!="mname") {
             if(frm.elements[i].value=='') {
@@ -698,7 +727,7 @@ var addRow1 = function(tableID) {
     });
 }
 var changeDOB = function() {
-	$("#dob").datepicker({dateFormat: 'yy-mm-dd',changeMonth: true, changeYear: true, yearRange: '1900:+50', onSelect: function(date){
+    $("#dob").datepicker({dateFormat: 'yy-mm-dd',changeMonth: true, changeYear: true, yearRange: '1900:+50', onSelect: function(date){
         if($('#class_of_pension').val() == '') {
             alert('Please select class of pension first.');
             $("#dob").val('');
@@ -708,23 +737,25 @@ var changeDOB = function() {
             $("#dob").val('');
             $('#case_no').focus();
         } else if($('#class_of_pension').val()!="Voluntary_Retirement_Pension") {
-        	var dor, data, add_year = '';
+            var dor, data, add_year = '';
 
             switch($('#designation').val()) {
                 case 'Teacher':
+                case 'AIS':
                 case 'MTF(group D)':
                     add_year = 60;
                     break;
                 default :
-                    add_year = 58;
+                    add_year = 60;
                     break;
             }
 
             if($('#retire_age').val() != '') {
                 add_year = $('#retire_age').val();
             }
-
+            add_year='60';
             data = moment($(this).val(), "YYYY-MM-DD").add({year: add_year}).format('YYYY-MM-DD');
+            //alert(add_year);
             dor = new Date(data);
 
             if(dor.getMonth() == '0' || dor.getMonth() == '00') {
@@ -743,9 +774,9 @@ var changeDOB = function() {
             $('#dor').val(dor);
             effectOfPension(dor);
             ageAtRetirement();
-    	} else if($('#class_of_pension').val()=="Voluntary_Retirement_Pension") {
-    	   $("#dor").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
-    	}
+        } else if($('#class_of_pension').val()=="Voluntary_Retirement_Pension") {
+           $("#dor").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
+        }
     }});
 }
 
@@ -757,7 +788,7 @@ var changeDOB = function() {
 }*/
 
 var changeDOR = function() {
-	$("#dor").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+50', onSelect: function(date){
+    $("#dor").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+50', onSelect: function(date){
 
         ageAtRetirement();
         var doj = '';
@@ -788,7 +819,7 @@ var changeDOR = function() {
 
         if(appointasChange() == 'dojac') {
 
-        	result = dateDiff($('#dojac').val(), $("#dojap").val(), 'false', 'true');
+            result = dateDiff($('#dojac').val(), $("#dojap").val(), 'false', 'true');
             var years, months, days, halfY, totalMonths, totalDays;
             halfY = result.year/2;
             totalMonths = halfY*12;
@@ -947,8 +978,10 @@ var changeDOD = function() {
 }
 
 var calculateSMP = function(result) {
-	var total = result.year*2;
-    if(result.month > 3 && result.month <= 8) {
+
+    var total = result.year*2;
+    console.log(total);
+    if(result.month >= 3 && result.month <= 8) {
         total+=1;
     } else if (result.month >= 9) {
         total+=2;

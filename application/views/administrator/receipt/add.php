@@ -336,7 +336,7 @@ else {
             dateFormat: 'yy-mm-dd',
             changeYear: true,
             changeMonth:true,
-            yearRange:'2012:2020'
+            yearRange:'2012:2030'
         });
     });
     $(document).ready(function() {
@@ -344,7 +344,7 @@ else {
             dateFormat: 'yy-mm-dd',
             changeYear: true,
             changeMonth:true,
-            yearRange:'2012:2020'
+            yearRange:'2012:2030'
         });
     });
     $(document).ready(function() {
@@ -500,7 +500,7 @@ else {
             }
         });
 		
-
+/* Disable Spe4cial cahr in text area
         $('input, textarea').bind('keypress', function(event) {
             var me = $(this);
             var regex = '';
@@ -515,6 +515,9 @@ else {
                 return false;
             }
         });
+
+*/
+
 
         $('#rdate').bind('paste', function(e) {
             e.preventDefault();

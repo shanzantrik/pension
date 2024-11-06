@@ -15,6 +15,8 @@ class ips extends CI_Controller
 	{
 		if (!empty($_GET['id'])) {
 			$department=$_GET['id'];
+			$dp['file_no']=$this->model_ips->checkFile();
+			//$dp['file_no_observation']=$this->model_ips->checkFile_observation();
 			$dp['lists'] = $this->model_ips->getFilterReceipt($department);
 			$dp['lists2'] = $this->model_ips->getFilterDirector($department);
 			$dp['lists3'] = $this->model_ips->getFilterPension($department);
@@ -23,6 +25,8 @@ class ips extends CI_Controller
 			$this->load->view('administrator/filtered', $data);
 	   }
 	   else{
+	   		$dp['file_no']=$this->model_ips->checkFile();
+	   		//$dp['file_no_observation']=$this->model_ips->checkFile_observation();
 	   		$dp['lists'] = $this->model_ips->getAll();
 			$dp['lists2'] = $this->model_ips->getAll2();
 			$dp['lists3'] = $this->model_ips->getAll_from_pension();
@@ -31,6 +35,48 @@ class ips extends CI_Controller
 			$this->load->view('administrator/default_template', $data);
 	   }
 	}
+
+	function load_editremarks($file_No='')
+    {
+            $file_No=base64_decode($file_No);
+                    
+            $data['title']   = "Check IPS Observations";
+            $dv['receipt']   =$this->model_ips->get_record($file_No);
+
+            $data['content'] = $this->load->view('administrator/ips/edit_remarks',$dv, true);
+            $this->load->view('administrator/default_template', $data);
+        
+            
+     }
+
+     function edit_remarks_controller()
+    {
+        
+        if($_POST) {
+            $ret=$this->model_ips->edit_ips_observation();
+            $this->session->set_flashdata('message', '<div class="alert alert-success">IPS observation updated successfully.</div>');
+            redirect('administrator/ips/index');
+            $this->load->view('administrator/default_template', $data);
+            
+            } else {
+            //$dv['receipt']=$this->model_ips->get_receipt($file_No);
+            redirect('administrator/ips/load_editremarks');
+            $this->load->view('administrator/default_template', $data);
+        }
+    }
+
+    function print_ips_observation($file_no)
+    {
+        $file_No=base64_decode($file_no);
+        
+        $q=$this->db->query("select a.remarks,b.dept_forw_no,b.receipt_date,b.pensionee_name,b.designation,c.address_department from observation a, pension_receipt_file_master b, pension_receipt_register_master c where a.case_no=b.file_no and c.dept_forw_no=b.dept_forw_no and a.case_no='$file_No'");
+        $result = $q->result();
+        $res['resu'] = $result;
+      
+        $data['title'] = "IPS detail Report";
+        $data['content'] = $this->load->view('administrator/pension/report/ips/ips_observations', $res, true);
+        $this->load->view('administrator/default_template', $data);
+    }
 
 	function view_ips()
 	{
@@ -314,12 +360,166 @@ class ips extends CI_Controller
        	}
 	}
 
+
+	function update_IPS($file_No='',$type)
+	{
+       	if($type=='Pension') {
+			$file_No=base64_decode($file_No);
+			$serial_no = $this->model_ips->get_serial_no($file_No);
+	   	} else {
+		   	$file_No=base64_decode($file_No);
+			$serial_no = $this->model_ips->get_serial_no1($file_No);
+	   	}
+  	    if($_POST) {
+			
+			   
+				$check_serial_no = $this->model_ips->check_serial_no($serial_no);
+		 	  	         
+				if($check_serial_no=='') {
+					if($this->model_ips->add_ips($file_No)) {
+						
+						$serial_no = $this->model_ips->get_serial_no($file_No);
+						$pid['values'] = $this->model_ips->get_ips_detail2($file_No);
+						$pid['status'] = $this->model_ips->get_file_from($file_No);
+						$data['title'] = "IPS detail Report";
+
+						//$data['content'] = $this->load->view('administrator/ips/viewform', $pid, true);
+				  $this->session->set_flashdata('message', '<div class="alert alert-success">File has been added successfully.</div>');
+					redirect('administrator/ips/edit/'.base64_encode($file_No).'/'.$type);
+					} else {
+						$this->session->set_flashdata('message', '<div class="alert alert-error">Some error occured during Update.</div>');
+						redirect('administrator/ips/edit/'.$file_No);
+					}
+				} else {
+					if($this->model_ips->ips_update($file_No)) {
+						$serial_no = $this->model_ips->get_serial_no($file_No);
+						$pid['values'] = $this->model_ips->get_ips_detail2($file_No);
+						$pid['status'] = $this->model_ips->get_file_from($file_No);
+						$data['title'] = "IPS detail Report";
+
+						$this->session->set_flashdata('message', '<div class="alert alert-success">File has been updated successfully.</div>');
+					//redirect('administrator/ips/edit/'.base64_encode($file_No).'/'.$type);
+					} else {
+						$this->session->set_flashdata('message', '<div class="alert alert-error">Some error occured during Update.</div>');
+						redirect('administrator/ips/edit/'.$file_No);
+					}
+					//$this->session->set_flashdata('message', '<div class="alert alert-success">This File Number already exists.</div>');
+					redirect('administrator/ips/edit/'.base64_encode($file_No).'/'.$type);
+				}
+			
+        } else {
+            $branch_code = $this->model_ips->get_branch_code($file_No);
+		    $serial_no = $this->model_ips->get_serial_no($file_No);
+		    
+		    $dv['departments']=$this->model_ips->getall_department();
+		    $dv['receipt']=$this->model_ips->get_receipt($file_No);
+		    $dv['records']=$this->model_ips->fetchData1($branch_code, $serial_no,$file_No);
+		    $dv['file_no']=$file_No;
+			$dv['id']=$serial_no;
+		    $dv['branch_code'] = $branch_code;
+		    $dv['type']=$type;
+			$data['title'] = "Add IPS";
+			$data['content'] = $this->load->view('administrator/ips/edit', $dv, true);
+			$this->load->view('administrator/default_template', $data);
+       	}
+	}
+
+	 // function load_remarks($file_No=''){
+		// 	$file_No=base64_decode($file_No);
+		// 	$dv['file_No']=$file_No;
+		// 	$data['title']   = "Check IPS Observations";
+			
+		// 	$data['content'] = $this->load->view('administrator/ips/add_remarks',$dv, true);
+		// 	$this->load->view('administrator/default_template', $data);
+
+			
+	 // }
+
+	function add_remarks_controller()
+	{
+		
+		if($_POST) {
+			//$file_No = ($this->uri->segment('4') != '') ? base64_decode($this->uri->segment(4)) : '';
+
+			// $file_No=base64_decode($file_No);
+			// $dv['receipt']=$this->model_ips->get_receipt($file_No);
+			$ret=$this->model_ips->add_ips_observation();
+			$this->session->set_flashdata('message', '<div class="alert alert-success">IPS observation saved successfully.</div>');
+			//redirect('administrator/Ips/load_remarks');//,$dv, true);
+			redirect('administrator/Ips/index');
+			//$data['content'] = $this->load->view('administrator/ips/add_remarks',$dv, true);
+			$this->load->view('administrator/default_template', $data);
+			
+			} else {
+			//$dv['receipt']=$this->model_ips->get_receipt($file_No);
+			redirect('administrator/Ips/load_remarks');
+			$this->load->view('administrator/default_template', $data);
+		}
+	}
+
+
+	// function edit_remarks_controller()
+	// {
+		
+	// 	if($_POST) {
+	// 		$ret=$this->model_ips->edit_ips_observation();
+	// 		$this->session->set_flashdata('message', '<div class="alert alert-success">IPS observation updated successfully.</div>');
+	// 		//redirect('administrator/Ips/load_remarks');//,$dv, true);
+	// 		redirect('administrator/Ips/index');
+	// 		//$data['content'] = $this->load->view('administrator/ips/add_remarks',$dv, true);
+	// 		$this->load->view('administrator/default_template', $data);
+			
+	// 		} else {
+	// 		//$dv['receipt']=$this->model_ips->get_receipt($file_No);
+	// 		redirect('administrator/Ips/load_editremarks');
+	// 		$this->load->view('administrator/default_template', $data);
+	// 	}
+	// }
+
+	
+	function load_remarks($file_No='')//,$type
+	{
+		// $ret=$this->model_ips->get_record($file_No);
+		// if($ret=='exist')
+		// {
+			
+		// 	$file_No=base64_decode($file_No);
+					
+		// 	$data['title']   = "Check IPS Observations";
+		// 	$dv['receipt']   =$this->model_ips->get_record($file_No);
+
+		// 	$data['content'] = $this->load->view('administrator/ips/edit_remarks',$dv, true);
+		// 	$this->load->view('administrator/default_template', $data);
+		// }
+		// else if($ret=='not_exist')
+		{
+			
+			$file_No=base64_decode($file_No);
+					
+			$data['title']   = "Check IPS Observations";
+			$dv['receipt']   =$this->model_ips->get_receipt($file_No);
+
+			$data['content'] = $this->load->view('administrator/ips/add_remarks',$dv, true);
+			$this->load->view('administrator/default_template', $data);
+		}
+	  //   	$file_No=base64_decode($file_No);
+					
+			// $data['title']   = "Check IPS Observations";
+			// $dv['receipt']   =$this->model_ips->get_receipt($file_No);
+
+			// $data['content'] = $this->load->view('administrator/ips/add_remarks',$dv, true);
+			// $this->load->view('administrator/default_template', $data);
+	    			
+	 }
+
+	 
+
      //attach ips details pensioner from pension module
     function add_ips_from($file_No='',$type)
 	{
        	if($type=='Pension') {
 			$file_No=base64_decode($file_No);
-			$serial_no = $this->model_ips->get_serial_no($file_No);
+			$serial_no = $this->model_ips->get_serial_no1($file_No);//get_serial_no($file_No)
 	   	} else {
 		   	$file_No=base64_decode($file_No);
 			$serial_no = $this->model_ips->get_serial_no1($file_No);
@@ -353,7 +553,7 @@ class ips extends CI_Controller
 		    $serial_no = $this->model_ips->get_serial_no($file_No);
 		    $dv['receipt']=$this->model_ips->get_receipt($file_No);
 		    $dv['departments']=$this->model_ips->getall_department();
-		    $dv['records']=$this->model_ips->fetchData1($branch_code, $serial_no,$file_No);
+		    $dv['records']=$this->model_ips->fetchData1($serial_no,$file_No);
 		    $dv['file_no']=$file_No;
 			$dv['id']=$serial_no;
 		    $dv['branch_code'] = $branch_code;
@@ -374,6 +574,32 @@ class ips extends CI_Controller
 		$data['content'] = $this->load->view('administrator/pension/report/ips/ips_report', $pid, true);
 		$this->load->view('administrator/default_template', $data);
  	}
+
+ 	// function print_ips_observation($file_no)
+ 	// {
+		// $file_No=base64_decode($file_no);
+		// //dd($file_No);
+		// $q=$this->db->query("select a.remarks,b.dept_forw_no,b.receipt_date,b.pensionee_name,b.designation,c.address_department from observation a, pension_receipt_file_master b, pension_receipt_register_master c where a.case_no=b.file_no and c.dept_forw_no=b.dept_forw_no and a.case_no='$file_No'");
+		// $result = $q->result();
+ 	// 	 //dd($result);
+		// $res['resu'] = $result;
+
+		// // $p=$this->db->query("select dept_forw_no from pension_receipt_file_master where file_no='$file_No'");
+		// // $resultp = $p->result();
+ 	// // 	 //dd($p);
+		// // $resp['resup'] = $resultp;
+		// //dd($resp);
+		// // $serial_no = $this->model_ips->get_serial_no($file_No);
+		// // $pid['values'] = $this->model_ips->get_ips_detail2($file_No);
+		// // $pid['status'] = $this->model_ips->get_file_from($file_No);
+		// // $this->load->library('Pensioner');//, array('serial_no'=>$serial_no));
+		// // $vrp['values'] = $this->pensioner;
+		// $data['title'] = "IPS detail Report";
+		// $data['content'] = $this->load->view('administrator/pension/report/ips/ips_observations', $res, true);
+		// $this->load->view('administrator/default_template', $data);
+ 	// }
+
+ 	
 //all employess with same dept_forw_no 
  	function print_ips_all($dept_forw_no)
 	{

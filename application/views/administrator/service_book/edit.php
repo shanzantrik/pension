@@ -1,4 +1,14 @@
-<?php $row = $records[0]; ?>
+<?php $row = $records[0]; $pensioner = $values; 
+
+$NumberOfWives=$pensioner->getNumberOfWives();
+
+        if($NumberOfWives==0){
+            $NumberOfWives=1;
+        }
+
+
+?>
+
 
 
 <h3 id="service-book-heading">Edit Service Book <span>(Fields mark with (*) are mandatory fields.)</span></h3>
@@ -10,7 +20,7 @@
     <div class="form-group">
         <label class="col-sm-3 control-label">File No <span class="required-field">*</span></label>
         <div class="col-sm-6">
-            <input autocomplete="off" name="case_no" id="case_no" type="text" value="<?php echo $row['case_no']; ?>" placeholder="Please Enter File No"><?php echo form_error('case_no', '<div class="error">', '</div>'); ?>
+            <input autocomplete="off" name="case_no" id="case_no" type="text" value="<?php echo $case=$row['case_no']; ?>" placeholder="Please Enter File No"><?php echo form_error('case_no', '<div class="error">', '</div>'); ?>
         </div>
     </div>
     <div class="form-group">
@@ -26,7 +36,7 @@
             <select required name="class_of_pension" id="class_of_pension">
                 <option value="">Select</option>
                 <?php $normal = array('Superannuation_Pension', 'Voluntary_Retirement_Pension', 'Invalid_Retirement_Pension', 'Absorption_in_autonomous_body_pension', 'Disability_Pension', 'Compulsory_Retirement_Pension'); ?>
-                <?php $family = array('Normal_Family_Pension', 'Extraordinary_Pension', 'Liberalised_Pension', 'Dependent_Pension', 'Parents_Pension'); ?>
+                <?php $family = array('Normal_Family_Pension', 'Extraordinary_Pension', 'Liberalised_Pension', 'Dependent_Pension', 'Parents_Pension', 'NPS', 'Death_Gratuity'); ?>
                 <?php
                     foreach ($normal as $key => $c) {
                         if($c==$row['class_of_pension']) {
@@ -159,7 +169,7 @@
         <label class="col-sm-3 control-label">Name of The Govt. Servent <span class="required-field">*</span></label>
         <div class="col-sm-6">
             <input style="width: 15%; float: left; border-radius: 0px;" readonly autocomplete="off" name="salutation" id="salutation" type="text" value="<?php echo $row['salutation']; ?>">
-            <input style="width: 68%; float: left; border-radius: 0px;" readonly name="name" id="name" type="text" value="<?php echo $row['name']; ?>" placeholder="Please Enter Name of The Govt. Servent"><?php echo form_error('name', '<div class="error">', '</div>'); ?>
+            <input style="width: 68%; float: left; border-radius: 0px;" name="name" id="name" type="text" value="<?php echo $row['name']; ?>" placeholder="Please Enter Name of The Govt. Servent"><?php echo form_error('name', '<div class="error">', '</div>'); ?>
         </div>
     </div>
     <div class="form-group">
@@ -173,7 +183,7 @@
         <div class="col-sm-6">
             <select name="religion" id="religion" class="multiselect">
                 <option value="0">Select</option>
-                <?php $religion = array('Hindu', 'Muslim', 'Sikh', 'Christian', 'Others'); ?>
+                <?php $religion = array('Hindu', 'Muslim', 'Sikh', 'Christian', 'Buddhism', 'Donyi-Polo', 'Others'); ?>
                 <?php
                     foreach ($religion as $key => $rl) {
                         if($rl==$row['religion']) {
@@ -231,11 +241,21 @@
     <div class="form-group">
         <label class="col-sm-3 control-label">Designation <span class="required-field">*</span></label>
         <div class="col-sm-6">
-            <input readonly autocomplete="off" name="designation" id="designation" type="text" value="<?php echo $row['designation']; ?>">
+            <input autocomplete="off" name="designation" id="designation" type="text" value="<?php echo $row['designation']; ?>">
             <?php $retire_age = getRetireAge($row['designation']); ?>
             <input type="hidden" name="retire_age" id="retire_age" value="<?php echo $retire_age; ?>" />
         </div>
     </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Sub Designation <span class="required-field">*</span></label>
+        <div class="col-sm-6">
+            <input  autocomplete="off" name="sub_designation" id="sub_designation" type="text" value="<?php echo $row['sub_designation']; ?>">
+            
+        </div>
+    </div>
+
 
     <div class="form-group">
         <label class="col-sm-3 control-label">Department <span class="required-field">*</span></label>
@@ -274,12 +294,52 @@
             </textarea>
         </div>
     </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Address after Retirement <span class="required-field">*</span></label>
-        <div class="col-sm-6">
-            <textarea name="address_after_retirement" placeholder="Please enter Address after Retirement" rows="4" columns="40"><?php echo $row['address_after_retirement']; ?></textarea><?php echo form_error('address_after_retirement', '<div class="error">', '</div>'); ?>
-        </div>
-    </div>
+    
+    <?php if($row['class_of_pension']=='Normal_Family_Pension' ){ ?>
+            <div class="form-group input_fields_wrap">
+                <nobr><label class="col-sm-3 control-label">Address after Retirement <span class="required-field">*</span> <button class="add_field_button btn btn-success" id="address_btn">Add</button></label></nobr>
+                <?php 
+
+                $check_address=explode('s:', $row['address_after_retirement']);
+
+                if(!empty($check_address[1])){
+
+                $address_after_retirement = unserialize($row['address_after_retirement']);
+
+                if(is_array($address_after_retirement))
+                {  
+
+                foreach ($address_after_retirement as $key => $value) { ?>
+
+                <div class="col-sm-6">
+                    <textarea name="address_after_retirement[]" placeholder="Please enter Address after Retirement" rows="4" columns="40"><?php echo $value['address_after_retirement']; ?></textarea><?php echo form_error('address_after_retirement', '<div class="error">', '</div>'); ?>
+                    <a href="#" style="margin-bottom:10px;" class="remove_field btn btn-danger">Remove</a>
+                </div>
+
+                <?php } } }else{  ?>
+
+                <div class="col-sm-6">
+                    <textarea name="address_after_retirement[]" placeholder="Please enter Address after Retirement" rows="4" columns="40"><?php echo $row['address_after_retirement']; ?></textarea><?php echo form_error('address_after_retirement', '<div class="error">', '</div>'); ?>
+                </div>
+
+            <?php } ?>
+                
+            </div>
+        <?php } else { ?>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Address after Retirement <span class="required-field">*</span></label>
+                <div class="col-sm-6">
+                    <textarea name="address_after_retirement" placeholder="Please enter Address after Retirement" rows="4" columns="40"><?php echo $row['address_after_retirement']; ?></textarea><?php echo form_error('address_after_retirement', '<div class="error">', '</div>'); ?>
+                </div>
+
+                <!-- <input type="button" onclick="addInput()"/> -->
+                <!-- <input type="button" onclick="textareaFunction()"/>
+                <span id="response"></span> -->
+            </div>
+
+        <?php } ?>    
+    
     <div class="form-group">
         <label class="col-sm-3 control-label">PIN Code </label>
         <div class="col-sm-6">
@@ -290,6 +350,12 @@
         <label class="col-sm-3 control-label">Cell Phone No. Incl(+91) </label>
         <div class="col-sm-6">
             <input name="phone_no" id="phone_no" type="text" value="<?php echo $row['phone_no']; ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Blood Group </label>
+        <div class="col-sm-6">
+            <input name="blood_group" id="blood_group" type="text" value="<?php echo $row['blood_group']; ?>">
         </div>
     </div>
     <div class="clear"></div>
@@ -352,7 +418,7 @@
     <div class="form-group">
         <label class="col-sm-3 control-label label-aor">Age at retirement</label>
         <div class="col-sm-6">
-            <input readonly type="text" name="aryear" id="aryear" class="width50" value="<?php echo set_value('aryear'); ?>" placeholder="year"/>&nbsp;<input readonly type="text" name="armonth" id="armonth" class="width50" value="<?php echo set_value('armonth'); ?>" placeholder="month"/>&nbsp;<input readonly type="text" name="arday" id="arday" class="width50" value="<?php echo set_value('arday'); ?>" placeholder="day"/>
+            <input  type="text" name="aryear" id="aryear" class="width50" value="<?php echo set_value('aryear'); ?>" placeholder="year"/>&nbsp;<input readonly type="text" name="armonth" id="armonth" class="width50" value="<?php echo set_value('armonth'); ?>" placeholder="month"/>&nbsp;<input readonly type="text" name="arday" id="arday" class="width50" value="<?php echo set_value('arday'); ?>" placeholder="day"/>
         </div>
     </div>
     <div class="form-group">
@@ -366,6 +432,13 @@
         <div class="col-sm-6">
             <?php list($year, $month, $day) = explode("-", $row['non_qualifying_service']); ?>
             <input required autocomplete="off" type="number" name="nonqsyear" id="nonqsyear" class="width50" value="<?php echo $year; ?>" placeholder="year" min="0"/>&nbsp;<input required autocomplete="off" type="number" name="nonqsmonth" id="nonqsmonth" class="width50" value="<?php echo $month; ?>" placeholder="month" min="0"/>&nbsp;<input required autocomplete="off" type="number" name="nonqsday" id="nonqsday" class="width50" value="<?php echo $day; ?>" placeholder="day" min="0"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Weightage <span class="required-field">*</span></label>
+        <div class="col-sm-6">
+            <?php list($year, $month, $day) = explode("-", $row['weightage']); ?>
+            <input required autocomplete="off" type="number" name="weightage_year" id="weightage_year" class="width50" value="<?php echo $year; ?>" placeholder="year" min="0"/>&nbsp;<input required autocomplete="off" type="number" name="weightage_month" id="weightage_month" class="width50" value="<?php echo $month; ?>" placeholder="month" min="0"/>&nbsp;<input required autocomplete="off" type="number" name="weightage_day" id="weightage_day" class="width50" value="<?php echo $day; ?>" placeholder="day" min="0"/>
         </div>
     </div>
     <div class="form-group">
@@ -405,11 +478,61 @@
     </div>
 </div>
 <div class="clear"></div>
+<div class="tab-pane" id="lapdetails">
+    <div class="row-fluid sortable">
+    <div class="span12">
+    <legend style="font-size:15px; color:#3b5999; font-weight:700">If Life time arrear Pension/Family is applicable » <small style="font-size:11px">&nbsp;</small></legend>
+    <table width="100%">
+        <tr>
+    <td>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">LAP From </label>
+        <div class="col-sm-9">
+            <input name="lapfrom" id="lapfrom" type="text" value="<?php echo $row['lap_from']; ?>" placeholder="yyyy-mm-dd">
+        </div>
+    </div>
+    </td>
+    <td>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">LAP To </label>
+        <div class="col-sm-9">
+            <input name="lapto" id="lapto" type="text" value="<?php echo $row['lap_to']; ?>" placeholder="yyyy-mm-dd">
+        </div>
+    </div>
+    </td>
+    <td>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">LAP Amount </label>
+        <div class="col-sm-9">
+            <input name="lapamount" id="lapamount" value="<?php echo $row['lap_amount']; ?>" type="text" placeholder="0">
+        </div>
+    </div>
+    </td>
+    </tr>
+</table>
+</div>
+</div>
+</div>
 
  <div class="tab-pane" id="family_details">
     <div class="row-fluid sortable">
         <div class="span12">
             <legend style="font-size:15px; color:#3b5999; font-weight:700">Family Information Panel » <small style="font-size:11px"> Use the below panel to enter basic information about family.</small></legend>
+
+            <!-- <div class="form-group" style="min-height:60px;min-width: 220px;">
+                <label class="col-sm-3 control-label">No. of wives is 2 or more than 2</label>
+                <div class="col-sm-6">
+                <input type="radio" name="more_wives" id="more_wives" value="1" <?php if($row['more_wives']=='1'){?>checked<?php } ?>>Yes
+                <input type="radio" name="more_wives" id="more_wives" value="0"  <?php if($row['more_wives'] == '0') { ?>checked<?php } ?>>No
+                </div>
+
+            <label class="col-sm-3 control-label">Enter No. of wives</label>
+            <div class="col-sm-6">
+            <input autocomplete="off" name="no_of_wives" id="no_of_wives" type="text" value="<?php echo $row['no_of_wives']; ?>" placeholder="">
+            </div>
+
+            </div> -->
+
             <p style="font-size:12px; color:red">Fields labelled in red are mandatory</p>
             <?php $family = unserialize($row['family_info']); ?>
             <table class="table" id="myTable" style="margin-top: 10px;">
@@ -430,7 +553,7 @@
                         <tr id="parent-<?php echo $count; ?>" class="parent">
                             <td><input style="opacity:4!important;" type="checkbox" name="chk[]" class="chk"></td>
                             <td>
-                                <?php $spouse_sal = array('mr'=>'Mr', 'mrs'=>'Mrs', 'miss'=>'Miss'); ?>
+                                <?php $spouse_sal = array('mr'=>'Mr', 'mrs'=>'Mrs', 'miss'=>'Miss','Md'=>'Md'); ?>
                                 <select required class="spouse_salutation form-control" name="spouse_salutation[]">
                                     <option value="0">--Please Select--</option>
                                     <?php foreach ($spouse_sal as $key => $ss) {
@@ -446,7 +569,7 @@
                             <td><input required value="<?php echo $value['spouse_dob']; ?>" class="dob form-control" name="spouse_dob[]" size="16" type="text"><label style="font-size:12px; color:red">Date of birth <span class="required-field">*</span></label></td>
                             <td><input value="<?php echo $value['spouse_dod']; ?>" class="dod form-control" name="spouse_dod[]" placeholder="Date of Death" size="16" type="text"><label style="font-size:12px; color:red">Date of death if available</label></td>
                             <td>
-                                <?php $relation = array('wife'=>'Wife', 'husband'=>'Husband', 'father'=>'Father', 'mother'=>'Mother'); ?>
+                                <?php $relation = array('wife'=>'Wife', 'husband'=>'Husband', 'father'=>'Father', 'mother'=>'Mother', 'legal_guardian'=>'Legal Guardian', 'legal heir'=>'Legal heir'); ?>
                                 <select required class="family_relation form-control" name="relation[]">
                                     <option value="">--Please Select--</option>
                                     <?php foreach ($relation as $key => $r) {
@@ -460,11 +583,11 @@
                             </td>
                             <td><input required class="percentage form-control" name="percentage[]" size="5" type="text" value="<?php echo $value['percentage']; ?>"><label style="font-size:12px; color:red">Percentage <span class="required-field">*</span></label></td>
                             <td></td>
-                            <td><input type="button" name="cmdAddRow" value="Add Child" class="addChild" id="addParentChild-<?php echo $count; ?>"></td>
+                            <td><input type="button" name="cmdAddRow" value="Add Child/Legal Guardian" class="addChild" id="addParentChild-<?php echo $count; ?>"></td>
                         </tr>
                         <?php
                             if(count($value['child']) != '0') {
-                                $marital_status = ['married'=>'Married', 'unmarried'=>'Unmarried', 'divorcee'=>'Divorcee', 'widow'=>'Widow'];
+                                $marital_status = ['married'=>'Married', 'unmarried'=>'Unmarried', 'divorcee'=>'Divorcee', 'widow'=>'Widow','legal_guardian'=>'Legal Guardian'];
                                 $handicapped = ['yes'=>'Yes', 'no'=>'No'];
                                 foreach ($value['child'] as $child_key => $child) { ?>
                                     <tr class="child-<?php echo $count; ?>">
@@ -532,6 +655,8 @@
             </table>
             <a class="btn btn-success scrollToTop" onClick="addRow('myTable')" data-target="family_details">Add More</a>
             <a class="btn btn-danger scrollToTop" onClick="deleteRow('myTable')" data-target="family_details">Delete</a>
+            <a class="btn btn-success" id="two_more_wives">Two or More Wife</a>
+            <a class="btn btn-danger" id="two_more_wives_hide">Remove Two or More Wife</a>
         </div>
     </div>
 </div>
@@ -563,7 +688,12 @@
                 <option value="0">--SELECT--</option>
             </select>
         </div>
+        <input type="hidden" name="six_pay_band" id="six_pay_band">
     </div>
+
+   
+
+
 
     <div class="form-group">
         <div class="col-sm-6">
@@ -593,7 +723,9 @@
         <label class="col-sm-3 control-label">Commutation Applied</label>
         <div class="col-sm-6">
             <input type="radio" name="com_applied" id="com_applied" value="1" <?php if($row['com_applied']=='1'){?>checked<?php } ?>>Yes
-            <input type="radio" name="com_applied" id="com_applied" value="0"  <?php if($row['com_applied'] == '0') { ?>checked<?php } ?>>No
+            <input type="radio" name="com_applied" id="com_applied" value="0"  <?php if($row['com_applied'] == '0') { ?>checked<?php } ?>>No &emsp;
+
+            <input type="number" maxlength="2" name="com_per" value="<?php echo $row['com_per'] ?>" placeholder="Percentage of Commutation(if any)">
         </div>
     </div>
 
@@ -605,10 +737,206 @@
         </div>
     </div>
 
+    <div class="form-group" style="min-height:60px;min-width: 220px;">
+        <label class="col-sm-3 control-label">Consolidated Pay</label>
+        <div class="col-sm-6">
+            <input type="radio" name="consolidated" id="consolidated" value="1" <?php if($row['consolidated']=='1'){?>checked<?php } ?>>Yes
+            <input type="radio" name="consolidated" id="consolidated" value="0"  <?php 
+            if($row['consolidated'] == '0') 
+            { 
+            ?>checked<?php 
+            } 
+            elseif($row['consolidated'] == NULL)
+            {
+            ?>checked<?php
+            }
+            ?>>No
+        </div>
+
+        <label class="col-sm-3 control-label">Date of Birth of son or daughter</label>
+        <div class="col-sm-6">
+              <input autocomplete="off" name="childDOB" id="childDOB" type="text" value="<?php //echo $row['childDOB']; 
+              if($row['childDOB']== NULL)
+                {echo '0000-00-00';}
+              else
+              {echo $row['childDOB'];}
+              ?>" placeholder="">
+        </div>
+
+         <label class="col-sm-3 control-label">Date of marriage/ Date of employment of son or daughter</label>
+        <div class="col-sm-6">
+              <input autocomplete="off" name="child_Date_of_marriage_employment" id="child_Date_of_marriage_employment" type="text" value="<?php //echo $row['child_Date_of_marriage_employment']; 
+              if($row['child_Date_of_marriage_employment']== NULL)
+                {echo '0000-00-00';}
+              else
+              {echo $row['child_Date_of_marriage_employment'];}
+              ?>" placeholder="">
+        </div>
+    </div>
+
     <div id="form_dis"></div>
     <div class="clear"></div>
+
+
+
 </div>
 <div class="clear"></div>
+<div class="ais_details" style="margin-top: 20px;">
+
+   
+<legend>AIS Report Customization</legend>
+<!--<div class="form-group-inside">-->
+<div class="form-group" style="float:left; margin: 0px 20px;">
+    <div class="col-sm-6">
+        <label class="col-sm-3 control-label">Name of Pensioner</label>
+        <input autocomplete="off" placeholder="Name of Pensioner"  type="text" name="ais_report_name" value="<?php if(!isset($row['name_ais'])):echo $row['name']; else: echo $row['name_ais']; endif; ?>">
+        
+    </div>
+</div>
+
+<div class="form-group" style="float:left; margin: 0px 20px;">
+    <div class="col-sm-6">
+        <label class="col-sm-3 control-label">Designation</label>
+        <input autocomplete="off" placeholder="Designation"  type="text" name="ais_report_designation" value="<?php if(!isset($row['designation_ais'])):echo $row['designation_ais']; else: echo $row['designation']; endif; ?>">
+        
+    </div>
+</div>
+
+<div class="form-group" style="float:left; margin: 0px 20px;">
+    <div class="col-sm-6">
+        <label class="col-sm-3 control-label">Service Belong</label>
+        <input autocomplete="off" placeholder="Service Belong"  type="text" name="ais_report_servicebelong" value="<?php if(!isset($row['department_ais'])):echo $row['department_ais']; else: echo $row['sub_designation']; endif; ?>">
+       
+    </div>
+</div>
+
+<div class="form-group" style="float:left; margin: 0px 20px;">
+    <div class="col-sm-6">
+        <label class="col-sm-3 control-label">Batch</label>
+        <input autocomplete="off" placeholder="Batch"  type="text" name="ais_report_batch" value="<?php echo $row['batch_ais']; ?>">
+        
+    </div>
+</div>
+</div>
+
+
+<div class="pay_details" id="7th1" style="margin-top: 20px;">
+
+   
+<legend>Pension Calculation</legend>
+<!--<div class="form-group-inside">-->
+
+
+
+    <h4>Before Increment</h4><hr style="margin: 0 0 15px 0;" />
+
+     <div class="form-group" style="left; margin: 0px 20px;">
+        <div class="col-sm-6">
+    <label class="col-sm-3 control-label">Total</label>
+    <input autocomplete="off" placeholder="Total Amont"  type="text" id="total_pres" name="total_pres" value="<?php echo $row['total_amount']; ?>">
+    </div>
+    </div>
+    
+     <div class="form-group" style="left; margin: 0px 20px;">
+        <div class="col-sm-6">
+    <label class="col-sm-3 control-label">Case/File No</label>
+    <input autocomplete="off" placeholder="case no"  type="text" id="case_file_no" name="case_file_no" value="<?php echo $row['case_file_no']; ?>">
+    </div></div>
+    
+    
+         <div class="form-group" style="left; margin: 0px 20px;">
+        <div class="col-sm-6">
+            <label class="col-sm-3 control-label">PPO No</label>
+    <input autocomplete="off" placeholder="ppo no"  type="text" id="ppo_file_no" name="ppo_file_no" value="<?php echo $row['ppo_no']; ?>">
+    <input type="hidden" id="ppo_file_no_hidden" name="ppo_file_no_hidden" value="<?php echo $row['ppo_no']; ?>"> <!-- Dani Rika 11'Dec 2018-->
+    </div>
+    </div>
+
+    <div class="form-group" style="left; margin: 0px 20px;">
+        <div class="col-sm-6">
+            <label class="col-sm-3 control-label">PPO No (In AIS Case)</label>
+    <input autocomplete="off" placeholder="ppo no"  type="text" id="ppo_file_no_ais" name="ppo_file_no_ais" value="<?php echo $row['ppo_ais']; ?>">
+        </div>
+    </div>
+<!--</div>-->
+ <div class="form-group" style="left; margin: 0px 20px;">
+        <div class="col-sm-6">
+    <label class="col-sm-3 control-label">GPO No</label>
+    <input autocomplete="off" placeholder="gpo no"  type="text" id="gpo_file_no" name="gpo_file_no" value="<?php echo $row['gpo_no']; ?>">
+</div>
+</div>
+
+ <div class="form-group" style="left; margin: 0px 20px;">
+        <div class="col-sm-6">
+    <label class="col-sm-3 control-label">CPO No</label>
+    <input autocomplete="off" placeholder="cpo no"  type="text" id="cpo_file_no" name="cpo_file_no" value="<?php echo $row['cpo_no']; ?>">
+</div></div>
+
+
+ <div class="form-group" style="left; margin: 0px 20px;">
+        <div class="col-sm-6">
+    <label class="col-sm-3 control-label">Before Increment Value(Family Pension)</label>
+    <input autocomplete="off" placeholder="before increament amount"  type="text" id="bf_increamnet" name="bf_increamnet" value="<?php echo $row['bf_increamnet']; ?>">
+    </div></div>
+<!--</div>-->
+
+
+
+<div id="scale_seven" style="margin-left:0px;"> 
+ <div class="form-group" style="left; margin: 0px 20px;">
+        <div class="col-sm-6">
+<label>Pay Level <span class="required-field">*</span></label>
+
+<select name="seven_pol" id="seven_pol">
+    <option value="0">--SELECT--</option>
+    <option value="1">Level-1</option>
+    <option value="2">Level-2</option>
+    <option value="3">Level-3</option>
+    <option value="4">Level-4</option>
+    <option value="5">Level-5</option>
+    <option value="6">Level-6</option>
+    <option value="7">Level-7</option>
+    <option value="8">Level-8</option>
+    <option value="9">Level-9</option>
+    <option value="10">Level-10</option>
+    <option value="11">Level-11</option>
+    <option value="11ugc">Level-11-UGC</option>
+    <option value="12">Level-12</option>
+    <option value="13">Level-13</option>
+    <option value="13a">Level-13a</option>
+    <option value="13augc">Level-13augc</option>
+    <option value="14">Level-14</option>
+    <option value="15">Level-15</option>
+    <option value="16">Level-16</option>
+    <option value="17">Level-17</option>
+    <option value="18">Level-18</option>
+
+</select>
+</div></div>
+
+ <div class="form-group" style="left; margin: 0px 20px;">
+        <div class="col-sm-6">
+<label class="col-sm-3 control-label"> <input id="clp" style="border: none; font: 10px; padding: 0; height: 12px; color: red;" value="0"></label>
+<select name="sc_seven" id="sc_seven">
+    <option value="0">--SELECT--</option>
+    
+</select>
+</div></div>
+
+
+
+ <div class="form-group" style="left; margin: 0px 20px;">
+        <div class="col-sm-6">
+ <label class="col-sm-3 control-label">Non Practising Allowance</label><!--onblur="calculateRevised()"-->
+    <input autocomplete="off" placeholder="Non Practising Allowance"  type="text" id="npa" name="npa" value="<?php echo $row['npa']; ?>"  class="npa">
+</div></div>
+</div>
+
+</div>
+<!-- seven pay-->
+
+<div class="clear"></div>
+
 <div class="tab-pane" id="leave_encashment">
     <legend style="font-size:15px; color:#3b5999; font-weight:700">Leave Encashment </legend>
     <div class="form-group">
@@ -625,13 +953,102 @@
     </div>
 </div>
 
-<!-- Treausry Details -->
+
+<!-- Increment Details -->
+<br/><br/>
+<div style="font-size:15px; color:#3b5999; font-weight:700">Average Emolument »</div>
+<?php
+$query=$this->db->query("select * from increment_detail where case_no='$case'");
+$result=$query->result();
+?>
+
+<table class="table" id="iTable" style="margin-top: 10px;">
+                <tbody>
+                 <tr id="parent-1" class="parent">
+                        <td>
+                          <label style="font-size:12px; color:red">From <span class="required-field">*</span></label>                      </td>
+                        <td>
+                        <label style="font-size:12px; color:red">To<span class="required-field">*</span></label></td>
+                        <td>
+                        <label style="font-size:12px; color:red">Rate of Pay  <span class="required-field">*</span></label></td>
+                        <td>
+                        <label style="font-size:12px; color:red">Amount</label></td>
+                    </tr>
+                    <?php 
+                    $xx=10;
+                    foreach ($result as $r) {?>
+                        <tr id="parent-1" class="parent">
+                        <td><input class="dod form-control fdate" name="fidate[]" placeholder="From Increment Date" size="16" type="text" value="<?php echo $r->from_date;?>" id="fidate_<?php echo $xx;?>">
+                          <label style="font-size:12px; color:red"></label>                      </td>
+                        <td><input class="dod form-control tdate" name="toidate[]" placeholder="To Increment Date" size="16" type="text" value="<?php echo $r->to_date;?>" id="toidate_<?php echo $xx;?>">
+                        <label style="font-size:12px; color:red"></label></td>
+                        <td><input  class=" form-control rate_amt" name="irate[]" placeholder="Rate" size="16" type="text" value="<?php echo $r->rate_of_pay;?>" id="irate_<?php echo $xx;?>">
+                        <label style="font-size:12px; color:red"></label></td>
+                        <td><input  class=" form-control item_amt" name="iamount[]" placeholder="Amount" size="16" type="text" value="<?php echo $r->amount;?>" id="iamount_<?php echo $xx;?>">
+                        <label style="font-size:12px; color:red"></label></td>
+                    </tr> <?php  $xx=$xx+1; }
+
+                    for($ctr=2;$ctr<=5;$ctr++){
+                    ?>
+                    <tr class="parent">
+                      <td><input class="dod form-control fdate" name="fidate[]" placeholder="From Increment Date" size="16" type="text" value="" id="fidate_<?php echo $ctr; ?>"></td>
+                      <td><input class="dod form-control tdate" name="toidate[]" placeholder="To Increment Date" size="16" type="text" value="" id="toidate_<?php echo $ctr; ?>"></td>
+                      <td><input  class=" form-control rate_amt" name="irate[]" placeholder="Rate" size="16" type="text" value="" id="irate_<?php echo $ctr; ?>"></td>
+                      <td><input  class=" form-control item_amt" name="iamount[]" placeholder="Amount" size="16" type="text" value="" id="iamount_<?php echo $ctr; ?>"></td>
+                    </tr>
+                <?php } ?>
+                   <!--  <tr class="parent">
+                     <td><input class="dod form-control fdate" name="fidate[]" placeholder="From Increment Date" size="16" type="text" value="" id="fidate3[]"></td>
+                     <td><input class="dod form-control tdate" name="toidate[]" placeholder="To Increment Date" size="16" type="text" value="" id="toidate3[]"></td>
+                     <td><input  class=" form-control rate_amt" name="irate[]" placeholder="Rate" size="16" type="text" value="" id="irate[]"></td>
+                     <td><input  class=" form-control item_amt" name="iamount[]" placeholder="Amount" size="16" type="text" value="" id="iamount[]"></td>
+                   </tr>
+                   <tr class="parent">
+                     <td><input class="dod form-control fdate" name="fidate[]" placeholder="From Increment Date" size="16" type="text" value="" id="fidate4[]"></td>
+                     <td><input class="dod form-control tdate" name="toidate[]" placeholder="To Increment Date" size="16" type="text" value="" id="toidate4[]"></td>
+                     <td><input  class=" form-control rate_amt" name="irate[]" placeholder="Rate" size="16" type="text" value="" id="irate[]"></td>
+                     <td><input  class=" form-control item_amt" name="iamount[]" placeholder="Amount" size="16" type="text" value="" id="iamount[]"></td>
+                   </tr>
+                   <tr class="parent">
+                     <td><input class="dod form-control fdate" name="fidate[]" placeholder="From Increment Date" size="16" type="text" value="" id="fidate5[]"></td>
+                     <td><input class="dod form-control tdate" name="toidate[]" placeholder="To Increment Date" size="16" type="text" value="" id="toidate5[]"></td>
+                     <td><input  class=" form-control rate_amt" name="irate[]" placeholder="Rate" size="16" type="text" value="" id="irate[]"></td>
+                     <td><input  class=" form-control item_amt" name="iamount[]" placeholder="Amount" size="16" type="text" value="" id="iamount[]"></td>
+                   </tr> -->
+                    
+                </tbody>
+            </table>
+
+
+<?php 
+                $temp_result=getRecordsByTableID('pensioner_pay_details','case_file_no',$case);
+                $list_items=unserialize($temp_result[0]["pay_info"]);
+                                ?>
+
 <div class="tab-pane" id="treausry_details">
-    <legend style="font-size:15px; color:#3b5999; font-weight:700">Treasury/AG Office/Bank Details Information Panel » <small style="font-size:11px"> Use the below panel to enter relevant details.</small></legend>
+    <legend style="font-size:15px; color:#3b5999; font-weight:700">Treasury/<?php echo $list_items[0]["post_DA"]; ?>AG Office/Bank Details Information Panel » <small style="font-size:11px"> Use the below panel to enter relevant details.</small></legend>
     <div class="form-group full-form-group">
-        <label class="col-sm-3 control-label">Name of Accountant General</label>
+        <label class="col-sm-3">Name of Accountant General: </label>
+        <div class="col-sm-12"><strong><span style="color: red;"><?php echo $pensioner->getAG_Name(($row['name_of_ag'])); ?></span></strong></div>
+
+        <!-- <input type="hidden" name="name_of_ag" value="$row['name_of_ag']"> -->
+    </div>
+    <div class="form-group full-form-group">
+    <label class="col-sm-3">&nbsp;</label>    
         <div class="col-sm-12">
-            <select name="name_of_accountant_general" id="name_of_accountant_general" <?php if($row['treasury_officer'] != NULL) { ?>disabled="disabled"<?php } ?>>
+            <?php if($row['class_of_pension']=="Normal_Family_Pension"  ) { ?>
+            <select name="name_of_accountant_general[]" multiple="true">
+                <option value="">Select</option>
+                <?php foreach (getAllAccountantGeneral() as $ag) { ?>
+
+                    <option value="<?php echo $ag['id']; ?>"><?php echo $ag['name']; ?></option>
+                        
+                <?php } ?>
+            </select>
+
+        <?php } else { ?>
+
+            <select name="name_of_accountant_general" id="name_of_accountant_general" <?php if($row['treasury_officer'] != NULL) { ?> disabled="disabled"<?php } ?>>
                 <option value="">Select</option>
                 <?php foreach (getAllAccountantGeneral() as $ag) { ?>
                     <?php if($ag['id'] == $row['name_of_accountant_general']) { ?>
@@ -640,18 +1057,75 @@
                         <option value="<?php echo $ag['id']; ?>"><?php echo $ag['name']; ?></option>
                     <?php } ?>
                 <?php } ?>
-            </select>&nbsp;<a href="#addAccountantGeneral" id="addAccountantGeneralModal" class="btn btn-success" data-toggle="modal">+</a><?php echo form_error('name_of_accountant_general', '<div class="error">', '</div>'); ?>
+            </select>
+
+        <?php } ?>    
+
+
+            &nbsp;<a href="#addAccountantGeneral" id="addAccountantGeneralModal" class="btn btn-success" data-toggle="modal">+</a><?php echo form_error('name_of_accountant_general', '<div class="error">', '</div>'); ?>
         </div>
     </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">TO/ Sub TO(Outside)</label>
-        <div class="col-sm-6">
-            <input name="sub_to" id="sub_to" type="text" value="<?php echo $row['sub_to']; ?>" <?php if($row['treasury_officer'] != NULL) { ?>disabled="disabled"<?php } ?>><?php echo form_error('sub_to', '<div class="error">', '</div>'); ?>
-        </div>
+
+    <?php if($row['class_of_pension']=='Normal_Family_Pension' ){ ?>
+
+    <div class="form-group input_fields_wrap_subto full-form-group">
+        <nobr><label class="col-sm-3 control-label">TO/ Sub TO(Outside)
+        <button class="add_field_button_subto btn btn-success" id="sub_to_btn">Add</button></label></nobr>
+                <?php 
+
+                $check_sub_to=explode('s:', $row['sub_to']);
+
+                if(!empty($check_sub_to[1])){
+
+                $sub_to = unserialize($row['sub_to']);
+
+                if(is_array($sub_to))
+                {  
+
+                foreach ($sub_to as $key => $value) { ?>
+                <div class="col-sm-6">
+                    <input name="sub_to[]" id="sub_to" type="text" value="<?php echo $value['sub_to']; ?>" <?php if($row['treasury_officer'] != NULL) { ?>disabled="disabled"<?php } ?>><?php echo form_error('sub_to', '<div class="error">', '</div>'); ?>
+                    <a href="#" style="margin-bottom:10px;" class="remove_field_subto btn btn-danger">Remove</a>
+                </div>
+                <?php } } }else{  ?>
+
+                <div class="col-sm-6">
+                    <input name="sub_to[]" id="sub_to" type="text" value="<?php echo $row['sub_to']; ?>" <?php if($row['treasury_officer'] != NULL) { ?>disabled="disabled"<?php } ?>><?php echo form_error('sub_to', '<div class="error">', '</div>'); ?>
+                </div>
+            <?php } ?>        
     </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Treasury/ Sub Treasury Officer</label>
-        <div class="col-sm-6">
+
+    <?php } else{ ?>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">TO/ Sub TO(Outside)</label>
+            <div class="col-sm-6">
+                <input name="sub_to" id="sub_to" type="text" value="<?php echo $row['sub_to']; ?>" <?php if($row['treasury_officer'] != NULL) { ?>disabled="disabled"<?php } ?>><?php echo form_error('sub_to', '<div class="error">', '</div>'); ?>
+            </div>
+        </div>
+    <?php } ?>    
+
+        <div class="form-group full-form-group">
+            <label class="col-sm-3">Treasury/ Sub Treasury Officer(Inside): </label>
+            <div class="col-sm-12"><strong><span style="color: red;"><?php echo $pensioner->getTreasury_Name(($row['name_of_treasury'])); ?></span></strong></div>
+        </div>
+    <div class="form-group full-form-group">
+        <label class="col-sm-3 control-label">&nbsp;</label>
+        <div class="col-sm-12">
+
+            <?php if($row['class_of_pension']=="Normal_Family_Pension" ) { ?>
+            <select name="treasury_officer[]" multiple="true">
+                <option value="">Select</option>
+
+                <?php foreach (getAllTreasury() as $treasury) { ?>
+
+                    <option value="<?php echo $treasury['id']; ?>"><?php echo $treasury['title']; ?></option>
+                        
+                <?php } ?>
+            </select>
+
+        <?php } else { ?>
+
+
             <select name="treasury_officer" id="treasury_officer" <?php if($row['name_of_accountant_general'] != NULL) { ?>disabled="disabled"<?php } ?>>
                 <option value="">Select</option>
                 <?php foreach (getAllTreasury() as $treasury) { ?>
@@ -661,6 +1135,8 @@
                         <option value="<?php echo $treasury['id']; ?>"><?php echo $treasury['title']; ?></option>
                     <?php } ?>
                 <?php } ?>
+
+        <?php } ?>           
             </select>&nbsp;<a href="#addTreasuryOfficer" id="addTreasuryOfficerModal" class="btn btn-success" data-toggle="modal">+</a><?php echo form_error('treasury_officer', '<div class="error">', '</div>'); ?>
         </div>
     </div>
@@ -692,7 +1168,11 @@
     </div>
 
 </div>
-<!-- Treausry Details -->
+
+
+
+
+
 <div class="clear"></div>
 <input type="submit" name="submit" value="Update" class="btn btn-primary" />
 <a class="scrollToTop" href="#" data-target="content">Move To Top</a>
@@ -734,6 +1214,10 @@ legend {margin-bottom: 10px;}
 #family_details table .form-control{ width: 132px;}
 #pay_details {margin-top: 20px;}
 #pay_details .form-group{float: left; margin: 0px 20px;}
+
+.pay_details {margin-top: 20px;}
+.pay_details .form-group{float: left; margin: 0px 20px;}
+
 #treausry_details {margin-top: 20px;}
 #treausry_details .form-group{float: left; width: 46%; margin: 0px 20px;}
 #treausry_details .form-group .col-sm-3 {float: left; width: 240px;}
@@ -761,8 +1245,10 @@ legend {margin-bottom: 10px;}
 </style>
 <?php if(validation_errors() != false) { echo '<style type="text/css">.form-group{min-height: 60px;margin-bottom: 0px;}</style>'; } ?>
 <script type="text/javascript">
-    $(document).ready(function() {
+    
 
+    $(document).ready(function() {
+        
         addAccountantGeneral("<?php echo site_url('administrator/service_book/saveAccountantName'); ?>");
         addTreasuryOfficer("<?php echo site_url('administrator/service_book/saveTreasuryTitle'); ?>");
         checkPensionCase();
@@ -778,8 +1264,63 @@ legend {margin-bottom: 10px;}
         checkAppointAs();
     });
 
+
+    //seven pay
+    $("#seven_pol").change(function(){
+            //alert("g");
+            var x=$("#seven_pol").val();
+            //$("#sex").val(x);
+            $.ajax({
+                url:'<?php echo site_url("administrator/service_book/getSevenpay/"); ?>',
+                data:'country_id='+x,
+                dataType:'html',
+                method:'POST',
+                success:function(html){
+                    $("#sc_seven").html(html);
+                    
+                }
+            });
+
+          });
+
+    $("#sc_seven").change(function(){
+            //alert("g");
+            $("#total_pres").val($(this).val());
+          });  
+
+     $("#npa").change(function(){
+            //alert("g");
+            tot = 0;
+            $.each($('.pre_xx'), function() {
+                tot += parseFloat($(this).val()) || 0;
+            });
+            
+            npa = $('#npa').val() || 0 ;
+            tot_npa=(tot/100*npa);
+            
+            tot1 =  $("#total_pres").val() || 0;
+            final_tot = 0;
+            //final_tot = (parseInt(tot)*parseInt(npa)/100)+parseInt(tot);
+            final_tot = parseInt(tot_npa)+parseInt(tot1);
+            $("#total_pres").val(Math.round(final_tot));
+            delete npa;
+            delete tot;
+            delete tot1;
+            delete final_tot;
+          });  
+
+    $("#pay_commission").change(function(){
+            alert($(this).val());
+            $("#chpaycom").val($(this).val());
+          });
+        
+
+    //seven pay
+
+
+
     $(function() {
-        $("#cash_received, #dod").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
+        $("#cash_received, #dod,#lapfrom,#lapto").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
         
         ageAtRetirement();
         $("#dor").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+50', onSelect: function(date){
@@ -797,8 +1338,12 @@ legend {margin-bottom: 10px;}
             nonqsmonth  = $('#nonqsmonth').val() || 0;
             nonqsday    = $('#nonqsday').val() || 0;
 
+            weightage_year   = $('#weightage_year').val() || 0;
+            weightage_month  = $('#weightage_month').val() || 0;
+            weightage_day    = $('#weightage_day').val() || 0;
+
             total_service1 = total_service.split(" ");
-            total_service2 = moment().add(total_service1[0], 'years').add(total_service1[2], 'months').add(total_service1[4], 'days');
+            total_service2 = moment().add(parseInt(total_service1[0])+parseInt(weightage_year), 'years').add(parseInt(total_service1[2])+parseInt(weightage_month), 'months').add(parseInt(total_service1[4])+parseInt(weightage_day), 'days');
             nonqs = moment().add(nonqsyear, "years").add(nonqsmonth, "months").add(nonqsday, "days");
             var result = dateDiff(nonqs, total_service2, 'false', 'true');
             $('#netqsyear').val(result.year);
@@ -814,12 +1359,68 @@ legend {margin-bottom: 10px;}
             delete nonqsmonth;
             delete nonqsday;
         });
+
+        $('#weightage_year, #weightage_month, #weightage_day').blur(function(){
+            if($('.form-group-dojac').hasClass('show')) {
+                var total_service = $('#total_service_from_casual_date').val()
+            } else {
+                var total_service = $('#total_service').val();
+            }
+
+            //------------------------------
+            /*weightage_year   = $('#weightage_year').val() || 0;
+            weightage_month  = $('#weightage_month').val() || 0;
+            weightage_day    = $('#weightage_day').val() || 0;
+
+            total_service1 = total_service.split(" ");
+
+            year=parseInt(total_service1[0])+parseInt(weightage_year);
+            month=parseInt(total_service1[2])+parseInt(weightage_month);
+            day=parseInt(total_service1[4])+parseInt(weightage_day);
+            
+            $('#netqsyear').val(year);
+            $('#netqsmonth').val(month);
+            $('#netqsday').val(day);*/
+            //---------------------------
+
+            nonqsyear   = $('#nonqsyear').val() || 0;
+            nonqsmonth  = $('#nonqsmonth').val() || 0;
+            nonqsday    = $('#nonqsday').val() || 0;
+
+            weightage_year   = $('#weightage_year').val() || 0;
+            weightage_month  = $('#weightage_month').val() || 0;
+            weightage_day    = $('#weightage_day').val() || 0;
+
+            total_service1 = total_service.split(" ");
+            total_service2 = moment().add(parseInt(total_service1[0])+parseInt(weightage_year), 'years').add(parseInt(total_service1[2])+parseInt(weightage_month), 'months').add(parseInt(total_service1[4])+parseInt(weightage_day), 'days');
+            nonqs = moment().add(nonqsyear, "years").add(nonqsmonth, "months").add(nonqsday, "days");
+            var result = dateDiff(nonqs, total_service2, 'false', 'true');
+            $('#netqsyear').val(result.year);
+            $('#netqsmonth').val(result.month);
+            $('#netqsday').val(result.day);
+            
+            calculateSMP(result);
+
+            delete total_service1;
+            delete weightage;
+            delete weightage_year;
+            delete weightage_month;
+            delete weightage_day;
+        });
     });
 
     $('body').on('focus',".dob", function(){
         $(this).datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
     });
     $('body').on('focus',".dod", function(){
+        $(this).datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
+    });
+
+    $('body').on('focus',"#childDOB", function(){
+        $(this).datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
+    });
+
+    $('body').on('focus',"#child_Date_of_marriage_employment", function(){
         $(this).datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: '1900:+0'});
     });
 
@@ -884,9 +1485,32 @@ legend {margin-bottom: 10px;}
 
 <script type="text/javascript">
     $(document).ready(function() {
+
+     var x=$("#pay-commission").val();
+               if(x==7){
+
+                    $("#7th").show();
+               } 
+               else
+               {
+                    $("#7th").hide();
+               }
+    
+    
         onPayCommissionLoad();
         getPensionCalc();
         $('#pay-commission').on('change', function() {
+        
+         var x=$("#pay-commission").val();
+               if(x==7){
+
+                    $("#7th").show();
+               } 
+               else
+               {
+                    $("#7th").hide();
+               }
+               
             onPayCommissionChange('<?php echo site_url("RestService/getPreRevisedPayScale/"); ?>');
             getPensionCalc();
         });
@@ -894,6 +1518,12 @@ legend {margin-bottom: 10px;}
         $('#earn_leave').val('<?php echo $pay_info[3]["earn_leave"]; ?>');
         $('#half_pay').val('<?php echo $pay_info[4]["half_pay"]; ?>');
     });
+
+    $("#pay_scale").change(function(){
+            
+            $("#six_pay_band").val($(this).val());
+          });  
+
 
     var onPayCommissionLoad = function() {
         var me = $('#pay-commission');
@@ -903,9 +1533,11 @@ legend {margin-bottom: 10px;}
     };
 
     var getPensionCalc = function() {
+               
+
         var x=$("#pay-commission").val();
         $.ajax({
-            url: '<?php echo site_url("administrator/service_book"); ?>/pre_revised?id='+x,
+            url: '<?php echo site_url("administrator/service_book"); ?>/pre_revised_edit?id='+x+'&fileno=<?php echo $case; ?>',
             dataType:'html',
             method:'GET',
             success:function(data) {
@@ -919,8 +1551,12 @@ legend {margin-bottom: 10px;}
                             $pre = $value;
                             $post = $increment;
                         ?>
-                            $('#pre_da option:contains("<?php echo $pre; ?>")').prop('selected', true);
-                            $('#post_da option:contains("<?php echo $post; ?>")').prop('selected', true);
+                        /*var selected_before_da='';
+        var selected_after_da='';*/
+                            /*$('#pre_da option:contains("<?php echo $list_items[1]["increament_DA"]; ?>")').prop('selected', true);
+                            $('#post_da option:contains("<?php echo $list_items[0]["post_DA"]; ?>")').prop('selected', true);*/
+                            $("#pre_da").val(<?php echo $list_items[1]["increament_DA"]; ?>);
+                            $("#post_da").val(<?php echo $list_items[0]["post_DA"]; ?>);
                         <?php else : ?>
                             <?php $pre = $value-$increment; ?>
                             <?php $pre = ($pre == '') ? 0 : $pre; ?>
@@ -928,25 +1564,268 @@ legend {margin-bottom: 10px;}
                             $('input[name="<?php echo $key; ?>"]').val('<?php echo $value; ?>');
                         <?php endif; ?>
                 <?php } ?>
+                
                 $('#last_increament_date').val('<?php echo $pay_info[2]["last_increament_date"]; ?>');
 
-                var pre_sum = 0;
-                var pre_da = $('#pre_da').val() || 0;
-                for(var i=0; i<$('.pre_xx').length; i++) {
-                    pre_sum+=parseInt($('.pre_xx:eq('+i+')').val()) || 0;
-                    //pre_sum = pre_sum+parseInt($('.pre_xx:eq('+i+')').val());
-                }
-                pre_sum=(pre_sum*parseInt(pre_da)/100)+pre_sum;
-                $('#total_pre').val(parseInt(pre_sum));
-                var post_sum = 0;
-                var post_da = $('#post_da').val() || 0;
-                for(var j=0; j<$('.rev_xx').length; j++) {
-                    post_sum+=parseInt($('.rev_xx:eq('+j+')').val()) || 0;
-                }
-                post_sum=(post_sum*parseInt(post_da)/100)+post_sum;
-                $('#total_rev').val(post_sum);
+                // var pre_sum = 0;
+                // var pre_da = $('#pre_da').val() || 0;
+                // for(var i=0; i<$('.pre_xx').length; i++) {
+                //     pre_sum+=parseInt($('.pre_xx:eq('+i+')').val()) || 0;
+                //     //pre_sum = pre_sum+parseInt($('.pre_xx:eq('+i+')').val());
+                // }
+                // pre_sum=(pre_sum*parseInt(pre_da)/100)+pre_sum;
+                // $('#total_pre').val(parseInt(pre_sum));
+                // var post_sum = 0;
+                // var post_da = $('#post_da').val() || 0;
+                // for(var j=0; j<$('.rev_xx').length; j++) {
+                //     post_sum+=parseInt($('.rev_xx:eq('+j+')').val()) || 0;
+                // }
+                // post_sum=(post_sum*parseInt(post_da)/100)+post_sum;
+                // $('#total_rev').val(post_sum);
+
+
+                da  = $('#pre_da').val() || 0;
+                tot = 0;
+                final_tot = 0;
+                $.each($('.pre_xx'), function() {
+                    tot += parseFloat($(this).val()) || 0;
+                });
+                var npa=$('.pre_yy').val();
+                tot=parseInt(tot+(tot/100*npa));
+                final_tot = (tot*parseInt(da)/100)+tot;
+                $("#total_pre").val(Math.round(final_tot));
+                delete da;
+                delete tot;
+                delete final_tot;
+
+                da = $('#post_da').val() || 0;
+                tot = 0;
+                final_tot = 0;
+                $.each($('.rev_xx'), function() {
+                    tot += parseFloat($(this).val()) || 0;
+                });
+                var npa=$('.rev_yy').val();
+                tot=parseInt(tot+(tot/100*npa));
+                final_tot = (tot*parseInt(da)/100)+tot;
+                $("#total_rev").val(Math.round(final_tot));
+                delete da;
+                delete tot;
+                delete final_tot;
+
+                 var gpv=$('input[name="pre_GP"]').val();
+                 var bpv=$('input[name="pre_BP"]').val();
+
+                 gpv=parseInt(gpv);
+                 bpv=parseInt(bpv);
+
+                 var lpv=parseInt((gpv+bpv)*2.57);
+
+                 $('#clp').val('Calculated Last Pay is: '+lpv);
+                 
+            },
+            complete(res){
+               
             }
         });
     }
+
+    var countBox =1;
+    var boxName = 0;
+    function addInput()
+    {
+         var boxName="textarea"+countBox; 
+    document.getElementById('response').innerHTML+='<br/><input type="textarea" id="'+boxName+'" value="'+boxName+'" "  /><br/>';
+         countBox += 1;
+    }
+    
+    var i = 0; /* Set Global Variable i */
+    function increment(){
+    i += 1; /* Function for automatic increment of field's "Name" attribute. */
+    }
+
+    function textareaFunction(){
+    var r = document.createElement('span');
+    var y = document.createElement("TEXTAREA");
+    var g = document.createElement("IMG");
+    y.setAttribute("cols", "17");
+    y.setAttribute("placeholder", "message..");
+    g.setAttribute("src", "delete.png");
+    increment();
+    y.setAttribute("Name", "textelement_" + i);
+    r.appendChild(y);
+    g.setAttribute("onclick", "removeElement('myForm','id_" + i + "')");
+    r.appendChild(g);
+    r.setAttribute("id", "id_" + i);
+    document.getElementById("response").appendChild(r);
+    }
+
+    /* Dani Rika, 11'Dec 2018 */
+    var dojap = document.getElementById('dojap');
+    if(dojap.value >= '2008-01-01') {
+        var ppoNumber = document.getElementById('ppo_file_no');
+        ppoNumber.value = 0;
+    } 
+    /*  Dani Rika, 11'Dec 2018 */
 </script>
+<script type="text/javascript">
+        $(document).ready(function() {
+            var max_fields      = 10; //maximum input boxes allowed
+            var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+            var add_button      = $(".add_field_button"); //Add button ID
+
+            var x = 1; //initlal text box count
+            $(add_button).click(function(e){ //on add input button click
+                e.preventDefault();
+                if(x < max_fields){ //max input box allowed
+                    x++; //text box increment
+                    $(wrapper).append('<div><textarea placeholder="Please enter Address after Retirement" rows="4" columns="40" name="address_after_retirement[]"/><a href="#" style="margin-bottom:10px;" class="remove_field btn btn-danger">Remove</a></div>'); //add input box
+                }
+            });
+
+            $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+                e.preventDefault(); $(this).parent('div').remove(); x--;
+            })
+
+
+            var max_fields_subto      = 10; //maximum input boxes allowed
+            var wrapper_sub         = $(".input_fields_wrap_subto"); //Fields wrapper
+            var add_button_sub      = $(".add_field_button_subto"); //Add button ID
+
+            var x = 1; //initlal text box count
+            $(add_button_sub).click(function(e){ //on add input button click
+                e.preventDefault();
+                if(x < max_fields_subto){ //max input box allowed
+                    x++; //text box increment
+                    $(wrapper_sub).append('<div><input type="text" placeholder="TO/ Sub TO(Outside)" rows="4" columns="40" name="sub_to[]"/><a href="#" style="margin-bottom:10px;" class="remove_field_subto btn btn-danger"> Remove</a></div>'); //add input box
+                }
+            });
+
+            $(wrapper_sub).on("click",".remove_field_subto", function(e){ //user click on remove text
+                e.preventDefault(); $(this).parent('div').remove(); x--;
+            })
+        });
+
+
+        //08-01-2020---------------------
+        $(document).on("change",".tdate",function(){
+            var key=$(this).attr("id").split("_");
+            var to_date=$("#toidate_"+key[1]).val().split("-");
+            var month_stat=1;
+
+
+            var start = moment($("#fidate_"+key[1]).val(), "YYYY-MM-DD");
+            var end = moment($("#toidate_"+key[1]).val(), "YYYY-MM-DD");
+            var days = end.diff(start, 'month');
+
+            days+=1;
+            var months = end.diff(start, 'month');
+            months=parseInt(months)+1;
+
+            if(to_date[2]){
+                if(parseInt(to_date[2])<15){
+                months=parseInt(months)-1;                    
+                }
+            }
+
+            console.log(months);
+
+            var rate=(isNaN($("#irate_"+key[1]).val()) || $("#irate_"+key[1]).val()=="") ? 0 : $("#irate_"+key[1]).val();
+            $("#iamount_"+key[1]).val(Math.round(parseInt(rate)*parseInt(months)));
+        });
+
+        $(document).on("blur",".rate_amt",function(){
+            var key=$(this).attr("id").split("_");
+            $("#toidate_"+key[1]).trigger("change");
+        });
+
+        $(document).on("change",".fdate",function(){
+            var key=$(this).attr("id").split("_");
+            $("#toidate_"+key[1]).trigger("change");
+        });
+
+        $(document).on("change","#pre_da",function(){
+            $("#post_da").val($(this).val());
+        });
+
+        $(document).on("change","#post_da",function(){
+            $("#pre_da").val($(this).val());
+        });
+
+        $(document).ready(function(){
+            $("#address_btn").hide();
+            $("#sub_to_btn").hide();
+
+            var two_more_wives = $('#two_more_wives');
+            $(two_more_wives).click(function(e){
+                
+            var class_of_pension=$("#class_of_pension").val();    
+                if(class_of_pension=="Normal_Family_Pension"){
+                    $("#address_btn").show();
+                    $("#sub_to_btn").show();
+                    /*$("#single_address").hide();
+                    $("#single_address").prop("disabled", true);
+                    $("#address_btn").show();
+                    $("#multiple_address").prop("disabled", false);
+                    $("#multiple_address").show();
+
+
+                    $("#name_of_accountant_general").hide();
+                    $("#name_of_accountant_general").prop("disabled", true);
+                    $("#ag_multiple").show();
+                    $("#ag_multiple").prop("disabled", false);
+
+
+                    $("#sub_to_single").hide();
+                    $("#sub_to_single").prop("disabled", true);
+                    $("#sub_to_btn").show();
+                    $("#sub_to_multiple").show();
+                    $("#sub_to_multiple").prop("disabled", false);
+
+
+                    $("#treasury_officer").hide();
+                    $("#treasury_officer").prop("disabled", true);
+                    $("#treasury_multiple").show();
+                    $("#treasury_multiple").prop("disabled", false);*/
+
+                }
+                
+            });
+
+
+            var two_more_wives_hide = $('#two_more_wives_hide');
+            $(two_more_wives_hide).click(function(e){
+
+
+                    /*$("#single_address").show();
+                    $("#single_address").prop("disabled", false);*/
+                    $("#address_btn").hide();
+                    $("#sub_to_btn").hide();
+                    /*$("#multiple_address").prop("disabled", true);
+                    $("#multiple_address").hide();*/
+
+
+                    /*$("#name_of_accountant_general").show();
+                    $("#name_of_accountant_general").prop("disabled", false);
+                    $("#ag_multiple").hide();
+                    $("#ag_multiple").prop("disabled", true);*/
+
+
+                    /*$("#sub_to_single").show();
+                    $("#sub_to_single").prop("disabled", false);*/
+                    
+                    /*$("#sub_to_multiple").hide();
+                    $("#sub_to_multiple").prop("disabled", true);*/
+
+
+                    /*$("#treasury_officer").show();
+                    $("#treasury_officer").prop("disabled", false);
+                    $("#treasury_multiple").hide();
+                    $("#treasury_multiple").prop("disabled", true);*/
+
+
+
+            });
+        });
+    </script>
 <script src='<?php echo base_url()?>includes/js/scripts.js'></script>
+

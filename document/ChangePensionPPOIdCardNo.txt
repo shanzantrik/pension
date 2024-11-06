@@ -1,0 +1,14 @@
+
+(i)Change pension case file no/IPS case file no/ GIS case file no
+
+pension_ui\application\models\administrator\model_receipt.php => modify the following: 
+(1)go to function getMax_no($branch_code), change return "30189"; => PEN/AP/30189/18-19/154
+(2)go to function add_receipt(), change $lst_no=154 => PEN/AP/30189/18-19/154 
+
+
+(ii)Change Id Card/PPO/GPO/CPO no
+pension_ui\application\models\administrator\model_service_book.php
+(1)go to getIdCardSerialNo() and change => return "1000" to required number
+(2)go to getPPONo() and change => return "1000" to required number
+(3)go to getGPONo() and change => return "1000" to required number
+(4)go to getCPONo() and change => return "1000" to required number

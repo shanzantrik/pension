@@ -1,0 +1,23 @@
+Receipt: Onima Jomang
+userid= pen1537
+password= pension2016
+
+DA: S.K. CHOUDHURY
+userid= pen1173
+pass= pension2016
+
+
+
+Pension Superintendent: Yomto Riba
+userid= pen8367
+pass= pension2016
+
+
+FAO: T. Tatung
+userid= pen8007
+pass= pension2016
+
+
+Admin
+userid= masteradmin
+pass= madeuta1313#

@@ -197,7 +197,8 @@ class CI_Loader {
 		{
 			foreach ($library as $class)
 			{
-				$this->library($class, $params);
+				 $this->library($class, $params);
+				 
 			}
 
 			return;
@@ -205,6 +206,7 @@ class CI_Loader {
 
 		if ($library == '' OR isset($this->_base_classes[$library]))
 		{
+			
 			return FALSE;
 		}
 

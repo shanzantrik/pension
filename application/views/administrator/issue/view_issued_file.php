@@ -95,16 +95,25 @@
    <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example" width="100%">
     <thead>
        <tr>
-            <th width="10%">Dept No</th>
-            <th width="10%">Token No</th>
-            <th width="20%">File No</th>
-            <th width="20%">Name | Designation</th>
-            <th width="15%">Registration No</th> 
-            <th width="15%">Reg Date</th>                  
+            <th width="5%">Dept No</th>
+            <th width="5%">Token No</th>
+            <th width="10%">File No</th>
+            <th width="10%">Name | Designation</th>
+            <th width="7%">POReg No AG/Treasury Copy</th> 
+            <th width="7%">Date</th>
+            <th width="7%">PONo. Dept. Copy</th> 
+            <th width="7%">Date</th>
+            <th width="7%">PONo. ID Card</th> 
+            <th width="7%">Date</th>
+            <th width="7%">PONo. Personal</th> 
+            <th width="7%">Date</th>
+            <th width="7%">Remarks</th>
         </tr>
     </thead>
     <tbody>
        
+
+
           <?php $i=1256; ?>
             <?php foreach ($lists as $key): ?>
                 <tr id="<?php echo $key->file_no;?>">
@@ -114,11 +123,21 @@
                 <td><?php echo $key->pensionee_name."->".$key->designation; ?></td>
                 <td  class="edit"><?php echo $key->reg_no; ?></td>
                 <td  class="edit" id="reg_dt"><?php echo $key->reg_dt; ?></td>
-  
+                               <td  class="edit"><?php echo $key->po_no; ?></td>
+                <td  class="edit" id="reg_dt"><?php echo $key->po_date; ?></td>
+                               <td  class="edit"><?php echo $key->po_idcard; ?></td>
+                <td  class="edit" id="reg_dt"><?php echo $key->po_iddate; ?></td>
+                               <td  class="edit"><?php echo $key->po_personal; ?></td>
+                <td  class="edit" id="reg_dt"><?php echo $key->po_personal_date; ?></td>
+                <td  class="edit" id="reg_dt"><?php echo $key->remarks; ?></td>
                 </tr>
             <?php endforeach?>
     </tbody>
 </table>
+
+
+
+
 <br/>
 <div id="myDelete_" class="modal fade">
     <div class="modal-dialog">

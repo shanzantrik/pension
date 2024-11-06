@@ -81,6 +81,25 @@ foreach ($records as $rec) {
             <?php endforeach; ?>
         </select> 
         <!-- <input class="form-control" type="text" required id="<?php echo $key->srl_No?>_designation" value="<?php echo $key->designation;?>"> -->
+
+       <!-- ====================-->
+
+       <?php 
+       $dfn=$key->dept_forw_no;
+       $qry=$this->db->query("Select * from pension_receipt_register_master where dept_forw_no='$dfn'");
+       $res=$qry->result();
+       foreach ($res as $r) {
+         # code...
+        $dpt=$r->address_department;
+       }
+       
+
+       ?>
+        <input type="hidden" required id="<?php echo $key->srl_No?>_dept_forw_no" value="<?php echo $dfn;?>" >
+        <label>Department Address</label>
+        <input class="form-control" type="text" required id="<?php echo $key->srl_No?>_dept_add" value="<?php echo $dpt;?>">
+
+        <!-- ====================-->
         <br/><button type="submit" id="sub_<?php echo $key->srl_No?>" class="btn btn-primary">Update</button>
         <span id="<?php echo $key->srl_No?>_msg"></span>
         
@@ -90,9 +109,39 @@ foreach ($records as $rec) {
             var emp_code=$("#<?php echo $key->srl_No?>_emp_code").val();
             var name=$("#<?php echo $key->srl_No?>_name").val();
             var srl=$("#<?php echo $key->srl_No?>_srl").val();
-			var desig = $("#<?php echo $key->srl_No?>_designation").val();
+            var fn1=$("#<?php echo $key->srl_No?>_dept_forw_no").val();
+            var d_add=$("#<?php echo $key->srl_No?>_dept_add").val();
+            var desig = $("#<?php echo $key->srl_No?>_designation").val();
+            //--13-02-2020
+            var formData=new FormData();
+            formData.append("srl",srl);
+            formData.append("file_no",file_no);
+            formData.append("emp_code",emp_code);
+            formData.append("dept_forw_no",fn1);
+            formData.append("address_department",d_add);
+            formData.append("name",name);
+            formData.append("designation",desig);
+
             $.ajax({
-              url: '<?php echo site_url("administrator/receipt"); ?>/update?srl='+srl+'&file_no='+file_no+'&emp_code='+emp_code+'&name='+name+'&designation='+desig,
+              url: '<?php echo site_url("administrator/receipt"); ?>/update',
+              type: 'POST',
+              dataType: 'json',
+              data:formData,
+              processData: false,
+              contentType: false,
+              success: function(data) {
+                $("#<?php echo $key->srl_No?>_emp_code").val(data.ecode);
+                $("#<?php echo $key->srl_No?>_name").val(data.pensionee_name);
+
+                $("#ec_<?php echo $key->srl_No?>").html(data.ecode);
+                $("#f_<?php echo $key->srl_No?>").html(data.pensionee_name);
+                $("#<?php echo $key->srl_No?>_msg").html('<p>File Updated Successfully</p>');
+              }
+            });   
+            
+            //--13-02-2020
+			         /*   $.ajax({
+              url: '<?php echo site_url("administrator/receipt"); ?>/update?srl='+srl+'&file_no='+file_no+'&emp_code='+emp_code+'&dept_forw_no='+fn1+'&address_department='+d_add+'&name='+name+'&designation='+desig,
               type: 'GET',
               dataType: 'json',
               success: function(data) {
@@ -103,7 +152,7 @@ foreach ($records as $rec) {
                 $("#f_<?php echo $key->srl_No?>").html(data.pensionee_name);
                 $("#<?php echo $key->srl_No?>_msg").html('<p>File Updated Successfully</p>');
               }
-            });       
+            });  */     
           });
         </script>
       </div>

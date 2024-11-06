@@ -5,11 +5,18 @@
 	$account_no = ($pensioner->account_no != '') ? '('.$pensioner->account_no.')' : '';
 	$ac 		= ($pensioner->name_of_accountant_general != '') ? $pensioner->sub_to : $pensioner->treasury_name;
 	$payable 	= $ac.' '.$pensioner->bank_name.' '.$account_no;
+	$total_amount=$pensioner->total_amount;
 ?>
 
-<div id="print" style="width: 1000px; margin: 0px auto;">
+<!-- <div id="print" style="width: 1000px; margin: 0px auto;">
 	<div style="width:1000px; min-height:600px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 2em">
 	    <div style="text-align:center; padding-top:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
+	        <u><strong>Working Sheet</strong></u>
+	    </div> -->
+	    <div id="print" style="width: 1000px; margin: 0px auto;">
+	<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+	
+		<div style="text-align:center; padding-top:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
 	        <u><strong>Working Sheet</strong></u>
 	    </div>
 	    <div style="padding-top:20px">
@@ -83,6 +90,12 @@
 				<td valign="top"><?php echo $pensioner->non_qualifying_service(); ?></td>
 			</tr>
 			<tr>
+				<td valign="top"><div align="right"><span class="style2"><span class="style3"></span></span></div></td>
+				<td valign="top"><span class="style3"><b>(iii) Add Weightage</b></span></td>
+			  <td valign="top"><span class="style3">:</span></td>
+			  <td valign="top"><span class="style3"><?php echo $pensioner->Weightage(); ?></span></td>
+		  </tr>
+			<tr>
 				<td valign="top"><div align="right"></div></td>
 				<td valign="top"><b>Net qualifying Service</b></td>
 				<td valign="top">:</td>
@@ -130,7 +143,7 @@
 				<td valign="top"><b>Last Pay (as per LPC)</b></td>
 				<td valign="top">:</td>
 				<td valign="top" colspan="3">
-					<?php echo $pensioner->getLastPay(); ?>
+					<?php if($pensioner->pay_commission==7){ echo $total_amount;} else{echo $pensioner->getLastPay();} ?>
 				</td>
 			</tr>
 			<!-- <tr style="height:50px;"> -->
@@ -139,14 +152,23 @@
 				<td valign="top"><b>Last Incremented Pay</td>
 				<td valign="top">:</td>
 				<td valign="top">
-					<?php echo $pensioner->getLastIncreamentPay(); ?>
+					<?php echo $lip=$pensioner->getLastIncreamentPay(); ?>
 				</td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">14.</div></td>
 				<td valign="top"><b>Average Emoluments</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getAverageEmolument(); ?></td>
+				<td valign="top"><?php 
+					//if($lip!=0){
+				//echo $pensioner->getAverageEmolument(); 
+				echo $pensioner->getAverageEmolumentNew();
+						//}
+						//else{
+						//	echo 'N/A';
+						//}
+
+				?></td>
 			</tr>
 			<tr>
 				<td valign="top"><div align="right">15.</div></td>
@@ -224,7 +246,12 @@
 				<td valign="top"><div align="right">25.</div></td>
 				<td valign="top"><b>Name of Legal Heir</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getNameOfLegalHeir(); ?></td>
+				<td valign="top"><?php //echo $pensioner->getNameOfLegalHeir(); 
+						  if($pensioner->WifeDODCondition()>'0')
+						  {echo 'N/A';}
+						  else
+						  {echo $pensioner->getNameofSpouse(); }
+				?></td>
 			</tr>
 			<tr style="height:50px;">
 				<td valign="top"><div align="right">26.</div></td>
@@ -244,10 +271,7 @@
 				<td valign="top">:</td>
 				<td valign="top"><?php echo $pensioner->provisional_pension; ?></td>
 			</tr>
-		    <tr>
-		        <td valign="top">&nbsp;</td>
-		        <td valign="top" colspan="4"><b>RECOVERIES:</b></td>
-		    </tr>
+		    
 		    <tr>
 				<td valign="top"><div align="right">29.</div></td>
 				<td valign="top"><b>Earned Leave Encashment</b></td>

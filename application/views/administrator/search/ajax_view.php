@@ -17,11 +17,14 @@
   </thead>
   <tbody>
   <?php $i=1; ?>
-  <?php foreach ($records[0] as $key): ?>
+  <?php 
+//print_r($records);die();
+
+  foreach ($records[0] as $key): ?>
     <tr>
       <td><?php echo $i; ?></td>
       <!-- <td><?php echo $key->file_no; ?></td> -->
-      <td><?php echo $key->emp_code; ?></td>
+      <td><?php echo $key->empp; ?></td>
       <?php 
           //if($key->registration_no=='NULL'){
             //echo "<span style='color:red'>Not Generated Yet!</span>";
@@ -47,7 +50,8 @@
 		 $userdata = $this->session->userdata;
 		 $member_code=$userdata['member_code'];
 		 $file_no = $key->file_no;
-		 $entryTimes = getEntryTimeFromFTD($file_no, 'Receipt', $member_code);
+		$entryTimes = getEntryTimeFromFTD($file_no, 'Receipt', $member_code);
+    
 		 ?>
        <td style="padding: 0px;">
        		<?php if(count($entryTimes) > 0) { ?>

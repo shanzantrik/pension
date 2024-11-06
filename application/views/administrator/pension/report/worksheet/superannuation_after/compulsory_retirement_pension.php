@@ -7,8 +7,14 @@
 	$payable 	= $ac.' '.$pensioner->bank_name.' '.$account_no;
 ?>
 
-<div id="print" style="width: 1000px; margin: 0px auto;">
+<!-- <div id="print" style="width: 1000px; margin: 0px auto;">
 	<div style="width:1000px; min-height:600px; font-size: 1.0em; color:#000000; background-color:#FFFFFF; line-height: 2em">
+		<div style="text-align:center; padding-top:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
+	        <u><strong>Working Sheet</strong></u>
+	    </div> -->
+	    <div id="print" style="width: 1000px; margin: 0px auto;">
+	<div style="width:1000px; min-height:600px; font-size: 1.2em; color:#000000; background-color:#FFFFFF; line-height: 1.5em">
+	
 		<div style="text-align:center; padding-top:10px; font:Arial, Helvetica, sans-serif; font-size:16px">
 	        <u><strong>Working Sheet</strong></u>
 	    </div>
@@ -83,6 +89,12 @@
 				<td valign="top"><?php echo $pensioner->non_qualifying_service(); ?></td>
 			</tr>
 			<tr>
+				<td valign="top"><div align="right"><span class="style2"><span class="style3"></span></span></div></td>
+				<td valign="top"><span class="style3"><b>(iii) Add Weightage</b></span></td>
+			  <td valign="top"><span class="style3">:</span></td>
+			  <td valign="top"><span class="style3"><?php echo $pensioner->Weightage(); ?></span></td>
+		  </tr>
+			<tr>
 				<td valign="top"><div align="right"></div></td>
 				<td valign="top"><b>Net qualifying Service</b></td>
 				<td valign="top">:</td>
@@ -130,7 +142,7 @@
 				<td valign="top"><b>Last Pay (as per LPC)</b></td>
 				<td valign="top">:</td>
 				<td valign="top" colspan="3">
-					<?php echo $pensioner->getLastPay(); ?>
+					<?php if($pensioner->pay_commission==7){ echo $pensioner->total_amount;} else{echo $pensioner->getLastPay();} ?>
 				</td>
 			</tr>
 			<!-- <tr style="height:50px;"> -->
@@ -142,12 +154,15 @@
 					<?php echo $pensioner->getLastIncreamentPay(); ?>
 				</td>
 			</tr>
-			<tr>
+			
+ 				<tr>
 				<td valign="top"><div align="right">14.</div></td>
 				<td valign="top"><b>Average Emoluments</b></td>
 				<td valign="top">:</td>
-				<td valign="top"><?php echo $pensioner->getAverageEmolument(); ?></td>
+				<td valign="top"><?php echo $pensioner->getAverageEmolument(); 
+				?></td>
 			</tr>
+			
 			<tr>
 				<td valign="top"><div align="right">15.</div></td>
 				<td valign="top"><b>Amount of Pension</b></td>
@@ -244,10 +259,7 @@
 				<td valign="top">:</td>
 				<td valign="top"><?php echo $pensioner->provisional_pension; ?></td>
 			</tr>
-		    <tr>
-		        <td valign="top">&nbsp;</td>
-		        <td valign="top" colspan="4"><b>RECOVERIES:</b></td>
-		    </tr>
+		    
 		    <tr>
 				<td valign="top"><div align="right">29.</div></td>
 				<td valign="top"><b>Earned Leave Encashment</b></td>

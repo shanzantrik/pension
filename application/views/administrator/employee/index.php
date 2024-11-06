@@ -106,19 +106,29 @@
     <thead>
         <tr>
             <th width="12%">Name</th>
-            <th width="10%">Designation</th>
-            <th width="13%">Date of Joining</th>
-            <th width="15%">Date of Retirement</th>
+            <th width="5%">Role</th>
+            <th width="5%">User id</th>
+            <th width="8%">Designation</th>
+            <th width="10%">Joining Date</th>
+            <th width="10%">Retirement Date</th>
             <th width="10%">Total Pay</th>
 			<th width="10%">Account No</th>
 			<th width="10%">Photo</th>
-			<th width="20%">Actions</th>
+			<th width="25%">Actions</th>
         </tr>
     </thead>
     <tbody>
     	<?php foreach ($lists as $list) { ?>
     		<tr id="<?php echo $list['id']; ?>">
 	            <td><?php echo $list['name']; ?></td>
+	            <td><?php foreach (getAllMember_Type() as $role) {
+                        if($role['member_type_code'] == $list['role'])
+                        {
+                           echo $role['member_type_name'];
+                        }
+                    }?>
+                </td>
+                <td><?php echo $list['user_id']; ?></td>
 	            <td><?php echo $list['designation']; ?></td>
 	            <td><?php echo dateTimeToDate($list['doj']); ?></td>
 	            <td><?php echo dateTimeToDate($list['dor']); ?></td>
@@ -126,7 +136,7 @@
 	            <td><?php echo $list['account_no']; ?></td>
 	            <td><?php echo ($list["photograph"]!="") ? '<img src="'.base_url('uploads/employee/'.$list["photograph"]).'" height="68">' : ''; ?></td>
 				<td>
-					<a href="<?php echo site_url('administrator/employee/view/'.$list['id']); ?>" id="view" class="btn"><i class="icon-eye-open"></i> View Profile</a>
+					<a href="<?php echo site_url('administrator/employee/view/'.$list['id']); ?>" id="view" class="btn"><i class="icon-eye-open"></i> View</a>
 					<a href="<?php echo site_url('administrator/employee/edit/'.$list['id']); ?>" id="edit" class="btn btn-success btn-rad"><i class="icon-pencil"></i> Edit</a>
 	            </td>                   	            
 	        </tr>

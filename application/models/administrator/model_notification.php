@@ -6,10 +6,67 @@ class model_notification extends CI_Model{
 		parent:: __construct();
 		$this->load->model('superandant/model_superandant');
 	}
+
+	function get_record($file_no)
+	 {
+		$this->db->select('*');
+		$this->db->where('case_no', $file_no);
+		$query = $this->db->get('observation');
+		if($query) 
+		{
+		 //return 'exist';
+		 return $query->result_array();
+		} 
+		else 
+		{
+			//return 'not_exist';
+			return false;
+		}
+		
+    }
+
+    function add_ips_observation() {
+		$case_no 		= $this->security->xss_clean($this->input->post('case_no'));
+		$observation_by	= $this->security->xss_clean($this->input->post('observation_by'));
+		$remarks 		= $this->security->xss_clean($this->input->post('remarks'));
+		$ips_pass	    = $this->security->xss_clean($this->input->post('ips_pass'));
+		$observation_date= $this->security->xss_clean($this->input->post('observation_date'));
+
+		$observation = array('case_no'=>$case_no, 'observation_by'=>$observation_by, 'remarks'=>$remarks, 'ips_pass'=>$ips_pass, 'observation_date'=>$observation_date);
+
+		$this->db->trans_begin();
+		$this->db->insert('observation', $observation);
+
+		$this->db->where('file_no', $case_no);
+		$this->db->update('file_status', ['ips_pass'=>$ips_pass]);
+		$this->db->trans_complete();
+
+			
+	}
+
+    function edit_ips_observation() {
+		$case_no 		= $this->security->xss_clean($this->input->post('case_no'));
+		$observation_by	= $this->security->xss_clean($this->input->post('observation_by'));
+		$remarks 		= $this->security->xss_clean($this->input->post('remarks'));
+		$ips_pass	    = $this->security->xss_clean($this->input->post('ips_pass'));
+		$observation_date= $this->security->xss_clean($this->input->post('observation_date'));
+
+		$observation = array('observation_by'=>$observation_by, 'remarks'=>$remarks, 'ips_pass'=>$ips_pass, 'observation_date'=>$observation_date);
+
+		$this->db->trans_begin();
+		//$this->db->insert('observation', $observation);
+		$this->db->where('case_no', $case_no);
+		$this->db->update('observation', $observation);
+		$this->db->trans_complete();
+
+			
+	}
+
 	function getNotifiction(){
 		
 		$member_code=$this->session->userdata('member_code');
-		$sql="SELECT * from file_status a,pension_receipt_file_master b,token_reciept c,pensioner_personal_details d where d.case_no=b.file_No and c.file_No=b.file_No and a.status='Forwarded to Superintendent of Pension' and a.file_no=b.file_no";
+		//$sql="SELECT * from file_status a,pension_receipt_file_master b,token_reciept c,pensioner_personal_details d where d.case_no=b.file_No and c.file_No=b.file_No and a.status='Forwarded to Superintendent of Pension' and a.file_no=b.file_no";
+		$sql="SELECT * from file_status a,pension_receipt_file_master b where a.status='Forwarded to Superintendent of Pension' and a.file_no=b.file_No";
         $q=$this->db->query($sql);
         $result=$q->result();
         return $result;
@@ -23,6 +80,29 @@ class model_notification extends CI_Model{
         $result=$q->result();
         return $result;
 	}
+	 function addObservation(){
+
+        $file_no=$this->security->xss_clean($this->input->post('file_no'));
+        $title=$this->security->xss_clean($this->input->post('title'));
+	    $remarks=$this->security->xss_clean($this->input->post('remarks'));
+	    $observation = array('file_no'=>$file_no, 'title' =>$title, 'remarks'=>$remarks);
+		//$observation = array( );
+
+		if($this->db->insert('pension_da_observation', $observation)) {
+			return true;
+		} else {
+			return false;
+		}
+  }
+
+   function get_details($file_No)
+	 {
+//$q=$this->db->query("SELECT * from pensioner_ips_details a,pension_receipt_file_master b where a.file_no=b.file_No and b.dept_forw_no='$dept'");
+         $q=$this->db->query("SELECT * from pensioner_ips_details a,pension_da_observation b where a.file_no=b.file_No and  b.file_no='$file_No'");
+        //$q=$this->db->query("SELECT * from pension_da_observation where file_no='$file_No'");
+    	$result = $q->result();
+ 		return $result;;
+	 }
 
 	function getNotificationfromDirector(){
 		//$bc=$this->session->userdata('branch_code');
@@ -87,6 +167,8 @@ class model_notification extends CI_Model{
         $result=$q->result();
         return $result;		
 	}
+
+	
 
 	function getfile_no_from_pensioner_personal_details()
 	{
@@ -662,7 +744,44 @@ class model_notification extends CI_Model{
 			
 	}
 	
+	#################### SUPERINTENDENT ##################
+	else if($to=='superintendent')
+			{
+           
+			$chk=@$_POST['chk_receipt'];
+		if(empty($chk)){
+			return 'validate';
+		}else{
+			if(isset($_POST['chk_receipt'])==true){
+			$chk=$_POST['chk_receipt'];
 
+			$this->db->trans_begin();
+			foreach($chk as $a => $b){
+				$file_tracking=array(
+					'file_no'=>$chk[$a],
+					'branch'=>'Pension', //
+					'file_status'=>'Forwarded to Superintendent of Pension',
+					'member_code'=>$this->session->userdata('member_code')
+					);
+				$this->db->insert('file_tracking_details',$file_tracking);
+				$this->db->where('file_no',$chk[$a]);
+				$this->db->update('file_status',array('status'=>'Forwarded to Superintendent of Pension','notification'=>'pending','member_code'=>$this->session->userdata('member_code'),'allocated_date'=>$allocated_date));
+			}
+			
+			}
+			if ($this->db->trans_status() === FALSE)
+			{
+			    $this->db->trans_rollback();
+			    return 'RollBack';
+			}
+			else
+			{
+			    $this->db->trans_commit();
+			    return 'Success';
+			}
+		}	
+			
+	}
 
 	 // 	$allocated_date=date('Y-m-d');
 		// $branch_code=$this->session->userdata('branch_code');
@@ -707,7 +826,7 @@ class model_notification extends CI_Model{
 		$data=array(
 			'file_no'=>$file,
 			'branch'=>$this->getBranch_forwrd($this->session->userdata('branch_code')),
-			'file_status'=>'Received by DA of pension from Director',
+			'file_status'=>'Received by DA of pension',
 			'member_code'=>$this->session->userdata('member_code')
 			);
 
@@ -993,6 +1112,10 @@ class model_notification extends CI_Model{
 		$branch_code=$this->session->userdata('branch_code');
 		$member_code=$this->get_director();
 	
+			$to=$_POST['to'];
+
+			if($to=='superintendent_ips')
+			{
 			$chk=@$_POST['chk_receipt'];
 				if(empty($chk)){
 					return 'validate';
@@ -1040,6 +1163,46 @@ class model_notification extends CI_Model{
 						}
 					//}
 				}
+			}
+
+				#################### ISSUE ##################
+	else if($to=='issue')
+			{
+           
+			$chk=@$_POST['chk_receipt'];
+		if(empty($chk)){
+			return 'validate';
+		}else{
+			if(isset($_POST['chk_receipt'])==true){
+			$chk=$_POST['chk_receipt'];
+
+			$this->db->trans_begin();
+			foreach($chk as $a => $b){
+				$file_tracking=array(
+					'file_no'=>$chk[$a],
+					'branch'=>'Pension', //
+					'file_status'=>'Forwarded to issue by pensionda from pension',
+					'member_code'=>$this->session->userdata('member_code')
+					);
+				$this->db->insert('file_tracking_details',$file_tracking);
+				$this->db->where('file_no',$chk[$a]);
+				$this->db->update('file_status',array('status'=>'Forwarded to issue by pensionda from pension','notification'=>'pending','member_code'=>$this->session->userdata('member_code'),'allocated_date'=>$allocated_date));
+			}
+			
+			}
+			if ($this->db->trans_status() === FALSE)
+			{
+			    $this->db->trans_rollback();
+			    return 'RollBack';
+			}
+			else
+			{
+			    $this->db->trans_commit();
+			    return 'Success';
+			}
+		}	
+			
+	}
 		//}
 	}
 
@@ -1112,7 +1275,7 @@ class model_notification extends CI_Model{
 					$this->db->trans_begin();
 					foreach($chk as $a => $b)
 					{
-						if($this->check_service_entry($chk[$a])=='entered')
+						if($this->check_service_entry($chk[$a])=='entered' || $this->check_service_entry($chk[$a])=='not_entered')
 					   {
 							$file_tracking=array(
 								'file_no'=>$chk[$a],
@@ -2047,7 +2210,8 @@ else{
 	}
 	 function getAll_issued_file()
 	 {
-	    $sql="select * from issue a,pension_receipt_file_master b,token_reciept c where c.file_no=b.file_No and a.file_no=b.file_No";
+	    //$sql="select * from issue a,pension_receipt_file_master b,token_reciept c where c.file_no=b.file_No and a.file_no=b.file_No";
+	    $sql="SELECT * from pension_receipt_file_master a,pension_receipt_register_master b,master_department c, pensioner_personal_details d, pensioner_treasury_details e, pensioner_service_details f, master_treasury g, issue h,token_reciept i where a.dept_forw_no=b.dept_forw_no and b.branch_code=c.dept_code and d.case_no=a.file_No and d.serial_no=e.serial_no and f.serial_no=d.serial_no and e.treasury_officer=g.id and i.file_no=a.file_No and h.file_no=a.file_No";
 	$query=$this->db->query($sql);
 		if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {

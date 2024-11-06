@@ -7,11 +7,13 @@ class Model_home extends CI_Model {
 	}
 	
 	function login() {
-		$username = $this->input->post('username');
+		//$mobile_no = $this->input->post('mobile_no');
+		$user_id = $this->input->post('user_id');
 		$pass  = $this->input->post('password');
 		$md5_pass = md5($pass);	
 
-		$sql = "Select member_code, member_name, Branch_Code, member_type_code, desg_code from pen_members where member_code='$username' and passwrd='$md5_pass'";
+		//$sql = "Select member_code, member_name, Branch_Code, member_type_code, desg_code from pen_members where member_code='$username' and passwrd='$md5_pass'";
+		$sql = "Select m.member_code, m.member_name, m.Branch_Code, m.member_type_code, m.desg_code from pen_members as m join employees as e on m.member_type_code=e.role where e.user_id='$user_id' and e.password='$md5_pass'";
 		if($this->db->affected_rows($this->db->query($sql)) == 1){
 			$query = mysql_query($sql);
 			while(list($member_code, $member_name, $branch_code, $member_type_code) = mysql_fetch_row($query)) {

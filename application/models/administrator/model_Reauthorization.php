@@ -30,7 +30,7 @@ class Model_Reauthorization extends CI_Model
  		
 	}
 	
-		function add_reautho($file_no,$enhanrate_from,$age_25,$enhanrate_upto,$enhanrate_upto_for_child,$ordrate_from){		
+		function add_reautho($file_no,$enhanrate_from,$age_25,$enhanrate_upto,$enhanrate_upto_for_child,$ordrate_from,$son_daughter){		
 		extract($_POST);
 
      /*  		$obj=array();
@@ -55,9 +55,9 @@ class Model_Reauthorization extends CI_Model
 		    'age_25'=>$age_25,
 			'enhanrate_upto'=>$enhanrate_upto,
 			'enhanrate_upto_for_child'=>$enhanrate_upto_for_child,
-			'ordrate_from'=>$ordrate_from
-
-			
+			'ordrate_from'=>$ordrate_from,
+			'benificery_type'=>$benificery_type,
+			'son_daughter'=>$son_daughter
 			
 		);
           
